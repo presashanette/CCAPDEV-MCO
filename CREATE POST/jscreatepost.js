@@ -42,3 +42,14 @@ function addTag(tag) {
 
     tagContainer.appendChild(tagContainerDiv);
 }
+
+const cancel = document.getElementById('cancelbtn');
+const post = document.getElementById('postbtn');
+
+cancel.addEventListener("reset", function1);
+
+function function1 () {
+    document.getElementById("title").reset();
+}
+
+post.addEventListener("click", )

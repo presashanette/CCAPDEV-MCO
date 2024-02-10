@@ -65,7 +65,7 @@ h1 {
 }
 
 .btn:hover {
-    background-color: var(--pink3);
+    background-color: var(--pink1);
     color: white;
 }
 
@@ -97,13 +97,14 @@ h1 {
     border: none;
     outline: none;
     padding: 5px;
+    border-radius: 10px;
 }
 
 .tag {
     background-color: var(--pink1);
     color: white;
     padding: 5px 10px;
-    border-radius: 3px;
+    border-radius: 10px;
     margin-right: 5px;
     margin-bottom: 5px;
     cursor: pointer;
@@ -114,3 +115,24 @@ h1 {
     flex-wrap: wrap;
     align-items: center;
   }
+
+.submitbtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+#cancelbtn, #postbtn {
+    height: 30px;
+    margin-right: 10px;
+    border: 0px;
+    outline: none;
+    background-color: white;
+    transition-duration: 0.4s;
+    border-radius: 10px;
+}
+
+#cancelbtn:hover, #postbtn:hover {
+    background-color: var(--pink1);
+    color: white;
+}

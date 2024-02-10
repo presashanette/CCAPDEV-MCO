@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="createpoststyle.css">
+
+</head>
+<body>
+    <!-- nav part here -->
+
+    <!-- create post -->
+    <h1>Create Post</h1>
+    <div id="line"></div>
+
+    <div id="create">
+        <div id="title">
+            <form>
+                <input type="text" id="titleinp" name="titleinp" placeholder="title">
+            </form>
+        </div>
+
+        <div id="content">
+            <div id="richtexteditor">
+                <button type="button" class="btn" data-element="bold">
+                    <i class="fa fa-bold"></i>
+                </button>
+                <button type="button" class="btn" data-element="italic">
+                    <i class="fa fa-italic"></i>
+                </button>
+                <button type="button" class="btn" data-element="underline">
+                    <i class="fa fa-underline"></i>
+                </button>
+                <button type="button" class="btn" data-element="insertUnorderedList">
+                    <i class="fa fa-list-ul"></i>
+                </button>
+                <button type="button" class="btn" data-element="insertOrderedList">
+                    <i class="fa fa-list-ol"></i>
+                </button>
+                <button type="button" class="btn" data-element="createLink">
+                    <i class="fa fa-link"></i>
+                </button>
+                <button type="button" class="btn" data-element="justifyLeft">
+                    <i class="fa fa-align-left"></i>
+                </button>
+                <button type="button" class="btn" data-element="justifyCenter">
+                    <i class="fa fa-align-center"></i>
+                </button>
+                <button type="button" class="btn" data-element="justifyRight">
+                    <i class="fa fa-align-right"></i>
+                </button>
+                <button type="button" class="btn" data-element="justifyFull">
+                    <i class="fa fa-align-justify"></i>
+                </button>
+                <button type="button" class="btn" data-element="insertImage">
+                    <i class="fa fa-image"></i>
+                </button>
+            </div>
+
+            <div id="posttext" contenteditable="true"></div>
+        </div>
+
+        <div class="tag-input-container">
+            <input type="text" id="tag-input" placeholder="Add tags..."><br>
+        </div>
+    </div>
+
+    <script src="jscreatepost.js"></script>
+    <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
+
+</body>
+</html>

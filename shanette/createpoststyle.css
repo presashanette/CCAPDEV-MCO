@@ -10,11 +10,12 @@
 
 h1 {
     color: var(--pink4);
+    font-size: 30px;
 }
 
 #line {
     border: 1px solid var(--brown);
-    width: 50%;
+    width: 75%;
 }
 
 #create {
@@ -57,6 +58,7 @@ h1 {
 
 .btn {
     height: 30px;
+    width: 30px;
     margin-left: 10px;
     border: 0px;
     outline: none;
@@ -97,13 +99,14 @@ h1 {
     border: none;
     outline: none;
     padding: 5px;
+    border-radius: 10px;
 }
 
 .tag {
     background-color: var(--pink1);
     color: white;
     padding: 5px 10px;
-    border-radius: 3px;
+    border-radius: 10px;
     margin-right: 5px;
     margin-bottom: 5px;
     cursor: pointer;

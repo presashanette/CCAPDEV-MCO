@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Comment System</title>
+    <style>
+        /* Styles for the comments */
+        .comment {
+            margin-left: 20px;
+            border-left: 2px solid #ccc;
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        .comment .reply {
+            margin-left: 20px;
+            border-left: 2px solid #eee;
+            padding-left: 10px;
+        }
+        .collapse {
+            display: none;
+        }
+        /* Style for the editable div */
+        #commentinput, .replyInput {
+            border: 1px solid #ccc;
+            padding: 5px;
+            min-height: 50px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="commentinput" contenteditable="true" placeholder="Add a comment" onkeydown="handleKeyDown(event)"></div><br>
+    <button onclick="addComment()">Add Comment</button>
+    <div id="comments"></div>
+    
+    <script>
+        function addComment() {
+            var text = document.getElementById("commentinput").innerText;
+            if (text.trim() === "") {
+                alert("Please enter a comment.");
+                return;
+            }
+            var comment = createComment(text);
+            document.getElementById("comments").appendChild(comment);
+            document.getElementById("commentinput").innerText = "";
+        }
+
+        function createComment(text) {
+            var commentDiv = document.createElement("div");
+            commentDiv.classList.add("comment");
+
+            var commentText = document.createTextNode(text);
+            commentDiv.appendChild(commentText);
+
+            var replyText = document.createElement("div");
+            replyText.classList.add("replyInput");
+            replyText.contentEditable = true;
+            replyText.setAttribute("placeholder", "Reply to this comment");
+            replyText.onkeydown = function(event) {
+                handleReplyKeyDown(event);
+            };
+            commentDiv.appendChild(replyText);
+
+            var replyButton = document.createElement("button");
+            replyButton.innerHTML = "Reply";
+            replyButton.onclick = function() {
+                addReply(this);
+            };
+            commentDiv.appendChild(replyButton);
+
+            var collapseButton = document.createElement("button");
+            collapseButton.innerHTML = "Collapse";
+            collapseButton.onclick = function() {
+                toggleCollapse(this);
+            };
+            commentDiv.appendChild(collapseButton);
+
+            return commentDiv;
+        }
+
+        function addReply(button) {
+            var parentComment = button.parentNode;
+            var text = parentComment.querySelector(".replyInput").innerText;
+            if (text.trim() === "") {
+                alert("Please enter a reply.");
+                return;
+            }
+            var replyDiv = document.createElement("div");
+            replyDiv.classList.add("reply");
+
+            var replyText = document.createTextNode(text);
+            replyDiv.appendChild(replyText);
+
+            var nestedReplyText = document.createElement("div");
+            nestedReplyText.classList.add("replyInput");
+            nestedReplyText.contentEditable = true;
+            nestedReplyText.setAttribute("placeholder", "Reply to this reply");
+            nestedReplyText.onkeydown = function(event) {
+                handleReplyKeyDown(event);
+            };
+            replyDiv.appendChild(nestedReplyText);
+
+            var nestedReplyButton = document.createElement("button");
+            nestedReplyButton.innerHTML = "Reply";
+            nestedReplyButton.onclick = function() {
+                addReply(this);
+            };
+            replyDiv.appendChild(nestedReplyButton);
+
+            var collapseButton = document.createElement("button");
+            collapseButton.innerHTML = "Collapse";
+            collapseButton.onclick = function() {
+                toggleCollapse(this);
+            };
+            replyDiv.appendChild(collapseButton);
+
+            parentComment.appendChild(replyDiv);
+            parentComment.querySelector(".replyInput").innerText = "";
+        }
+
+        function toggleCollapse(button) {
+            var parentComment = button.parentNode;
+            var childComments = parentComment.querySelectorAll(".comment, .reply");
+            childComments.forEach(function(child) {
+                if (child.classList.contains("collapse")) {
+                    child.classList.remove("collapse");
+                    button.innerHTML = "Collapse";
+                } else {
+                    child.classList.add("collapse");
+                    button.innerHTML = "Expand";
+                }
+            });
+        }
+
+        function handleKeyDown(event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+                addComment();
+            }
+        }
+
+        function handleReplyKeyDown(event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+                addReply(event.target.parentNode.querySelector("button"));
+            }
+        }
+    </script>
+</body>
+</html>

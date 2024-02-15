@@ -203,7 +203,7 @@ button{
     line-height: 100px;
 }
 
-#signup-button{
+#signup-button, #logout-button{
     color: #32000C;
     outline: solid #9F0840 2px;
     padding: 8px;
@@ -212,7 +212,7 @@ button{
     line-height: 70px;
 }
 
-#login-button{
+#login-button, #edit-profile{
     color: white;
     background-color: #FB4570;
     padding: 8px;

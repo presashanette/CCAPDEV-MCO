@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="editprofile.css">
+
+</head>
+<body>
+    <div class="main">
+        <div class="spacer"></div>
+        <div class="panel">
+            <div class="header">
+                <h1>PROFILE</h1>
+            </div>
+
+            <div class="profpic">
+                <img src="user.jpg" id="pic">
+                <input type="file" id="profpicfile" name="picfilename"  accept="image/gif, image/jpeg, image/png" onchange="readURL(this)" >
+                <script>
+                    function readURL(input) {
+                      if (input.files && input.files[0]) {
+                      
+                        var reader = new FileReader();
+                        reader.onload = function (e) { 
+                          document.querySelector("#pic").setAttribute("src",e.target.result);
+                        };
+                  
+                        reader.readAsDataURL(input.files[0]); 
+                      }
+                    }
+                </script>
+                <button onclick="change()" class="uploadbtn" id="uploadbtn">Upload</button>
+                <script>
+                    function change()
+                    {
+                        document.getElementById("uploadbtn").innerHTML="Uploaded!";
+                    }
+                </script>
+            </div>
+
+            <div class="bio">
+                <h3>Bio</h3>
+                <textarea id="biobox" name="bio" rows="3"> Add a bio (optional).</textarea>
+            </div>
+
+            <div class="buttons">
+                <button onclick="window.location.href='viewprofile.html';" class="savebtn">Save</button>
+                <input type="button" class="backbtn" value="Back" onclick="history.back()">
+            </div>
+        </div>
+        <div class="spacer"></div>
+    </div>
+</body>
+</html>

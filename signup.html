@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="signup.css">
+
+</head>
+<body>
+    <div class="main">
+        <div class="spacer"></div>
+        <div class="panel">
+            <div class="header">
+                <h1>REGISTER</h1>
+            </div>
+            <div class="username">
+                <h3>Username</h3>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+            </div>
+            <div class="password">
+                <h3>Password</h3>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+            </div>
+            <div class="buttons">
+                
+                <span class="alruser"><p>Already a user? <a href="login.html">Log In</a></p></span>
+                
+                <button onclick="window.location.href='editprofile.html';" class="regbtn">Register</button>
+                
+                <input type="button" class="backbtn" value="Back" onclick="history.back()">
+            </div>
+        </div>
+        <div class="spacer"></div>
+    </div>
+</body>
+</html>

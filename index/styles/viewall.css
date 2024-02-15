@@ -33,12 +33,12 @@
     flex-direction: row;
 }
 
-#poptext {
+#hometext {
     padding-left: 5px;
     color: var(--pink4);
 }
 
-#popular {
+#home {
     display: flex;
     flex-direction: row;
     align-items: center;

@@ -86,11 +86,15 @@
 }
 
 .post {
-    width: 70%;
+    width: 900px;
     height: 210px;
     background-color: var(--pink2);
     border-radius: 10px;
     margin: 10px 5px 10px 10px;
+}
+
+a {
+    text-decoration: none;
 }
 
 .content {
@@ -110,7 +114,7 @@
     overflow: hidden; /* make sure it hides the content that overflows */
     text-overflow: ellipsis; /* give the beautiful '...' effect */
     -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
-    -webkit-background-clip:text;
+    -webkit-background-clip: text;
 }
 
 .icons {

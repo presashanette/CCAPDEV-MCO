@@ -11,13 +11,15 @@
 .content{
     width: 100%;
     max-width: 800px;
-
+    margin: auto;
 }
 
 .post {
     margin: 10px 20px 10px 20px;
     width: 100%;
     max-width: 800px;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -59,7 +61,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .count {
@@ -98,5 +100,32 @@
 .icon {
     border: 0;
     background-color: white;
+}
 
+.tagpost {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: auto;
+    text-justify: inter-word;
+    overflow-wrap: break-word;
+    width: 760px;
+    height: auto;
+    margin-top: 10px;
+}
+
+.onetag {
+    background-color: var(--pink3);
+    border-radius: 10px;
+    height: 22px;
+    width: auto;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.tagtext {
+    font-size: 15px;
+    padding-left: 5px;
+    padding-right: 10px;
+    margin: 2px 0 0 5px;
 }

@@ -44,6 +44,7 @@
     flex-direction: row;
     align-items: center; /*justify-content used to align things horizontally, align-items for vertical*/
     color: white;
+    margin-left: 20px;
 }
 
 #richtexteditor .btn {
@@ -74,6 +75,7 @@
     border-radius: 0 0 10px 10px;
     overflow: auto;
     outline: none;
+    margin-left: 20px;
 }
 
 #commentinput img {
@@ -106,7 +108,6 @@
 
 .add-comment, .comments{
     width: 200px;
-    
 }
 
 .comment{

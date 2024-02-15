@@ -48,7 +48,7 @@ h1 {
     font-size: larger;
 }
 
-#content {
+.editorcontent {
     margin: 20px 0 0 20px;
     height: 300px;
     width: 950px;
@@ -70,10 +70,11 @@ h1 {
 
 .btn {
     height: 30px;
+    width: 30px;
     margin-left: 10px;
     border: 0px;
     outline: none;
-    background-color: white;
+    background-color: transparent;
     transition-duration: 0.4s;
 }
 
@@ -137,12 +138,17 @@ h1 {
 
 #cancelbtn, #postbtn {
     height: 30px;
+    width: 60px;
     margin-right: 10px;
     border: 0px;
     outline: none;
     background-color: white;
     transition-duration: 0.4s;
     border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    padding-top: 5px;
 }
 
 #cancelbtn:hover, #postbtn:hover {

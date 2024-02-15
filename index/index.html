@@ -18,6 +18,7 @@
     <!-- scripts -->
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/viewone.js"></script>
 
     <title>Girls</title>
 </head>
@@ -26,7 +27,7 @@
     <nav class="nav-container nav-top-container">
         <ul class="nav-top-items">
             <li>
-                <a id="logo" href="index.html">GIRLS</a>
+                <a id="logo" href="popular.html">GIRLS</a>
             </li>
             <li>
                 <form action="search.html">
@@ -45,12 +46,12 @@
         <nav class="nav-container nav-side-container">
             <ul class="nav-side-items">
                 <li class="nav-symbol">
-                    <a class="nav-symbol-button" id="home-button" href="index.html">
+                    <a class="nav-symbol-button" id="home-button" href="popular.html">
                         <span class="material-symbols-outlined" id="home-symbol">home</span> Home
                     </a>
                 </li>
                 <li class="nav-symbol">
-                    <a class="nav-symbol-button" id="profile-button" href="profile.html">
+                    <a class="nav-symbol-button" id="profile-button" href="viewprofile.html">
                         <span class="material-symbols-outlined" id="profile-symbol">person</span>Profile
                     </a>
                 </li>
@@ -81,7 +82,22 @@
     
         
         <!-- content -->
-        <div class="content">          
+        <div class="content">    
+            <div class="head">
+                <div id="home">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                    <h1 id="hometext">Home</h1>
+                </div>
+                <div class="seemore">
+                    <p id="see">See More</p>
+                    <span class="material-symbols-outlined" id="arrow">
+                        arrow_forward
+                        </span>
+                </div>
+            </div>
+
             <div class="allposts">
                 <!-- post 1 -->
                 <div class="post">
@@ -106,33 +122,6 @@
                             <div class="onetag">
                                 <p class="tagtext">tag</p>
                             </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagend</p>
-                            </div>
                         </div>
 
                         <button type="button" class="icon" id="hearticon">
@@ -140,19 +129,16 @@
                                 favorite
                             </span>
                         </button>
-                        <p class="count">100</p>    
                         <button type="button" class="icon" id="bhearticon">
-                            <span class="material-symbols-outlined" id="brokenheart">
+                            <span class="material-symbols-outlined" id="brokenheart" >
                                 heart_broken
                             </span>
                         </button>
-                        <p class="count">100</p>
-                        <button type="button" class="icon" id="commenticon">
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone.html';">
                             <span class="material-symbols-outlined" id="comment">
                                 mode_comment
                             </span>
                         </button>
-                        <p class="count">100</p>
                     </div>
                 </div>
                 <!-- post 2 -->
@@ -179,24 +165,6 @@
                                 <p class="tagtext">tag</p>
                             </div>
                             <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
                                 <p class="tagtext">tagss</p>
                             </div>
                             <div class="onetag">
@@ -212,19 +180,16 @@
                                 favorite
                             </span>
                         </button>
-                        <p class="count">100</p>    
                         <button type="button" class="icon" id="bhearticon">
-                            <span class="material-symbols-outlined" id="brokenheart">
+                            <span class="material-symbols-outlined" id="brokenheart" >
                                 heart_broken
                             </span>
                         </button>
-                        <p class="count">100</p>
-                        <button type="button" class="icon" id="commenticon">
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone.html';">
                             <span class="material-symbols-outlined" id="comment">
                                 mode_comment
                             </span>
                         </button>
-                        <p class="count">100</p>
                     </div>
                 </div>
                 <!-- post 3 -->
@@ -245,30 +210,6 @@
                                 <p class="tagtext">tag</p>
                             </div>
                             <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
                                 <p class="tagtext">tagss</p>
                             </div>
                             <div class="onetag">
@@ -284,32 +225,81 @@
                                 favorite
                             </span>
                         </button>
-                        <p class="count">100</p>    
                         <button type="button" class="icon" id="bhearticon">
-                            <span class="material-symbols-outlined" id="brokenheart">
+                            <span class="material-symbols-outlined" id="brokenheart" >
                                 heart_broken
                             </span>
                         </button>
-                        <p class="count">100</p>
-                        <button type="button" class="icon" id="commenticon">
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone.html';">
                             <span class="material-symbols-outlined" id="comment">
                                 mode_comment
                             </span>
                         </button>
-                        <p class="count">100</p>
                     </div>
                 </div>
-                <!-- post 3 -->
+                <!-- post 4 -->
                 <div class="post">
                     <div class="profile">
-                        <img src="images/aurora.jpeg" class="dp">
+                        <img src="images/elsa.jpeg" class="dp">
                         <div class="headerpost">
-                            <p class="handle">@auroraprinsesa</p>
-                            <p class="title">Where can I get my nails done?</p>
+                            <p class="handle">@elsabrr</p>
+                            <p class="title">How I depuff my face in the morning</p>
                         </div>
                     </div>
                     <div class="post-content">
-                        <p class="text">I want to start doing my own nails but I don’t know where to begin. Should I do gel? Is there a good nail system I can get? I just need some tips for an absolute beginner.</p>
+                        <p class="text">I’ve dealt with facial swelling for as long as I can remember and in various forms. From waking up with a puffy face in the morning to allergy-induced inflammation, there’s no kind of facial swelling I haven’t dealt with—or treatment I haven’t tried to relieve it.
+        
+                            If you can relate, you’re in the right place, and I can assure you there is light at the end of the big-face tunnel. After years of trial and error, I learned that a combination of daily face massage, avoiding food allergies, and learning to manage my sinus infections pretty much keeps my bloated face at bay. Of course, it still makes an unexpected comeback every now and then. I’ pretty puffy as I write this, in fact. Is it my period or because I stopped my allergy meds for an allergy patch test? Who knows?
+                            
+                            Fortunately I’ve learned exactly how to depuff my face—and fast. Here’s everything you need to know about how to get rid of a puffy face, plus how prevent it from happening in the first place, according to experts.</p>
+                    </div>
+                    <div class="icons">
+                        <div class="tagpost">
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagss</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagend</p>
+                            </div>
+                        </div>
+
+                        <button type="button" class="icon" id="hearticon">
+                            <span class="material-symbols-outlined" id="heart">
+                                favorite
+                            </span>
+                        </button>
+                        <button type="button" class="icon" id="bhearticon">
+                            <span class="material-symbols-outlined" id="brokenheart" >
+                                heart_broken
+                            </span>
+                        </button>
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone4.html';">
+                            <span class="material-symbols-outlined" id="comment">
+                                mode_comment
+                            </span>
+                        </button>
+                    </div>
+                </div>
+        
+                <!-- post 5 -->
+                <div class="post">
+                    <div class="profile">
+                        <img src="images/moana.jpg" class="dp">
+                        <div class="headerpost">
+                            <p class="handle">@moanaaa</p>
+                            <p class="title">Local makeup brands that are affordable</p>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p class="text">We’ve seen a lot of new local makeup brands popping out in malls and social media for the past years. Some brands are available only online while others have been in the market for quite some time. From celebrity-owned brands to organic cosmetics, these are the local makeup products that you should give a try!
+                            Happy Skin is one of the favorite homegrown brands of makeup. All of their products are infused with top-notch skincare ingredients from beauty capitals all over the world. Happy Skin has collaborated with local celebrities in their collections, as well as with international brands Sanrio and Disney.
+                            As one of the country’s finest and most innovative makeup line, Colourette Cosmetics redefined cosmetics to beautify and empower the modern-day women. The brand’s makeup products come in creative packaging, budget-friendly, and complements every Filipina skin tone.
+                            SHE Cosmetics Philippines is a makeup brand by celebrity Kris Bernal. The brand was launched late last year and they introduced liquid cushion lipsticks. Kris knew that the colors should be perfect for her primary market which is the Philippines so she made the five shades perfect for any skin tone.
+                            Pink Sugar goes beyond their creative packaging and catchy names by producing cosmetics that are free from animal testing and parabens. The selection of wearable colors available for each of Pink Sugar products have been expertly curated by makeup professionals to complete a woman's makeup collection and to complement the Filipina skin.
+                        </p>
                     </div>
                     <div class="icons">
                         <div class="tagpost">
@@ -320,55 +310,28 @@
                                 <p class="tagtext">tag</p>
                             </div>
                             <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tag</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
-                                <p class="tagtext">tagss</p>
-                            </div>
-                            <div class="onetag">
                                 <p class="tagtext">tagss</p>
                             </div>
                             <div class="onetag">
                                 <p class="tagtext">tagend</p>
                             </div>
                         </div>
-
+        
                         <button type="button" class="icon" id="hearticon">
                             <span class="material-symbols-outlined" id="heart">
                                 favorite
                             </span>
                         </button>
-                        <p class="count">100</p>    
                         <button type="button" class="icon" id="bhearticon">
-                            <span class="material-symbols-outlined" id="brokenheart">
+                            <span class="material-symbols-outlined" id="brokenheart" >
                                 heart_broken
                             </span>
                         </button>
-                        <p class="count">100</p>
-                        <button type="button" class="icon" id="commenticon">
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone5.html';">
                             <span class="material-symbols-outlined" id="comment">
                                 mode_comment
                             </span>
                         </button>
-                        <p class="count">100</p>
                     </div>
                 </div>
             </div>

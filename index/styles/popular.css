@@ -86,7 +86,7 @@
 }
 
 .post {
-    width: 70%;
+    width: 900px;
     height: 210px;
     background-color: var(--pink2);
     border-radius: 10px;

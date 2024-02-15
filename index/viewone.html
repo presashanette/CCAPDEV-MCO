@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- styles -->
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/viewone.css">
+    <link rel="stylesheet" href="styles/comment.css">
+
+    
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    
+    <script src="scripts/index.js"></script>
+    <script src="scripts/comment.js"></script>
+
+    <title>Girls</title>
+</head>
+<body>
+    <!-- top navigation -->
+    <nav class="nav-container nav-top-container">
+        <ul class="nav-top-items">
+            <li>
+                <a id="logo" href="index.html">GIRLS</a>
+            </li>
+            <li>
+                <form action="search.html">
+                    <div class="search">
+                        <span class="material-symbols-outlined" id="search-symbol">search</span>
+                        <input type="search" class="search-input" placeholder="search (# for tags)">
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <!-- top navigation end -->
+
+    <div class="wrapper">
+        <!-- side navigation -->
+        <nav class="nav-container nav-side-container">
+            <ul class="nav-side-items">
+                <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="home-button" href="index.html">
+                        <span class="material-symbols-outlined" id="home-symbol">home</span> Home
+                    </a>
+                </li>
+                <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="profile-button" href="profile.html">
+                        <span class="material-symbols-outlined" id="profile-symbol">person</span>Profile
+                    </a>
+                </li>
+                <li class="nav-symbol">
+                    <button onclick="filter()" class="nav-symbol-button" id="filter-button">
+                        <span class="material-symbols-outlined" id="filter-symbol">
+                        filter_alt
+                        </span>
+                        Filter
+                    </button>
+                    <div class="dropdown-content" id="myDropdown">    
+                        <button class="recent" id="recent-button">Recent</button>
+                        <button class="popular" id="popular-button">Popular</button>
+                    </div>    
+                </li>
+                <li>
+                    <a class="nav-button" id="create-button" href="createpost.html">Create Post</a>
+                </li>
+                <li>
+                    <a class="nav-button" id="signup-button" href="signup.html">Sign Up</a>
+                </li>
+                <li>
+                    <a class="nav-button" id="login-button" href="login.html">Log In</a>
+                </li>
+            </ul>           
+        </nav>
+        <!-- side navigation end -->
+    
+        
+        <!-- content -->
+        <div class="content">
+            <div class="post">
+                <div class="header">
+                    <img src="../images/barbie.jpg" id="dp">
+                    <div class="headerpost">
+                        <p class="handle">@barbie</p>
+                        <p class="title">Ways to do your own makeup</p>
+                    </div>
+                </div>
+        
+                <div class="post-content">
+                    <p>Have you ever found yourself shopping for new beauty products and feeling totally confused over why there were so many options? Do you really need to contour your face and apply bronzer? What’s the difference between an eyebrow pencil and an eyebrow gel (and how do you even fill in your eyebrows)? After a while, your shopping cart can seem redundant, while every YouTube makeup tutorial can simply sound like noise. The good news? If you feel like this, you’re not alone. Whether you need a makeup for beginners tutorial, or you love trying all the latest beauty trends, we’re giving you a little refresh on all the basics. </p>
+                </div>
+        
+                <div class="icons">
+                    <button type="button" class="icon" id="hearticon" onclick="upvotePost()">
+                        <span class="material-symbols-outlined" id="heart">
+                            favorite
+                        </span>
+                    </button>
+                    <p class="count" id="upvote-count">100</p>
+                    <button type="button" class="icon" id="bhearticon" onclick="downvotePost()">
+                        <span class="material-symbols-outlined" id="brokenheart" >
+                            heart_broken
+                        </span>
+                    </button>
+                    <p class="count" id="downvote-count">100</p>
+                    <button type="button" class="icon" id="commenticon">
+                        <span class="material-symbols-outlined" id="comment">
+                            mode_comment
+                        </span>
+                    </button>
+                    <p class="count" id="comment-count">100</p>
+
+                    <button type="button" class="icon" id="editicon" onclick="editPost()">
+                        <span class="material-symbols-outlined" id="edit">
+                            edit
+                        </span>
+                    </button>
+                    <button type="button" class="icon" id="deleteicon" onclick="deletePost()" >
+                        <span class="material-symbols-outlined" id="delete">
+                            delete
+                        </span>
+                    </button>
+                </div>
+            
+            </div>
+            <div id="add-comment">
+                <div id="richtexteditor">
+                    <button type="button" class="btn" data-element="bold">
+                        <i class="fa fa-bold"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="italic">
+                        <i class="fa fa-italic"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="underline">
+                        <i class="fa fa-underline"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="insertUnorderedList">
+                        <i class="fa fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="insertOrderedList">
+                        <i class="fa fa-list-ol"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="createLink">
+                        <i class="fa fa-link"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="justifyLeft">
+                        <i class="fa fa-align-left"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="justifyCenter">
+                        <i class="fa fa-align-center"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="justifyRight">
+                        <i class="fa fa-align-right"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="justifyFull">
+                        <i class="fa fa-align-justify"></i>
+                    </button>
+                    <button type="button" class="btn" data-element="insertImage">
+                        <i class="fa fa-image"></i>
+                    </button>
+                    <button id="commentbtn" onclick="addComment()">COMMENT</button>
+                </div>
+
+               
+                <div id="commentinput" contenteditable="true" placeholder="Add a comment" onkeydown="handleKeyDown(event)"></div>
+                <script src="scripts/viewone.js"></script>
+                <script src="scripts/createpost.js"></script>
+                <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
+
+                
+            </div>    
+
+            <div id="comments"></div>
+            
+        </div>   
+    </div>    
+   
+    
+</body>
+    
+</html>

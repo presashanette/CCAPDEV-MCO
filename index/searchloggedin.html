@@ -30,7 +30,7 @@
     <nav class="nav-container nav-top-container">
         <ul class="nav-top-items">
             <li>
-                <a id="logo" href="index.html">GIRLS</a>
+                <a id="logo" href="indexloggedin.html">GIRLS</a>
             </li>
             <li>
                 <form action="search.html">
@@ -49,7 +49,7 @@
         <nav class="nav-container nav-side-container">
             <ul class="nav-side-items">
                 <li class="nav-symbol">
-                    <a class="nav-symbol-button" id="home-button" href="index.html">
+                    <a class="nav-symbol-button" id="home-button" href="indexloggedin.html">
                         <span class="material-symbols-outlined" id="home-symbol">home</span> Home
                     </a>
                 </li>
@@ -66,18 +66,15 @@
                         Filter
                     </button>
                     <div class="dropdown-content" id="myDropdown">    
-                        <button class="recent" id="recent-button">Recent</button>
-                        <button class="popular" id="popular-button">Popular</button>
+                        <a class="recent" id="recent-button" href="recentloggedin.html">Recent</button>
+                        <a class="popular" id="popular-button" href="popularloggedin.html">Popular</button>
                     </div>    
                 </li>
                 <li>
                     <a class="nav-button" id="create-button" href="createpost.html">Create Post</a>
                 </li>
                 <li>
-                    <a class="nav-button" id="signup-button" href="signup.html">Sign Up</a>
-                </li>
-                <li>
-                    <a class="nav-button" id="login-button" href="login.html">Log In</a>
+                    <a class="nav-button" id="logout-button" href="index.html">Log Out</a>
                 </li>
             </ul>           
         </nav>
@@ -378,6 +375,76 @@
             
         
             <div class="allposts">
+                <!-- post 1 -->
+                <div class="post">
+                    <div class="profile">
+                        <img src="images/barbie.jpg" class="dp">
+                        <div class="headerpost">
+                            <p class="handle">@barbie</p>
+                            <a class="title" href="viewone.html">Ways to do your own makeup</a>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <p class="text">Have you ever found yourself shopping for new beauty products and feeling totally confused over why there were so many options? Do you really need to contour your face and apply bronzer? What’s the difference between an eyebrow pencil and an eyebrow gel (and how do you even fill in your eyebrows)? After a while, your shopping cart can seem redundant, while every YouTube makeup tutorial can simply sound like noise. The good news? If you feel like this, you’re not alone. Whether you need a makeup for beginners tutorial, or you love trying all the latest beauty trends, we’re giving you a little refresh on all the basics. </p>
+                    </div>
+                    <div class="icons">
+                        <div class="tagpost">
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tag</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagss</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagss</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagss</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagss</p>
+                            </div>
+                            <div class="onetag">
+                                <p class="tagtext">tagend</p>
+                            </div>
+                        </div>
+
+                        <button type="button" class="icon" id="hearticon">
+                            <span class="material-symbols-outlined" id="heart">
+                                favorite
+                            </span>
+                        </button>
+                        <button type="button" class="icon" id="bhearticon">
+                            <span class="material-symbols-outlined" id="brokenheart" >
+                                heart_broken
+                            </span>
+                        </button>
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = 'viewone.html';">
+                            <span class="material-symbols-outlined" id="comment">
+                                mode_comment
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                
                 
                 <!-- post 2 -->
                 <div class="post">

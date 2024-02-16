@@ -1,3 +1,5 @@
+
+
 function deletePost() {
     alert('Post deleted successfully.');
     window.location.href = "../index.html";

@@ -26,7 +26,7 @@
 .toppanel {
     width: 100%;
     background-color: #F3CFD6;
-    height: 27%;
+    height: 11%;
     
 }
 
@@ -44,10 +44,11 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    padding: 0;
 }
 
 .spacer{
-    height: 7%;
+    height: 20px;
 }
 
 .spacer2{
@@ -63,6 +64,7 @@
     height: 86%;
     margin: auto;
     align-items: center;
+    margin-top: 0;
 }
 
 .container {

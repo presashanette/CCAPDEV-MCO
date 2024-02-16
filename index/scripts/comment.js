@@ -22,13 +22,13 @@ function createProfile() {
     var picture = document.createElement("img");
     var username = document.createElement("p");
 
-    picture.src = "images/aurora.jpeg";
+    picture.src = "images/barbie.jpg";
 
     profileDiv.classList.add("profile-container");
     picture.classList.add("profile-picture");
     infoDiv.classList.add("user-info");
 
-    infoDiv.textContent = "@aurora";
+    infoDiv.textContent = "@barbie";
 
     pictureDiv.appendChild(picture);
     infoDiv.appendChild(username);

@@ -58,6 +58,7 @@ button{
 }
 
 .content{
+    margin-top: 100px;
     padding: 20px;
     width: 100%;
 }
@@ -66,6 +67,7 @@ button{
 /* top navigation *********/
 .nav-top-container{
     background-color: #EE7C9A;
+    
 }
 
 .nav-top-items{
@@ -113,7 +115,7 @@ button{
     background-color: #ffcdda;
     width: 100%;
     max-width: 300px;
-    height: 100%;
+    min-height: 100%;
 }
 
 

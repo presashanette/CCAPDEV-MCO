@@ -13,11 +13,12 @@
 
     <!-- styles -->
     <link rel="stylesheet" href="styles/index.css">
-    <link rel="stylesheet" href="styles/popular.css">
+    <link rel="stylesheet" href="styles/recent.css">
     
     <!-- scripts -->
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/recent.js"></script>
 
     <title>Girls</title>
 </head>
@@ -26,7 +27,7 @@
     <nav class="nav-container nav-top-container">
         <ul class="nav-top-items">
             <li>
-                <a id="logo" href="index.html">GIRLS</a>
+                <a id="logo" href="indexloggedin.html">GIRLS</a>
             </li>
             <li>
                 <form action="search.html">
@@ -45,12 +46,12 @@
         <nav class="nav-container nav-side-container">
             <ul class="nav-side-items">
                 <li class="nav-symbol">
-                    <a class="nav-symbol-button" id="home-button" href="index.html">
+                    <a class="nav-symbol-button" id="home-button" href="indexloggedin.html">
                         <span class="material-symbols-outlined" id="home-symbol">home</span> Home
                     </a>
                 </li>
                 <li class="nav-symbol">
-                    <a class="nav-symbol-button" id="profile-button" href="login.html">
+                    <a class="nav-symbol-button" id="profile-button" href="viewprofile.html">
                         <span class="material-symbols-outlined" id="profile-symbol">person</span>Profile
                     </a>
                 </li>
@@ -62,18 +63,15 @@
                         Filter
                     </button>
                     <div class="dropdown-content" id="myDropdown">    
-                        <a class="recent" id="recent-button" href="recent.html">Recent</button>
-                        <a class="popular" id="popular-button" href="popular.html">Popular</button>
-                    </div>    
+                        <a class="recent" id="recent-button" href="recentloggedin.html">Recent</button>
+                        <a class="popular" id="popular-button" href="popularloggedin.html">Popular</button>
+                    </div>
                 </li>
                 <li>
-                    <a class="nav-button" id="create-button" href="login.html">Create Post</a>
+                    <a class="nav-button" id="create-button" href="createpost.html">Create Post</a>
                 </li>
                 <li>
-                    <a class="nav-button" id="signup-button" href="signup.html">Sign Up</a>
-                </li>
-                <li>
-                    <a class="nav-button" id="login-button" href="login.html">Log In</a>
+                    <a class="nav-button" id="logout-button" href="index.html">Log Out</a>
                 </li>
             </ul>           
         </nav>
@@ -83,11 +81,11 @@
         <!-- content -->
         <div class="content">
             <div class="head">
-                <div id="popular">
+                <div id="recent">
                     <span class="material-symbols-outlined">
-                        star
+                        schedule
                     </span>
-                    <h1 id="poptext">Popular</h1>
+                    <h1 id="recenttext">Recent</h1>
                 </div>
                 <!-- <div class="seemore">
                     <p id="see">See More</p>
@@ -423,7 +421,10 @@
                 </div>
                 
             </div>
-        </div>
+        </div>   
+    </div>    
+   
+    
 </body>
     
 </html>

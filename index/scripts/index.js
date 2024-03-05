@@ -1,71 +1,76 @@
+const express = require('express');
+const app = express();
+const path = require('path');
+const hbs = require("hbs");
+const collection = require('./mongodb');
+// const bodyParser = require('body-parser')
+// const LocalStrategy = require('passport-local')
+// const passport = require('passport')
+// const passportLocalMongoose = require('passport-local-mongoose')
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+// const User = require("./user");
+// const users = require('./routes/user');
+// const login = require('./routes/login');
 
-/**
- * isLoggedIn = false;
- * ^ turns true when user logs in
- * 
- * if isLoggedIn == true
- *      change:
- *      Log In -> Log Out
- *      link   -> link
- */
+const templatePath = path.join(__dirname, "../templates");
 
+// app.use(passport.initialize());
+// app.use(passport.session());
+app.use(express.json()); //have to write this to use hbs and connect mongoDB?
+app.set("view engine", "hbs");
+app.set("views", templatePath);
+app.use(express.urlencoded({extended:false}));
+app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../images")));
 
-// function filter() {
-//     document.getElementById("myDropdown").classList.toggle("show");
-//   }
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
-// function filterFunction() {
-//     var input, filter, ul, li, a, i;
-
-//     input = document.getElementById("myInput");
-//     filter = input.value.toUpperCase();
-//     div = document.getElementById("myDropdown");
-//     a = div.getElementsByTagName("a");
-    
-//     for (i = 0; i < a.length; i++) {
-//         txtValue = a[i].textContent || a[i].innerText;
-//         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-//             a[i].style.display = "";
-//         } else {
-//             a[i].style.display = "none";
-            
-//         }
-//     }
-// }  
-
-const express = require('express')
-const app = express()
-const path = require('path')
-const hbs = require("hbs")
-const collection = require('./mongodb')
-
-const templatePath = path.join(__dirname, "../templates")
-
-app.use(express.json()) //have to write this to use hbs and connect mongoDB?
-app.set("view engine", "hbs")
-app.set("views", templatePath)
-app.use(express.urlencoded({extended:false}))
-app.use(express.static(path.join(__dirname, "../public")))
+app.use(
+    session({
+      secret: 'secret-key',
+      cookie: {
+        sameSite: 'strict'
+      }
+    //   resave: false,
+    //   saveUninitialized: false,
+    })
+);
 
 app.get("/", (req,res) => {
-    res.render("login")
-})
+    res.render("login");
+});
+
+app.get("/index", (req,res) => {
+    res.render("index");
+});
+
+app.get("/indexloggedin", (req,res) => {
+    res.render("indexloggedin");
+});
 
 app.get("/login", (req,res) => {
-    res.render("login")
-})
+    res.render("login");
+});
 
 app.get("/signup", (req,res) => {
-    res.render("signup")
+    res.render("signup");
+})
+
+app.get("/secret", isLoggedIn, function (req, res) {
+    res.render("secret");
 })
 
 app.post("/signup", async(req, res) => {
     
 
-    const checksu = await collection.findOne({uname: req.body.uname})
+    const checksu = await collection.findOne({uname: req.body.uname});
 
     if (checksu && checksu.uname === req.body.uname){
-        res.send("Account already exists!")
+        const showError1 = true; // Set to true if an error is detected
+        res.render("signup", { showError1 });
     }
 
     else {
@@ -74,30 +79,49 @@ app.post("/signup", async(req, res) => {
             psw: req.body.psw
         }
 
-        await collection.insertMany([data])
+        //for hashing pw
+        const saltRounds = 10;
+        const hashedpsw = await bcrypt.hash(data.psw, saltRounds);
+        data.psw = hashedpsw;
+        await collection.insertMany([data]);
 
-        res.render("index")
+        res.render("indexloggedin");
     }
 
 })
 
 app.post("/login", async(req, res) => {
     try {
-        const check = await collection.findOne({uname: req.body.uname})
-
-        if(check && check.psw === req.body.psw){
-            res.render("index")
+        const check = await collection.findOne({uname: req.body.uname});
+        const isPassMatch = await bcrypt.compare(req.body.psw, check.psw);
+        if(check && isPassMatch){
+            req.session.user = check;
+            req.session.authorized = true;
+            res.render("indexloggedin");
         }
         else {
-            res.send("wrong password")
+            if (check == null) {
+                const showError2 = true; // Set to true if an error is detected
+                res.render("login", { showError2 });
+            }
+            else {
+                const showError1 = true; // Set to true if an error is detected
+                res.render("login", { showError1 });
+            }
         }
     }
     catch {
-        res.send("wrong details")
+        const showError2 = true; // Set to true if an error is detected
+        res.render("login", { showError2 });
     }
 
-})
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect("/login");
+}
 
 app.listen(3000, () => {
     console.log("port connected");
-})
+});

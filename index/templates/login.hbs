@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
     <link rel="stylesheet" href="/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
@@ -41,5 +42,30 @@
         </div>
         <div class="spacer"></div>
     </div>
+
+    <!-- The Modal -->
+    <div id="myModal1" class="modal" style="{{#if showError1}}display: block;{{else}}display: none;{{/if}}">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <button class="close" onclick="myFunc()">X</button>
+        <p>Wrong password!</p>
+    </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal2" class="modal" style="{{#if showError2}}display: block;{{else}}display: none;{{/if}}">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <button class="close" onclick="myFunc()">X</button>
+        <p>No account with this username!</p>
+    </div>
+    </div>
+
+    <script>
+    // When the user clicks on div, close the popup
+    function myFunc() {
+        $(".modal").hide();
+    }
+    </script>
 </body>
 </html>

@@ -9,7 +9,7 @@ mongoose.connect("mongodb://localhost:27017/Girls")
     console.log("failed to connect mongodb")
 })
 
-const LogIndb = new mongoose.Schema({
+const userSch = new mongoose.Schema({
     uname:{
         type: String,
         required: true
@@ -18,9 +18,57 @@ const LogIndb = new mongoose.Schema({
     psw:{
         type: String,
         required: true
-    }
+    },
+
+    profPicLink:  {
+        type: String,
+        default: '/defUser.png'
+    },
+    bio: {
+        type: String,
+        default: 'No bio added'
+    },
+    posts:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
+    comments:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
 })
 
-const collection = new mongoose.model("SignUpCollection", LogIndb)
+const postSch = new mongoose.Schema({
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    title: String,
+    content: String,
+    tags: [String],
+    image: String, // URL to the image
+});
 
-module.exports = collection
+const commentSch = new mongoose.Schema({
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    content: String,
+    image: String, // URL to the image
+    replies:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
+});
+
+const Post = mongoose.model('Post', postSch, 'posts');
+const User = mongoose.model('User', userSch, 'users');
+const Comment = mongoose.model('Comment', commentSch, 'comments');
+
+const posts = new mongoose.model("posts", postSch);
+const users = new mongoose.model("users", userSch);
+const comments = new mongoose.model("comments", commentSch);
+
+module.exports = { Post, User, Comment };
+

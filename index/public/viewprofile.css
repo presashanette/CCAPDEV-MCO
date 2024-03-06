@@ -26,7 +26,7 @@
 .toppanel {
     width: 100%;
     background-color: #F3CFD6;
-    height: 11%;
+    height: 50%;
     
 }
 
@@ -35,7 +35,12 @@
     flex-direction: column;
     padding: 0;
     margin-top: 0;
-    
+    margin-left: 0;
+}
+
+.namebio p {
+    font-size: 1.5vw;
+    color: var(--pink1);
 }
 
 .bottompanel {
@@ -48,7 +53,7 @@
 }
 
 .spacer{
-    height: 20px;
+    height: 7%;
 }
 
 .spacer2{
@@ -74,7 +79,8 @@
     flex-direction: row;
     word-wrap: break-word;
     align-items: center;
-    margin-bottom: 20%;
+    padding-bottom: 20%;
+    padding-top: 5%;
 }
 
 .container p {
@@ -84,13 +90,12 @@
 
 .pic {
     border-radius: 50%;
-    max-height: 300px;
-    max-width: 300px;
+    
     min-height: 170px;
     min-width: 170px;
     border: 20px #F3CFD6;
-    height: 75%;
-    margin-bottom: 200px;
+    height: 300px;
+    
     margin: auto;
     align-items: center;
 }
@@ -111,12 +116,29 @@
 
 h1{
     color: #9F0840;
-    font-size: 1.5vw;
+    font-size:2vw;
     margin:auto;
     text-align: center;
     font-weight: 800;
     margin-bottom: 10px;
 }
+
+.noactivity {
+    border: 20px;
+    border-radius: 20px;
+}
+
+.noactivity h1 {
+    color: #e79ba2;
+    font-size: 1.5vw;
+    margin:auto;
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 10px;
+    padding: 10%;
+    padding-top: 20%;
+}
+
 
 .buttons {
     display: flex;

@@ -424,7 +424,20 @@
         </div>   
     </div>    
    
-    
+    <div id="myModal3" class="modal" style="{{#if showError3}}display: block;{{else}}display: none;{{/if}}">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <button class="close" onclick="myFunc()">X</button>
+        <p>An error occurred fetching user profile.</p>
+    </div>
+    </div>
+
+    <script>
+    // When the user clicks on div, close the popup
+        function myFunc() {
+            $(".modal").hide();
+        }
+    </script>
 </body>
     
 </html>

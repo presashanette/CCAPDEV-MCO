@@ -42,7 +42,7 @@ app.use(
 );
 
 app.get("/", (req,res) => {
-    res.render("login");
+    res.render("index");
 });
 
 app.get("/index", (req,res) => {
@@ -84,7 +84,7 @@ app.get("/viewprofile", async (req, res) => {
 
     } catch (error) {
         console.error("Error fetching user profile:", error);
-        res.render("login", { showError2: true, errorMessage: 'An error occurred fetching user profile.' });
+        res.render("indexloggedin", { showError3: true });
     }
 });
 
@@ -124,6 +124,10 @@ app.post("/signup", async(req, res) => {
         data.psw = hashedpsw;
         await User.insertMany([data]);
         
+        const signedup = await User.findOne({uname: req.body.uname});
+
+        req.session.user = signedup;
+        req.session.authorized = true;
         res.render("indexloggedin");
     }
 

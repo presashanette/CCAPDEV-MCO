@@ -1,0 +1,157 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      post-content="width=device-width, initial-scale=1.0"
+    />
+    <!-- icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- styles -->
+    <link rel="stylesheet" href="/index.css" />
+    <link rel="stylesheet" href="/viewall.css" />
+    <link rel="stylesheet" href="/recent.css" />
+    <link rel="stylesheet" href="/comment.css" />
+
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/viewone.js"></script>
+    <script src="scripts/comment.js"></script>
+    <title>Comments || Girls
+    </title>
+  </head>
+  <body>
+    <!-- top navigation -->
+    <nav class="nav-container nav-top-container">
+      <ul class="nav-top-items">
+        <li>
+          <a id="logo" href="/index">GIRLS</a>
+        </li>
+        <li>
+              <form action="/globalSearch" method="GET">
+    <div class="search">
+        <span class="material-symbols-outlined" id="search-symbol">search</span>
+        <input type="search" class="search-input" name="query" placeholder="Search with tags here ..........">
+        <button type="submit" class="bg-pink">Search</button>
+    </div>
+</form>
+
+        </li>
+      </ul>
+    </nav>
+    <!-- top navigation end -->
+
+    <div class="wrapper">
+      <!-- side navigation -->
+      <nav class="nav-container nav-side-container">
+        <ul class="nav-side-items">
+          <li class="nav-symbol">
+            <a class="nav-symbol-button" id="home-button" href="/index">
+              <span
+                class="material-symbols-outlined"
+                id="home-symbol"
+              >home</span>
+              Home
+            </a>
+          </li>
+          <li class="nav-symbol">
+            <a class="nav-symbol-button" id="profile-button" href="/login">
+              <span
+                class="material-symbols-outlined"
+                id="profile-symbol"
+              >person</span>Profile
+            </a>
+          </li>
+          <br />
+          <li class="nav-symbol">
+            <a class="nav-symbol-button" id="profile-button" href="/login">
+              <span
+                class="material-symbols-outlined"
+                id="filter-symbol"
+              >schedule</span>Recent
+            </a>
+          </li>
+          <li class="nav-symbol">
+            <a class="nav-symbol-button" id="profile-button" href="/login">
+              <span
+                class="material-symbols-outlined"
+                id="filter-symbol"
+              >star</span>Popular
+            </a>
+          </li>
+          <li>
+            <a class="nav-button" id="create-button" href="/login">Create Post</a>
+          </li>
+          <li>
+            <a class="nav-button" id="signup-button" href="/signup">Sign Up</a>
+          </li>
+          <li>
+            <a class="nav-button" id="login-button" href="/login">Log In</a>
+          </li>
+        </ul>
+      </nav>
+      <!-- side navigation end -->
+
+      <div class="comment-container">
+        <div class="comment-wrapper">
+          <div class="comment-card">
+            <h3 class="comment-title">The first comment</h3>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit
+              minima magnam maxime nemo voluptas mollitia officia optio
+              voluptatem temporibus qui. Sit veniam quam, dolorum quas magni
+              temporibus a ut nam.
+            </p>
+            <div class="comment-icons">
+              <button
+                type="button"
+                class="icon"
+                id="hearticon"
+                onclick="upvotePost()"
+              >
+                <span class="material-symbols-outlined" id="heart">
+                  favorite
+                </span>
+              </button>
+              <p class="count" id="upvote-count">100</p>
+              <button
+                type="button"
+                class="icon"
+                id="bhearticon"
+                onclick="downvotePost()"
+              >
+                <span class="material-symbols-outlined" id="brokenheart">
+                  heart_broken
+                </span>
+              </button>
+              <p class="count" id="downvote-count">100</p>
+              <button type="button" class="icon" id="commenticon">
+                <span class="material-symbols-outlined" id="comment">
+                  mode_comment
+                </span>
+              </button>
+              <p class="count" id="comment-count">100</p>
+            </div>
+          </div>
+          <div class="comment-wrapper"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="scripts/comment.js"></script>
+  </body>
+</html>

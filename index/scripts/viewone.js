@@ -2,11 +2,11 @@
 
 function deletePost() {
     alert('Post deleted successfully.');
-    window.location.href = "./index.html";
+    window.location.href = "/index";
 }
 
 function editPost() {
-    window.location.href = "./edit.html";
+    window.location.href = "/edit";
 }
 
 var isUpvoted = false;

@@ -189,11 +189,14 @@ h1{
     object-fit: cover;
     width: 75px;
     height: 75px;
+    background: var(--pink5);
     border-radius: 50%;
+    border: 2px solid var(--pink4);
 }
 
 .profile {
     display: flex;
+    align-items: center;
     flex-direction: row;
     padding: 15px 0 0 15px;
 }

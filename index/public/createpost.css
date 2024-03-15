@@ -32,7 +32,7 @@ h1 {
 
 #create {
     margin-top: 30px;
-    width: 1000px;
+    width: 99%;
     height: 500px;
     background-color: var(--pink2);
 }
@@ -41,7 +41,7 @@ h1 {
     margin: 20px 0 0 20px; /*top right bottom left*/
     background-color: var(--pink3);
     border: 0px;
-    width: 950px;
+    width: 97%;
     height: 50px;
     border-radius: 10px;
     text-indent: 10px;
@@ -50,8 +50,8 @@ h1 {
 
 .editorcontent {
     margin: 20px 0 0 20px;
-    height: 300px;
-    width: 950px;
+    height: 270px;
+    width: 97%;
     border-radius: 10px;
 }
 
@@ -86,6 +86,7 @@ h1 {
 #posttext {
     height: 220px;
     padding: 15px;
+    width: 100%;
     background-color: var(--pink3);
     border-radius: 0 0 10px 10px;
     overflow: auto;
@@ -102,15 +103,17 @@ h1 {
     align-items: center;
     border: 0;
     padding: 5px;
-    width: 800px;
-    margin: 10px 0 0 20px;
+    width: 98%;
+    margin: 10px 0 20px 10px;
 }
 
 .tag-input-container input {
     flex: 1;
     border: none;
     outline: none;
-    padding: 5px;
+        background-color: var(--pink3);
+    padding: 15px;
+    font-size: 18px !important;
     border-radius: 10px;
 }
 
@@ -136,22 +139,28 @@ h1 {
     justify-content: end;
 }
 
-#cancelbtn, #postbtn {
+#cancelbtn,
+#postbtn {
     height: 30px;
-    width: 60px;
+    width: 80px; /* Increased width for better readability */
     margin-right: 10px;
     border: 0px;
+    font-size: 18px !important;
+    font-weight: bold;
     outline: none;
-    background-color: white;
+    background-color: transparent;
     transition-duration: 0.4s;
     border-radius: 10px;
     text-decoration: none;
     display: inline-block;
+    outline: solid #9F0840 2px;
     text-align: center;
     padding-top: 5px;
+    cursor: pointer; /* Add cursor pointer on hover */
 }
 
-#cancelbtn:hover, #postbtn:hover {
-    background-color: var(--pink1);
+#cancelbtn:hover,
+#postbtn:hover {
+    background-color: var(--pink1); /* Pink color */
     color: white;
 }

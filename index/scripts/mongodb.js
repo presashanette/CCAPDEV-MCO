@@ -9,6 +9,8 @@ mongoose.connect("mongodb://localhost:27017/Girls")
     console.log("failed to connect mongodb")
 })
 
+
+
 const userSch = new mongoose.Schema({
     uname:{
         type: String,
@@ -43,11 +45,27 @@ const postSch = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
     title: String,
     content: String,
     tags: [String],
-    image: String, // URL to the image
+    image: {
+        type: String,
+        default: '/default-image.png' // Default image URL if no image is uploaded
+    },
+    upvotes: {
+        type: Number,
+        default: 0,
+    },
+    downvotes: {
+        type: Number,
+        default: 0,
+    },
 });
+
 
 const commentSch = new mongoose.Schema({
     author: {
@@ -60,6 +78,10 @@ const commentSch = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }
 });
 
 const Post = mongoose.model('Post', postSch, 'posts');

@@ -10,16 +10,14 @@
 
 .content{
     width: 100%;
-    max-width: 800px;
-    margin: auto;
 }
 
 .post {
     margin: 10px 20px 10px 20px;
-    width: 100%;
-    max-width: 800px;
+    width: 98% !important;
     display: flex;
     flex-direction: column;
+    padding: 20px 30px;
 }
 
 .header {
@@ -33,6 +31,8 @@
     border-radius: 50%;
     width: 90px;
     height: 90px;
+    background: var(--pink1) !important;
+    border: 2px solid var(--pink5);
 }
 
 .handle {
@@ -55,6 +55,7 @@
     text-justify: inter-word;
     font-size: 25px;
     margin-top: 20px;
+    
 }
 
 .icons {
@@ -129,3 +130,67 @@
     padding-right: 10px;
     margin: 2px 0 0 5px;
 }
+
+.posta2 {
+    width: 98%;
+    height: 150px;
+    background-color: var(--pink2);
+    border-radius: 10px;
+    margin: 10px 20px 10px 10px;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bg-pink {
+    background-color: var(--pink1);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+  }
+  
+  .text-end{
+        text-align: end;
+        margin-right: 20px !important;
+  
+  }
+  
+  .bg-pink:hover {
+    background-color: var(--pink5);
+  }
+
+  .bg-comment2 {
+    width: 97% !important;
+    border-radius: 10px;
+    padding: 20px 10px;
+    font-size: 18px !important;
+}
+
+    .comments-section {
+        margin:  10px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        width: 98%;
+        border-radius: 10px;
+        background-color: var(--pink2);
+}
+
+.comment {
+    margin-bottom: 15px;
+}
+
+.comment p {
+    margin: 0;
+}
+
+hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+

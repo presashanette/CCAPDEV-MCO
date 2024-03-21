@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;800&display=swap');
+
+* {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+}
+
+.main {
+    background-color: #F3CFD6;
+    width: 100%;
+    height:100%;
+    
+    top:0;
+    left:0;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+}
+
+.panel {
+    background-color: #FFEBEB;
+    width:65%;
+    min-width: 700px;
+    
+    min-height: 550px;
+    border-radius: 20px;
+    margin:auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.spacer {
+    height:5%;
+}
+
+.buttons, .bio {
+    width: 67%;
+    max-width: 500px;
+    margin:auto;
+    
+}
+
+#biobox {
+    width:100%;
+    color: #000;
+    padding: 20px;
+    background: var(--pink3);
+    margin:auto;
+}
+
+.header {
+    width: 75%;
+    margin:auto;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 0;
+}
+
+h1{
+    color: #FB4570;
+    font-size: 25px;
+    margin:auto;
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+.profpic {
+    width: 67%;
+    max-width: 500px;
+    margin:auto;
+    align-items: center;
+    margin-top: 0px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#pic {
+    border-radius: 50%;
+    margin-bottom: 20px;
+    width:250px;
+    height:250px;
+}
+
+#profpicfile {
+    border-color: #32000C;
+    border: 1px;
+    background-color: #ffc8c8;
+    color: #FB4570;
+    width: 100%;
+}
+
+h3 {
+    color: #32000C;
+    margin:0;
+    padding: 0;
+    font-weight: 400;
+    margin-top: 15px;
+}
+
+.savebtn, .uploadbtn {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    background-color: #FB4570;
+    color:#FFFFFF;
+    border-radius: 50px;
+}
+
+.backbtn {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    background-color: #FFEBEB;
+    color:#FB4570;
+    border-radius: 50px;
+    margin-bottom: 30px;
+}
+
+
+.profpic {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+#pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#profpicfile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.uploadbtn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    border: none;
+    outline: none;
+    background-color: var(--pink5);
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.uploadbtn:hover {
+    background-color: var(--pink1);
+}

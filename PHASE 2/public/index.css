@@ -1,0 +1,372 @@
+/* !!!TO EDIT!!! */
+
+/* change id to whichever page it is on (#home-symbol, #profile-symbol, #filter-symbol) delete if none (creating post siguro none) */
+#home-symbol {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+/* change class to whichever page it is on (.home, .profile, .filter) delete if none (creating post siguro none) */
+#home-button{
+    font-weight: 700;
+}
+
+/* general *******/
+*{
+    font-family: "Syne";
+    color: rgb(77, 77, 77);
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+body{
+    height: 100vh;
+}
+
+ul, li{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+button{
+    padding: 0;
+    text-decoration: none;
+}
+
+.nav-container{
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    
+}
+
+.nav-container{
+    font-size: 25px;
+}
+
+.wrapper {
+    display: flex;
+    height: calc(100vh - 70px); /* Subtracting height of navigation bar from viewport height */
+    overflow-y: auto; /* Add scrollbar for content overflow */
+}
+
+.content{
+    margin-top: 100px;
+    padding: 20px;
+    width: 100%;
+} 
+
+
+/* top navigation *********/
+.nav-top-container {
+    background-color: #EE7C9A;
+    position: sticky;
+    top: 0 !important; /* Stick to the top of the viewport */
+    z-index: 1000; /* Ensure it appears above other content */
+    width: 100%; /* Ensure it spans the entire width */
+}
+
+
+.nav-top-items{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-top-items li:nth-child(2){
+    margin: auto;
+}
+
+#logo{
+    font-size: 60px;
+    font-weight: 700;
+    margin-right: 20px;
+    color: white;
+} 
+
+/* search *********/
+.search{
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    border-radius: 28px;
+    background-color: #f6f6f6;
+    
+    
+}
+
+.search-input{
+    font-size: 25px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #333;
+    margin-left: 14px;
+    width: 500px;
+    
+}
+
+/* side navigation *********/
+
+.nav-side-container {
+    background-color: #ffcdda;
+    width: 100%;
+    max-width: 300px;
+    min-height: 100vh; /* Set minimum height to viewport height */
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 999; /* Ensure it appears above other content */
+    overflow-y: auto; /* Add scrollbar for content overflow */
+}
+
+
+
+.nav-side-items li{
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.nav-side-items li:nth-child(3){
+    margin-bottom: 100px;
+}
+
+.nav-symbol-button {
+    font-weight: 600;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#profile-symbol{
+    margin-right: 20px;
+} 
+
+
+/* filter *********/
+#filter-button{
+    font-size: 25px;
+}
+  
+.dropdown-content {
+    display: none;
+    
+}
+
+.dropdown-content button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+}
+
+.dropdown-content button:hover {
+    color: #EE7C9A;
+}
+
+
+.show {
+    display: block;
+    margin-left: 60px;
+}
+
+/* icons *********/
+.nav-side-items .material-symbols-outlined{
+    margin-right: 14px;
+    color: rgb(77, 77, 77);
+
+}
+
+.nav-symbol .material-symbols-outlined{
+    color: rgb(77, 77, 77);
+    vertical-align: middle;
+    font-size: 40px;
+}
+
+#search-symbol{
+    color: #EE7C9A;
+    font-size: 50px;
+    
+}
+
+/* buttons *********/
+.nav-button{
+    border-radius: 28px;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+#create-button{
+    color: #32000C;
+    outline: solid #9F0840 2px;
+    padding: 8px;
+    padding-left: 36px;
+    padding-right: 36px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#create-button:hover {
+    background-color: var(--pink1); /* Pink color */
+    color: white;
+}
+
+
+#signup-button, #logout-button{
+    color: #32000C;
+    outline: solid #9F0840 2px;
+    padding: 8px;
+    padding-left: 56px;
+    padding-right: 56px;
+    line-height: 70px;
+    text-align: center;
+    cursor: pointer;
+    width: 300px !important;
+}
+
+#signup-button, #logout-button:hover {
+    background-color: var(--pink1); /* Pink color */
+    color: white;
+}
+
+#login-button{
+    color: #32000C;
+    outline: solid #9F0840 2px;
+    padding: 8px;
+    padding-left: 63px;
+    padding-right: 63px;
+    text-align: center;
+    cursor: pointer;
+    width: 300px !important;
+}
+
+#login-button, #edit-profile {
+    background-color: var(--pink1); /* Pink color */
+    color: white;
+}
+
+#edit-profile{
+    color: #32000C;
+    outline: solid #9F0840 2px;
+    padding: 8px;
+    padding-left: 43px;
+    padding-right: 43px;
+    line-height: 70px;
+    text-align: center;
+    cursor: pointer;
+    width: 300px !important;
+}
+
+
+/* The Modal (background) */
+.modal { 
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Could be more or less, depending on screen size */
+  }
+
+  .btn {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+    border: 0px;
+    outline: none;
+    background-color: transparent;
+    transition-duration: 0.4s;
+}
+.bg-pink{
+    background: var(--pink1);
+    color: #fff;
+    padding: 16px 11px;
+    font-size: 20px;
+    border: none;
+    border-radius: 4%;
+}
+  
+  /* Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+
+
+  .bg-comment {
+    margin: 20px 0 0 20px;
+    height: 100px;
+    width: 650px;
+    border-radius: 10px;
+    padding:10px 5px 20px 20px;
+
+}
+
+.posta {
+    width: 800px;
+    height: 150px;
+    background-color: var(--pink2);
+    border-radius: 10px;
+    margin: 10px 20px 10px 10px;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+textarea{
+    font-size: 18px;
+    color: #000;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 15px 0 0 15px;
+}
+
+
+.action-icons{
+    display: flex;
+    align-items: center;
+}
+
+
+.icon{
+    cursor: pointer;
+}

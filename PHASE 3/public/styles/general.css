@@ -1,0 +1,46 @@
+/* general *******/
+*{
+    font-family: "Syne";
+    font-size: 16px;
+    margin: 0;
+    box-sizing: border-box;
+
+    --pink1: #EE7C9A;
+    --pink2: #F3CFD6;
+    --pink3: #FFEBEB;
+    --pink4: #9F0840;
+    --pink5: #FB4570;
+    --brown: #32000C;
+
+}
+
+body{
+    height: 100vh;
+}
+
+ul, li{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+button{
+    padding: 0;
+    text-decoration: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #f6f6f6 inset !important;
+}

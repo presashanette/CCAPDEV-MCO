@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In || Girls</title>
+    <link rel="stylesheet" href="./styles/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+    <div class="main">
+        <div class="spacer"></div>
+        <div class="panel">
+            <div class="header">
+                <h1>LOGIN</h1>
+            </div>
+
+            <form action="/login" method="post">
+                <div class="username">
+                    <h3>Username</h3>
+                    <input type="text" placeholder="Enter Username" name="uname" required>
+                </div>
+                <div class="password">
+                    <h3>Password</h3>
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                </div>
+                <div class="buttons">
+                    <div class="rmblogin">
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember" class="remembercheck"> Remember me
+                        </label>
+                        <span class="notyetuser"><p>Not yet a user? <a href="/signup">Sign Up</a></p></span>
+                    </div>
+                    
+                    <button onclick="window.location.href='/indexloggedin';" class="loginbtn">Login</button>
+                
+                    <input type="button" class="backbtn" value="Back" onclick="history.back()">
+                </div>
+            </form>
+            
+        </div>
+        <div class="spacer"></div>
+    </div>
+
+<script>
+    // Function to handle form submission
+    function submitForm() {
+        // Submit the form using jQuery AJAX
+        $.ajax({
+            type: "POST",
+            url: "/login",
+            data: $('#loginForm').serialize(), // Serialize form data
+            success: function(response) {
+                if (response.success) {
+                    // Redirect to homepage upon successful login
+                    window.location.href = "/indexloggedin";
+                } else {
+                    // Display appropriate error modal
+                    if (response.errorType === "password") {
+                        $("#myModal1").show(); // Wrong password modal
+                    } else if (response.errorType === "username") {
+                        $("#myModal2").show(); // Username not found modal
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+
+    // Function to close modals
+    function myFunc() {
+        $(".modal").hide();
+    }
+</script>
+
+</body>
+</html>

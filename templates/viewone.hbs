@@ -150,16 +150,14 @@
         </div>
         <div class="icons">
             <form method="POST" action="/upvotePost/{{post._id}}">
-                <button type="submit" class="icon" id="hearticon" onclick="uptoggle(this)">
+                <button type="submit" class="icon" id="hearticon">
                     <span class="material-symbols-outlined" id="heart" aria-hidden="true">favorite</span>
-                    {{!-- <i class="fa fa-heart fa-lg" id="heart" aria-hidden="true"></i> --}}
                 </button>
             </form>
             <p class="count">{{post.upvotes}}</p>
             <form method="POST" action="/downvotePost/{{post._id}}">
                 <button type="submit" class="icon" id="bhearticon">
                     <span class="material-symbols-outlined" id="bheart" aria-hidden="true">heart_broken</span>
-                    {{!-- <i class="fa fa-broken-heart fa-lg" id="brokenheart" aria-hidden="true"></i> --}}
                 </button>
             </form>
             <p class="count" id="downvote-count">{{post.downvotes}}</p>
@@ -277,47 +275,6 @@
         const postId = '{{post._id}}';
         window.location.href = `/edit/${postId}`;
     }
-
-    var status = "none";
-    $("#hearticon").click(function(){
-      if (status == "up") {
-        $('#heart').removeClass("material-symbols-filled");
-        $('#heart').addClass("material-symbols-outlined");
-        status = "none";
-      }
-      else if (status == "down") {
-        $('#bheart').removeClass("material-symbols-filled");
-        $('#bheart').addClass("material-symbols-outlined");
-        $('#heart').addClass("material-symbols-filled");
-        status = "up";
-      }
-      else {
-        $('#heart').removeClass("material-symbols-outlined");
-        $('#heart').addClass("material-symbols-filled");
-        status = "up";
-      }
-      
-    });
-
-    $("#bhearticon").click(function(){
-      if (status == "down") {
-        $('#bheart').removeClass("material-symbols-filled");
-        $('#bheart').addClass("material-symbols-outlined");
-        status = "none";
-      }
-      else if (status == "up") {
-        $('#heart').removeClass("material-symbols-filled");
-        $('#heart').addClass("material-symbols-outlined");
-        $('#bheart').addClass("material-symbols-filled");
-        status = "down";
-      }
-      else {
-        $('#bheart').removeClass("material-symbols-outlined");
-        $('#bheart').addClass("material-symbols-filled");
-        status = "down";
-      }
-      
-    });
 </script>
 
   </body>

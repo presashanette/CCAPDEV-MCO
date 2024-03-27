@@ -114,12 +114,20 @@
     padding-right: 20px;
 }
 
-#heart, #brokenheart, #comment {
+/* #heart, #brokenheart, #comment {
     color: var(--brown);
     margin-left: 10px;
-}
+} */
 
-#heart:active, #brokenheart:active, #comment:active {
+/* #heart:active, #brokenheart:active, #comment:active {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 300,
+    'GRAD' 0,
+    'opsz' 24
+} */
+
+.active {
     font-variation-settings:
     'FILL' 1,
     'wght' 300,
@@ -167,3 +175,21 @@
     margin: 0;
     margin-bottom: 5px;
 }
+
+.focus {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 300,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48;
+    color: var(--brown);
+    font-size: 22px;
+  }

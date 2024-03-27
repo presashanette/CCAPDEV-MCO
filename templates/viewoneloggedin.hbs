@@ -146,14 +146,14 @@
         </div>
         <div class="icons">
             <form method="POST" action="/upvotePost/{{post._id}}">
-                <button type="submit" class="icon" id="hearticon" onclick="location.reload()">
-                    <span class="material-symbols-outlined" id="heart">favorite</span>
+                <button type="submit" class="icon" id="hearticon">
+                    <span class="material-symbols-outlined {{#if addClassHeart}}focus{{/if}}">favorite</span>
                 </button>
             </form>
             <p class="count">{{post.upvotes}}</p>
             <form method="POST" action="/downvotePost/{{post._id}}">
                 <button type="submit" class="icon" id="bhearticon">
-                    <span class="material-symbols-outlined" id="brokenheart">heart_broken</span>
+                    <span class="material-symbols-outlined {{#if addClassBheart}}focus{{/if}}">heart_broken</span>
                 </button>
             </form>
             <p class="count" id="downvote-count">{{post.downvotes}}</p>
@@ -277,8 +277,6 @@
 
     
 <script>
-    
-
     function editPost() {
         const postId = '{{post._id}}';
         window.location.href = `/edit/${postId}`;

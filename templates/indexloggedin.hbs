@@ -20,11 +20,11 @@
     />
 
     <!-- styles -->
-    <link rel="stylesheet" href="./styles/nav.css"/>
-    <link rel="stylesheet" href="./styles/general.css"/>
-    <link rel="stylesheet" href="./styles/index.css"/>
-    <link rel="stylesheet" href="./styles/posts.css"/>
-    <link rel="stylesheet" href="./styles/viewall.css"/>
+    <link rel="stylesheet" href="../styles/nav.css"/>
+    <link rel="stylesheet" href="../styles/general.css"/>
+    <link rel="stylesheet" href="../styles/index.css"/>
+    <link rel="stylesheet" href="../styles/posts.css"/>
+    <link rel="stylesheet" href="../styles/viewall.css"/>
 
     <!-- scripts -->
     <script src="//code.jquery.com/jquery.min.js"></script>
@@ -155,16 +155,16 @@
                 {{/each}}
             </div>
             <div class="action-icons">
-                <form method="POST" action="/upvotePost/{{_id}}">
+                <form method="POST" action="/upvotePost/{{this._id}}">
                     <button type="submit" class="icon" id="hearticon">
-                        <span class="material-symbols-outlined" id="heart">favorite</span>
+                        <span class="material-symbols-outlined {{#if (lookup ../hearts @index)}}focus{{/if}}">favorite</span>
                     </button>
                 </form>
                 <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
 
-                <form method="POST" action="/downvotePost/{{_id}}">
+                <form method="POST" action="/downvotePost/{{this._id}}">
                     <button type="submit" class="icon" id="bhearticon">
-                        <span class="material-symbols-outlined" id="brokenheart">heart_broken</span>
+                        <span class="material-symbols-outlined {{#if (lookup ../bhearts @index)}}focus{{/if}}">heart_broken</span>
                     </button>
                 </form>
                 <p class="count">{{downvotes}}</p> <!-- Display downvotes count here -->

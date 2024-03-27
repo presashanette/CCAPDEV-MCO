@@ -45,26 +45,57 @@ app.get("/secret", isLoggedIn, function (req, res) {
 // Route for fetching homepage with all posts
 app.get('/homepage', async (req, res) => {
     try {
-        // Fetch all posts from the database
-         const allPosts = await Post.find().populate('author').exec();
+        const allPosts = await Post.find().populate('author').exec();
 
         if (!req.session.authorized || !req.session.user) {
             return res.render('homepage', { posts: allPosts.reverse() });
+        } else {
+            const userId = req.session.user._id;
+            let hearts = [];
+            let bhearts = [];
+
+            const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
+            const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+
+            allPosts.forEach(post => {
+                hearts.push(upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id)));
+                bhearts.push(downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id)));
+            });
+
+            return res.render('indexloggedin', { posts: allPosts.reverse(), hearts: hearts.reverse(), bhearts: bhearts.reverse() });
         }
-        else{
-            return res.render('indexloggedin', { posts: allPosts.reverse() });
-        }
-        
 
     } catch (error) {
-        console.error('Error fetching homepage posts:', error);
+        console.error('Error fetching homepage posts.', error);
         res.status(500).send('Error fetching homepage posts.');
     }
 });
 
+
+
+
 app.get("/viewone/:postId", async (req, res) => {
     try {
         const postId = req.params.postId;
+        const userId = req.session.user._id;
+
+        const foundPosts = await Post.find({ _id: postId, upvotedBy: userId }).exec();
+        const foundPostsdown = await Post.find({ _id: postId, downvotedBy: userId }).exec();
+        let addClassHeart;
+        let addClassBheart
+        if (foundPosts.length > 0) {
+            addClassHeart = true;
+        }
+        else {
+            addClassHeart = false;
+        }
+
+        if (foundPostsdown.length > 0) {
+            addClassBheart = true;
+        }
+        else {
+            addClassBheart = false;
+        }
 
         // Fetch the post including author details and explicitly populate author fields
         const post = await Post.findById(postId)
@@ -89,7 +120,7 @@ app.get("/viewone/:postId", async (req, res) => {
             return res.render("viewone", { post, comments });
         }
         else{
-            return res.render("viewoneloggedin", { post, comments });
+            return res.render("viewoneloggedin", { addClassHeart, addClassBheart, post, comments });
         }
 
         
@@ -98,7 +129,6 @@ app.get("/viewone/:postId", async (req, res) => {
         res.status(500).send("An error occurred fetching post details.");
     }
 });
-
 
 app.get('/logout', async (req, res) => {
 
@@ -179,7 +209,7 @@ app.post("/login", async (req, res) => {
         if (isPassMatch) {
             req.session.user = user;
             req.session.authorized = true;
-            return res.redirect("homepage");
+            return res.redirect("/homepage");
         } else {
             showError1 = true;
             return res.render("login", { showError1 });
@@ -525,8 +555,6 @@ app.post('/upvotePost/:postId', async(req, res) => {
 
         await postExist.save();
 
-        // res.redirect(`/viewone/${postId}`);
-
         if (referer && referer.includes('/viewone/')) {
             // Redirect to the same post if user came from viewone/:postId
             res.redirect(referer);
@@ -585,10 +613,6 @@ app.post('/downvotePost/:postId', async(req, res) => {
         res.status(500).json({error: error});
     }
 });
-
-// app.get("/homepage",  (req, res) => {
-//     res.render("homepage");
-// });
 
 app.listen(3000, () => {
     console.log("port connected");

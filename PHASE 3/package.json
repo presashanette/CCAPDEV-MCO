@@ -18,11 +18,5 @@
   "scripts": {
     "serve": "nodemon server.js",
     "start": "nodemon scripts/index.js"
-  },
-  "name": "phase-3",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }

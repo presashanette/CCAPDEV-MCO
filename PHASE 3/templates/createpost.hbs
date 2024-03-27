@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" post-content="width=device-width, initial-scale=1.0">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles/general.css" />
+    <link rel="stylesheet" href="./styles/nav.css" />
+    <link rel="stylesheet" href="./styles/index.css">
+    <link rel="stylesheet" href="./styles/createpost.css">
+    {{!-- <link rel="stylesheet" href="./styles/recent.css"> --}}
+
+    
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    {{!-- <script src="scripts/createpost.js"></script> --}}
+
+    <title>Create Post | Girls</title>
+</head>
+<body>
+   <!-- NAVIGATIONS!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- top navigation -->
+    <nav class="nav-container nav-top-container">
+      <ul class="nav-top-items">
+        <li>
+            <a id="logo" href="/homepage">GIRLS</a>
+        </li>
+        <li>
+            <form action="/globalSearch" method="GET">
+                <div class="search">
+                    <span class="material-symbols-outlined" id="search-symbol">search</span>
+                    <input type="search" class="search-input" name="query" placeholder="Search with tags here">
+                    <button type="submit" class="search-button">Search</button>
+                </div>
+            </form>
+        </li>
+      </ul>
+    </nav>
+    <!-- top navigation end -->
+
+      <!-- side navigation left -->
+      <nav class="nav-container nav-side-left-container">
+        <div class="left-wrapper">
+            <ul class="nav-side-items">
+                <li class="nav-symbol">
+                  <a class="nav-symbol-button" id="home-button" href="/homepage">
+                    <span
+                      class="material-symbols-outlined"
+                      id="home-symbol"
+                    >home</span>
+                    Home
+                  </a>
+                </li>
+                <li class="nav-symbol">
+                  <a class="nav-symbol-button" id="profile-button" href="/viewprofile">
+                    <span
+                      class="material-symbols-outlined"
+                      id="profile-symbol"
+                    >person</span>Profile
+                  </a>
+                </li>
+                
+                <li>
+                  <a class="nav-button" id="create-button" href="/createpost">Create Post</a>
+                </li>
+                <li>
+                  <a class="nav-button" id="logout-button"  href="/logout">Log Out</a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+      <!-- side navigation left end -->
+
+      <!-- side navigation right -->
+      <nav class="nav-container nav-side-right-container">
+        <div class="right-wrapper">
+            <ul class="nav-side-right-items">
+                <li>Sort by:</li>
+                <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="recent-button" href="/recent">
+                      <span
+                        class="material-symbols-outlined"
+                        id="filter-symbol"
+                      >schedule</span>Recent
+                    </a>
+                  </li>
+                  <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="popular-button" href="/popular">
+                      <span
+                        class="material-symbols-outlined"
+                        id="filter-symbol"
+                      >filter_alt</span>Popular
+                    </a>
+                  </li>
+            </ul>
+        </div>
+      </nav>
+<!-- NAVIGATIONS END!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    
+        
+    <!-- content -->
+    <div class="content-container">
+        <!-- create post -->
+        <h1 class="hometext">Create Post</h1>
+        <div id="create">
+            <div id="title">
+                <form id="postForm" action="/createPost" method="POST">
+                    <input type="text" id="titleinp" name="title" placeholder="Enter title here" maxlength="40">
+                    <div class="editorcontent">
+                        <div id="richtexteditor">
+                            <button type="button" class="btn" data-element="bold">
+                                <i class="fa fa-bold"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="italic">
+                                <i class="fa fa-italic"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="underline">
+                                <i class="fa fa-underline"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="insertUnorderedList">
+                                <i class="fa fa-list-ul"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="insertOrderedList">
+                                <i class="fa fa-list-ol"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="justifyLeft">
+                                <i class="fa fa-align-left"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="justifyCenter">
+                                <i class="fa fa-align-center"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="justifyRight">
+                                <i class="fa fa-align-right"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="justifyFull">
+                                <i class="fa fa-align-justify"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="insertImage" id="insertImageBtn">
+                                <i class="fa fa-image"></i>
+                            </button>
+                            <button type="button" class="btn" data-element="createLink" id="insertLinkBtn">
+                                <i class="fa fa-link"></i>
+                            </button>
+                        </div> <!--end of rich text editor-->
+                        <div id="posttext"  contenteditable="true" name="content"></div>
+                        <div class="tag-input-container">
+                            <input type="text" name="tags" id="tag-input" placeholder="Enter tags with coma for split"><br>
+                        </div>
+                        <input type="hidden" name="contentHTML" id="contentHTML">
+                        <div class="submitbtn">
+                            <button id="cancelbtn" type="button" onclick="history.back()">Cancel</button>
+                            <button id="postbtn" type="button">Post</button >
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>   
+    </div>    
+        
+
+    <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Existing code for editor buttons
+            $('.btn').click(function () {
+                var command = $(this).data('element');
+                document.execCommand(command, false, null);
+            });
+
+            // Insert Image button click event
+            $('#insertImageBtn').click(function () {
+                var imageUrl = prompt('Enter image URL:');
+                if (imageUrl) {
+                    var imageHtml = '<img src="' + imageUrl + '" alt="Image">';
+                    document.execCommand('insertHTML', false, imageHtml);
+                }
+            });
+
+            // Insert Link button click event
+            $('#insertLinkBtn').click(function () {
+                var url = prompt('Enter URL:');
+                var linkText = prompt('Enter link text:');
+                if (url && linkText) {
+                    var linkHtml = '<a href="' + url + '">' + linkText + '</a>';
+                    document.execCommand('insertHTML', false, linkHtml);
+                }
+            });
+            // e.stopImmediatePropagation();
+            // Handle post button click - your existing code
+
+            $('#postbtn').click(function (e) {
+                var postContent = $('#posttext').html();
+                $('#contentHTML').val(postContent); // Update hidden input
+
+                // Send data to server using AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/createPost',
+                    data: $('#postForm').serialize(), // Serialize form data
+                    success: function (response) {
+                        alert('Post saved successfully!');
+                        
+                        // Redirect or perform actions based on response
+                    },
+                    error: function () {
+                        alert('Error saving post!');
+                    }
+                });
+            });
+            
+        });
+    </script>
+</body>
+
+{{!-- $('#postbtn').click(function (e) {
+                var postContent = $('#posttext').html();
+                $('#contentHTML').val(postContent); // Update hidden input
+
+                // Send data to server using AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/createPost',
+                    data: $('#postForm').serialize(), // Serialize form data
+                    success: function (response) {
+                        alert('Post saved successfully!');
+                        res.redirect()
+                        // Redirect or perform actions based on response
+                    },
+                    error: function () {
+                        alert('Error saving post!');
+                    }
+                });
+            }); --}}
+</html>

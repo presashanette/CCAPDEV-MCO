@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" post-content="width=device-width, initial-scale=1.0">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- styles -->
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles/nav.css"/>
+    <link rel="stylesheet" href="./styles/general.css"/>
+    <link rel="stylesheet" href="./styles/index.css"/>
+    <link rel="stylesheet" href="./styles/posts.css"/>
+    <link rel="stylesheet" href="./styles/viewall.css"/>
+    <link rel="stylesheet" href="./styles/search.css"/>
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/viewone.js"></script>
+    <script src="scripts/search.js"></script>
+
+    <title>Search | Girls</title>
+</head>
+<body>
+<!-- NAVIGATIONS!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- top navigation -->
+    <nav class="nav-container nav-top-container">
+      <ul class="nav-top-items">
+        <li>
+            <a id="logo" href="/homepage">GIRLS</a>
+        </li>
+        <li>
+            <form action="/globalSearch" method="GET">
+                <div class="search">
+                    <span class="material-symbols-outlined" id="search-symbol">search</span>
+                    <input type="search" class="search-input" name="query" placeholder="Search with tags here">
+                    <button type="submit" class="search-button">Search</button>
+                </div>
+            </form>
+        </li>
+      </ul>
+    </nav>
+    <!-- top navigation end -->
+
+      <!-- side navigation left -->
+      <nav class="nav-container nav-side-left-container">
+        <div class="left-wrapper">
+            <ul class="nav-side-items">
+                <li class="nav-symbol">
+                  <a class="nav-symbol-button" id="home-button" href="/homepage">
+                    <span
+                      class="material-symbols-outlined"
+                      id="home-symbol"
+                    >home</span>
+                    Home
+                  </a>
+                </li>
+                <li class="nav-symbol">
+                  <a class="nav-symbol-button" id="profile-button" href="/profile">
+                    <span
+                      class="material-symbols-outlined"
+                      id="profile-symbol"
+                    >person</span>Profile
+                  </a>
+                </li>
+                
+                <li>
+                  <a class="nav-button" id="create-button" href="/createpost">Create Post</a>
+                </li>
+                <li>
+                  <a class="nav-button" id="logout-button"  href="/logout">Log Out</a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+      <!-- side navigation left end -->
+
+      <!-- side navigation right -->
+      <nav class="nav-container nav-side-right-container">
+        <div class="right-wrapper">
+            <ul class="nav-side-right-items">
+                <li>Sort by:</li>
+                <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="recent-button" href="/recent">
+                      <span
+                        class="material-symbols-outlined"
+                        id="filter-symbol"
+                      >schedule</span>Recent
+                    </a>
+                  </li>
+                  <li class="nav-symbol">
+                    <a class="nav-symbol-button" id="popular-button" href="/popular">
+                      <span
+                        class="material-symbols-outlined"
+                        id="filter-symbol"
+                      >filter_alt</span>Popular
+                    </a>
+                  </li>
+            </ul>
+        </div>
+      </nav>
+      <!-- side navigation right end -->
+<!-- NAVIGATIONS END!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+        
+        <!-- content -->
+        <div class="content-container">
+            <div class="content">
+        
+            <h1 class="hometext">Search Results:</h1>
+
+
+        <div class="allposts">
+
+        <div class="posts">
+            <!-- Display popular posts -->
+            {{#each posts}}
+            <div class="post">
+                <!-- Display post content -->
+                <div class="profile">
+                    {{#if this.author.profPicLink}}
+                    <img src="{{this.author.profPicLink}}" class="dp" />
+                    <!-- Display profile image -->
+                    {{else}}
+                    <img src="images/bubbles.jpg" class="dp" />
+                    <!-- Fallback image -->
+                    {{/if}}
+                    <div class="headerpost">
+                        <p class="handle">
+                            {{#if this.author.uname}}
+                            <a class="user" href="/viewprofile{{this.author._id}}">@{{this.author.uname}}</a>
+                            {{else}}
+                            <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
+                            <!-- Fallback username -->
+                            {{/if}}
+                        </p>
+                        {{#if this.author.url}}
+                        <a class="title" href="{{this.author.url}}">{{title}}</a>
+                        <!-- Use author's URL if available -->
+                        {{else}}
+                        <a class="title" href="http://localhost:3000/viewone">{{title}}</a>
+                        <!-- Fallback URL -->
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="content">
+                    <!-- Display post content -->
+                    <p class="text">{{{content}}}</p>
+                </div>
+                <div class="icons">
+                    <div class="tagpost">
+                        {{#each tags}}
+                        <div class="onetag">
+                            <p class="tagtext">{{this}}</p>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="action-icons">
+                        <form method="POST" action="/upvotePost/{{_id}}">
+                            <button type="submit" class="icon" id="hearticon">
+                                <span class="material-symbols-outlined" id="heart">favorite</span>
+                            </button>
+                        </form>
+                        <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
+
+                        <form method="POST" action="/downvotePost/{{_id}}">
+                            <button type="submit" class="icon" id="bhearticon">
+                                <span class="material-symbols-outlined" id="brokenheart">heart_broken</span>
+                            </button>
+                        </form>
+                        <p class="count">{{downvotes}}</p> <!-- Display downvotes count here -->
+
+                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = '/viewone/{{_id}}';">
+                            <span class="material-symbols-outlined" id="comment">mode_comment</span>
+                        </button>
+                        <p class="count">{{comments.length}}</p> <!-- Display comments count here -->
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <p>No popular posts found</p>
+            {{/each}}
+        </div>
+
+        </div>
+      </div>
+
+
+    
+</html>

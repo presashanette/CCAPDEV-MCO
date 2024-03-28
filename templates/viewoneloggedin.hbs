@@ -233,42 +233,57 @@
                 <button id="edit-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Edit</button>
                 <button id="delete-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Delete</button>
 
-                <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
-                <button id="reply-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Reply</button>
+                <form action="/reply/comment/{{this.post._id}}/{{this._id}}" method="post">
+                  <textarea
+                      name="content"
+                      class="replyInput"
+                      placeholder="Reply to this comment"
+                  ></textarea>
+                  <button type="submit">Reply</button>
+                </form>
                 <button onclick="toggleCollapse(this)">Collapse</button>
 
                 <!-- Render replies dynamically if applicable -->
-                {{#each replies}}
-                    <div class="reply">
-                      <!-- Profile picture and user info -->
-                      <div class="profile-container">
-                          <div class="profile-picture"><img src="{{this.author.profPicLink}}" alt="{{this.author.uname}}"></div>
-                          <div class="user-info">@{{this.author.uname}}</div>
-                      </div>
+                        {{#each this.replies}}
+                            <div class="comment" data-post-id="{{post._id}}"  data-comment-id="{{this._id}}"> 
+                                <div class="profile-container">
+                                <p class="profile-picture">
+                                  {{#if this.author.profPicLink}}
+                                    <img src="{{this.author.profPicLink}}" class="profile-picture" />
+                                  {{else}}
+                                      <img src="./public/images/defUser.png" class="profile-picture" />
+                                  {{/if}}
+                                </p>
 
-                      <!-- Reply content -->
-                      <div class="editable" contenteditable="true">{{this.content}}</div>
+                                <div class="user-info">
+                                    {{#if this.author.uname}}
+                                          <a class="user" href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
+                                      {{else}}
+                                          <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
+                                      {{/if}}
+                                </div>
+                              </div>
+                                <div class="editable">
+                                    {{this.content}}
+                                </div>
+                                
+                                <button id="edit-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Edit</button>
+                                <button id="delete-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Delete</button>
 
-                      <!-- Buttons -->
-                      <button class="edit-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Edit</button>
-                      <button class="delete-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Delete</button>
-
-                      <!-- Nested reply section -->
-                      <div class="reply-section">
-                          <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
-                          <button id="reply-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Reply</button>
-                          <button onclick="toggleCollapse(this)">Collapse</button>
-                      </div>
-                      
-                    </div>
-                {{/each}}
+                                <form action="/reply/comment/{{this.post._id}}/{{this._id}}" method="post">
+                                <textarea
+                                    name="content"
+                                    class="replyInput"
+                                    placeholder="Reply to this comment"
+                                ></textarea>
+                                <button type="submit">Reply</button>
+                              </form>
+                                <button onclick="toggleCollapse(this)">Collapse</button>
+                            </div>
+                        {{/each}}
             </div>
-            
         {{/each}}
     </div>
-    
-
-     
 </div>
 
 

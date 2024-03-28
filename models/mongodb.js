@@ -24,7 +24,7 @@ const userSch = new mongoose.Schema({
 
     profPicLink:  {
         type: String,
-        default: '/picUploads/defUser.jpg'
+        default: '/picUploads/defUser.png'
     },
     bio: {
         type: String,
@@ -81,7 +81,11 @@ const commentSch = new mongoose.Schema({
         ref: 'User'
     },
     content: String,
-    image: String, // URL to the image
+    parentComment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+        default: null
+    },
     replies:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'

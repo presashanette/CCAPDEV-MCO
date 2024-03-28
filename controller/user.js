@@ -36,28 +36,3 @@ export async function login(req, res) {
         }
     }
 }
-
-// async function createPost(req, res) {
-//     const { title, content, tags } = req.body; // Assuming form fields are 'title', 'content', and 'tags'
-
-//     try {
-//         // Create a new post document
-//         const newPost = new Post({
-//             title,
-//             content,
-//             tags: tags.split(',').map(tag => tag.trim()), // Split tags string by comma and trim spaces
-//             author: req.session.user._id // Assuming you have user details in the session
-//         });
-
-//         // Save the post to the database
-//         await newPost.save();
-
-//         // Redirect or send a response as needed
-//         res.redirect('/viewone'); // Redirect to a specific page after successful post creation
-//     } catch (error) {
-//         console.error('Error creating post:', error);
-//         res.status(500).send('Error creating post.'); // Send an error response
-//     }
-// }
-
-// module.exports = { createPost };

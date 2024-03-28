@@ -255,34 +255,34 @@ function toggleEdit(button) {
     }
 }
 
-$('#reply-button').on('click', function(e) {
-    const replyContent = $('.replyInput').text();
-    const $target = $(e.target);
+// $(document).on('click', '#reply-button', function(e) {
+//     const replyContent = $('.replyInput').text();
+//     const $target = $(e.target);
 
-    const postId = $target.attr('data-post-id');
-    const parentCommentId = $target.attr('data-comment-id');
+//     const postId = $target.attr('data-post-id');
+//     const parentCommentId = $target.attr('data-comment-id');
 
-    console.log("panget");
-    $.ajax({
-        type: 'POST',
-        url: `/reply/comment/${postId}/${parentCommentId}`,
-        data: { content: replyContent },
-        success: function(response) {
-            // Handle success response, such as displaying a message or updating the UI
-            console.log('Reply submitted successfully:', response);
-        },
-        error: function(err) {
-            // Handle error, such as displaying an error message
-            console.error('Error submitting reply:', err);
-        }
-    });
+//     console.log("panget");
+//     $.ajax({
+//         type: 'POST',
+//         url: `/reply/comment/${postId}/${parentCommentId}`,
+//         data: { content: replyContent },
+//         success: function(response) {
+//             // Handle success response, such as displaying a message or updating the UI
+//             console.log('Reply submitted successfully:', response);
+//         },
+//         error: function(err) {
+//             // Handle error, such as displaying an error message
+//             console.error('Error submitting reply:', err);
+//         }
+//     });
 
-    // Optionally, clear the replyInput field after submitting the reply
-    $('.replyInput').empty(); // or .text('') if using .text() above
-});
+//     // Optionally, clear the replyInput field after submitting the reply
+//     $('.replyInput').empty(); // or .text('') if using .text() above
+// });
 
 
-$('#edit-button').on('click', function(e) {
+$(document).on('click', '#edit-button', function(e) {
     var $button = $(this);
     var parentComment = $button.closest('.comment');
     var editableDiv = parentComment.find(".editable");
@@ -321,7 +321,9 @@ $('#edit-button').on('click', function(e) {
     }
 });
 
-$('#delete-button').on('click', function(e) {
+
+
+  $(document).on('click', '#delete-button', function(e) {
     console.log("whew");
     const $target = $(e.target);
     const postId = $target.attr('data-post-id');
@@ -338,7 +340,7 @@ $('#delete-button').on('click', function(e) {
             console.log(err);
         }
     });
-  }); 
+});
 
 function handleKeyDown(event) {
     if (event.keyCode === 13 && !event.shiftKey) {

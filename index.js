@@ -72,8 +72,6 @@ app.get('/homepage', async (req, res) => {
 });
 
 
-
-
 app.get("/viewone/:postId", async (req, res) => {
     try {
         const postId = req.params.postId;
@@ -107,8 +105,19 @@ app.get("/viewone/:postId", async (req, res) => {
 
         // Fetch the comments for the post
         const comments = await Comment.find({ post: postId })
-            .populate('author')
+        .populate({
+            path: 'author',
+            select: 'uname profPicLink' // Specify fields to populate for the author
+        })
+        .populate({
+            path: 'replies',
+            populate: {
+                path: 'author',
+                select: 'uname profPicLink' // Specify fields to populate for the reply author
+            }
+        })
             .exec();
+
 
             // console.log(post, comments)
 
@@ -160,7 +169,6 @@ app.get('/', async (req, res) => {
     }
 });
      
-
 app.post("/signup", async(req, res) => {
     const checksu = await User.findOne({uname: req.body.uname});
 
@@ -189,8 +197,6 @@ app.post("/signup", async(req, res) => {
     }
 
 })
-
- // Import your User model
 
 app.post("/login", async (req, res) => {
     let showError1 = false;
@@ -230,16 +236,15 @@ app.get("/createpost",  (req, res) => {
 });
 
 // POST route to handle creating a new post
-app.post("/createpost", async (req, res) => {
-    
-    try {
-        let showError1 = false;
-        let showValid = false;
+app.post("/create", async (req, res) => {
+    if (!req.session.authorized) {
+        return res.render("login", { showError1: true });
+    }
 
+    try {
         const { title, contentHTML, tags } = req.body;
 
         const tagList = tags.split(',').map(tag => tag.trim()); // Split tags by comma and trim whitespace
-
 
         const newPost = new Post({
             title, // Ensure that title is accessed correctly from req.body
@@ -248,22 +253,11 @@ app.post("/createpost", async (req, res) => {
             author: req.session.user._id 
         });
 
-        if (!title || !contentHTML) {
-            showError1 = true;
-            return res.render("createpost", { showError1 });
-        }
-        else {
-            showValid = true;
-            res.render("createpost", { showValid });
-        }
-
         // Save the new post to the database
         await newPost.save();
-                    
-        const postId = newPost._id;
-
+        
         // Redirect to an appropriate page after successful creation
-        res.redirect(`/viewone/${postId}`);
+        res.redirect(`/viewone/${newPost._id}`);
          
     } catch (error) {
         console.error('Error creating post:', error);
@@ -350,7 +344,7 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
     }
   });
 
-  app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
+app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
     try {
         // Extract postId and parentCommentId from req.params
         const { postId, parentCommentId } = req.params;
@@ -358,28 +352,31 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
         // Extract replyContent from request body
         const { content: replyContent } = req.body;
 
-        // First, find the comment to which the user is replying
-        const comment = await Comment.findById(parentCommentId);
-        if (!comment) {
-            return res.status(404).json({ message: 'Comment not found' });
-        }
-
         // Now, create a new comment for the reply
-        const reply = new Comment({
-            author: req.session.user._id, // Assuming you have a user authenticated and req.user contains user information
+        const reply = await new Comment({
+            author: req.session.user._id,
             content: replyContent,
-            post: postId // Associate the reply with the original post
-        });
+            post: postId,
+            parentComment: parentCommentId
+        }).save();
 
-        // Save the reply to the database
-        await reply.save();
+        console.log(reply);
 
-        // Update the original comment to include the reply
-        comment.replies.push(reply._id);
-        await comment.save();
+        const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
 
-        // Optionally, send a success response back to the client
-        res.status(201).json({ message: 'Reply submitted successfully', reply: reply });
+
+        console.log('Update result:', result);
+        // Assuming `parentComment` contains the parent comment fetched from the database
+        const parentComment = await Comment.findById(parentCommentId);
+
+        // Fetch contents of replies
+        const replies = await Comment.find({ _id: { $in: parentComment.replies } });
+
+        // Extract contents of replies
+        const replyContents = replies.map(reply => reply.content);
+
+        console.log(replyContents);
+        res.redirect(`/viewone/${postId}`);
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error submitting reply:', error);

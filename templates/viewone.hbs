@@ -165,7 +165,7 @@
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
             <p class="count" id="comment-count">{{comments.length}}</p>
-            <button type="button" class="icon" id="editicon" onclick="editPost()">
+            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/editpost/{{this._id}}';">
                 <span class="material-symbols-outlined" id="edit">edit</span>
             </button>
             <form action="/deletePost/{{post._id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
@@ -273,7 +273,7 @@
 <script>
     function editPost() {
         const postId = '{{post._id}}';
-        window.location.href = `/edit/${postId}`;
+        window.location.href = `/editpost/${postId}`;
     }
 </script>
 

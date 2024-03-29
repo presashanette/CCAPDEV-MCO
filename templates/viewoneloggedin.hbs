@@ -161,14 +161,43 @@
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
             <p class="count" id="comment-count">{{comments.length}}</p>
-            <button type="button" class="icon" id="editicon" onclick="editPost()">
+            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/editpost/{{post._id}}';">
                 <span class="material-symbols-outlined" id="edit">edit</span>
             </button>
-            <form action="/deletePost/{{post._id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+            <form action="/deletePost/{{post._id}}" method="POST">
                 <button type="submit" class="icon" id="deleteicon">
                     <span class="material-symbols-outlined" id="delete">delete</span>
                 </button>
             </form>
+            <script>
+              document.getElementById('editicon').addEventListener('click', function() {
+                
+                  const currentUser = "{{userId}}";
+                  const postAuthor = "{{post.author._id}}";
+
+                  if (currentUser !== postAuthor) {
+                      alert('Error: You are not authorized to edit this post.');
+                      window.location.href = `/viewone/{{post._id}}`; 
+                  }
+              });
+              
+              document.getElementById('deleteicon').addEventListener('click', function() {
+                
+                  const currentUser = "{{userId}}";
+                  const postAuthor = "{{post.author._id}}";
+
+                  if (currentUser !== postAuthor) {
+                      alert('Error: You are not authorized to delete this post.');
+                      window.location.href = `/viewone/{{post._id}}`; 
+                  } else {
+                      const confirmDelete = confirm('Are you sure you want to delete this post?');
+                      if (confirmDelete) {
+                          document.getElementById('deletePostForm').submit();
+                      }
+                  }
+              });
+            </script>
+
         </div>
     </div>
 
@@ -294,7 +323,7 @@
 <script>
     function editPost() {
         const postId = '{{post._id}}';
-        window.location.href = `/edit/${postId}`;
+        window.location.href = `/editpost/${postId}`;
     }
 </script>
 

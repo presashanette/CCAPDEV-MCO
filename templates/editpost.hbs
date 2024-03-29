@@ -11,10 +11,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- styles -->
-    <link rel="stylesheet" href="./styles/general.css" />
-    <link rel="stylesheet" href="./styles/nav.css" />
-    <link rel="stylesheet" href="./styles/index.css">
-    <link rel="stylesheet" href="./styles/createpost.css">
+    <link rel="stylesheet" href="../styles/general.css" />
+    <link rel="stylesheet" href="../styles/nav.css" />
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/createpost.css">
     {{!-- <link rel="stylesheet" href="./styles/recent.css"> --}}
 
     
@@ -22,7 +22,7 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     {{!-- <script src="scripts/createpost.js"></script> --}}
 
-    <title>Create Post | Girls</title>
+    <title>Edit Post | Girls</title>
 </head>
 <body>
    <!-- NAVIGATIONS!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -104,15 +104,15 @@
       </nav>
 <!-- NAVIGATIONS END!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
     
-        
     <!-- content -->
     <div class="content-container">
         <!-- create post -->
-        <h1 class="hometext">Create Post</h1>
+        <h1 class="hometext">Edit Post</h1>
         <div id="create">
-            <form id="postForm" action="/createpost" method="POST">
+            <form id="postForm" action="/updatePost" method="POST">
                 <div id="title">
-                    <input type="text" id="titleinp" name="title" placeholder="Enter title here" maxlength="40">
+                    <!-- Preload the title -->
+                    <input type="text" id="titleinp" name="title" placeholder="Enter title here" maxlength="40" value="{{post.title}}">
                 </div>
 
                 <div class="editorcontent">
@@ -152,22 +152,32 @@
                         </button>
                     </div> <!--end of rich text editor-->
 
-                    <div id="posttext"  contenteditable="true" name="content"></div>
+                    <input type="hidden" name="postId" value="{{post._id}}">
+
+                    <!-- Preload the content -->
+                    <div id="hiddenContent" style="display: none;">{{{post.content}}}</div>
+                    <div id="posttext" contenteditable="true" name="content">{{{post.content}}}</div>
                 </div>
 
                 <div class="tag-input-container">
-                    <input type="text" name="tags" id="tag-input" placeholder="Enter tags with coma for split"><br>
+                    <!-- Preload the tags -->
+                    <input type="text" name="tags" id="tag-input" placeholder="Enter tags with comma for split" value="{{post.tags}}"><br>
                 </div>
 
-                <input type="hidden" name="contentHTML" id="contentHTML">
+                <input type="hidden" name="content" id="contentInput">
                 <div class="submitbtn">
                     <button id="cancelbtn" type="button" onclick="history.back()">Cancel</button>
-                    <button id="postbtn" type="submit">Post</button >
+                    <button id="postbtn" type="submit" onclick="saveAndRedirect()">Save Changes</button>
+                    <script>
+                        function saveAndRedirect() { 
+                        var content = document.getElementById("posttext").innerHTML;
+                        document.getElementById("contentInput").value = content;
+                        window.location.href = "http://localhost:3000/viewone"; }
+                    </script>
                 </div>
             </form>
         </div>   
     </div>    
-        
 
     <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -197,19 +207,13 @@
                     document.execCommand('insertHTML', false, linkHtml);
                 }
             });
-            // e.stopImmediatePropagation();
-            
-            $('#postForm').submit(function () {
-                // Get the text content of the posttext div
-                var textContent = $('#posttext').text();
-                // Replace new lines with <br> tags
-                {{!-- var htmlContent = textContent.replace('<br>', /\n/g); --}}
-                // Set the value of the contentHTML input to the modified HTML content
-                $('#contentHTML').val(textContent);
 
-                {{!-- var postContent = $('#posttext').html();
-                $('#contentHTML').val(postContent); --}}
-             });
+            // Get the content from the hidden div
+            var postContent = $('#hiddenContent').html();
+            
+            // Set the contenteditable div's content
+            $('#posttext').html(postContent);
+ 
         });
     </script>
 
@@ -238,24 +242,4 @@
     }
     </script>
 </body>
-
-{{!-- $('#postbtn').click(function (e) {
-                var postContent = $('#posttext').html();
-                $('#contentHTML').val(postContent); // Update hidden input
-
-                // Send data to server using AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: '/createPost',
-                    data: $('#postForm').serialize(), // Serialize form data
-                    success: function (response) {
-                        alert('Post saved successfully!');
-                        res.redirect()
-                        // Redirect or perform actions based on response
-                    },
-                    error: function () {
-                        alert('Error saving post!');
-                    }
-                });
-            }); --}}
 </html>

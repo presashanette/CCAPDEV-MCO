@@ -74,6 +74,10 @@ app.get('/homepage', async (req, res) => {
 
 app.get("/viewone/:postId", async (req, res) => {
     try {
+        if(!req.session.authorized){
+            return res.render('login');
+        }
+        
         const postId = req.params.postId;
         const userId = req.session.user._id;
 
@@ -129,7 +133,8 @@ app.get("/viewone/:postId", async (req, res) => {
             return res.render("viewone", { post, comments });
         }
         else{
-            return res.render("viewoneloggedin", { addClassHeart, addClassBheart, post, comments });
+            const userId = req.session.user._id;
+            return res.render("viewoneloggedin", { addClassHeart, addClassBheart, post, comments, userId });
         }
 
         
@@ -138,6 +143,82 @@ app.get("/viewone/:postId", async (req, res) => {
         res.status(500).send("An error occurred fetching post details.");
     }
 });
+
+app.get("/editpost/:postId", async (req, res) => {
+    if (!req.session.authorized || !req.session.user) {
+        return res.render('login');
+    }
+    const postId = req.params.postId;
+    const userId = req.session.user._id;
+    try {
+        const post = await Post.findById(postId)
+            .populate({
+                path: 'author',
+                select: 'uname profPicLink' 
+            })
+            .exec();
+        
+        if (!post.author || !post.author._id.equals(userId)) {
+            return res.redirect(`/viewone/${postId}?error=Unauthorized: You cannot edit this post.`);
+            
+        }
+        
+        res.render("editpost", {post});
+
+    } catch (error) {
+        console.error("Error editing post:", error);
+        res.render("homepage", { showError2: true, errorMessage: 'An error occurred editing post.' });
+    }
+});
+
+app.post('/updatePost', async (req, res) => {
+    const { postId, title, content, tags } = req.body;
+
+    try {        
+        await Post.findByIdAndUpdate(postId, {
+            title: title,
+            content: content,
+            tags: tags.split(',').map(tag => tag.trim()), 
+        });
+      
+        res.redirect(`/viewone/${postId}`);
+    } catch (error) {
+        console.error('Failed to update post:', error);
+        res.status(500).send('Error updating post.');
+    }
+});
+
+app.post('/deletePost/:postId', async (req, res) => {
+    if (!req.session.authorized || !req.session.user) {
+        return res.status(401).render('login');
+    }
+
+    const postId = req.params.postId;
+    const userId = req.session.user._id;
+
+    try {
+        const post = await Post.findById(postId).populate('author');
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        if (!post.author || !post.author._id.equals(userId)) {
+            return res.redirect(`/viewone/${postId}?error=Unauthorized: You cannot delete this post.`);
+            
+        }
+        else {
+            await Post.findByIdAndDelete(postId);
+            res.redirect('/homepage');
+        }
+
+        
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        res.status(500).send('An error occurred while deleting the post.');
+    }
+});
+
+
 
 app.get('/logout', async (req, res) => {
 
@@ -236,15 +317,16 @@ app.get("/createpost",  (req, res) => {
 });
 
 // POST route to handle creating a new post
-app.post("/create", async (req, res) => {
-    if (!req.session.authorized) {
-        return res.render("login", { showError1: true });
-    }
-
+app.post("/createpost", async (req, res) => {
+    
     try {
+        let showError1 = false;
+        let showValid = false;
+
         const { title, contentHTML, tags } = req.body;
 
         const tagList = tags.split(',').map(tag => tag.trim()); // Split tags by comma and trim whitespace
+
 
         const newPost = new Post({
             title, // Ensure that title is accessed correctly from req.body
@@ -253,17 +335,29 @@ app.post("/create", async (req, res) => {
             author: req.session.user._id 
         });
 
+        if (!title || !contentHTML) {
+            showError1 = true;
+            return res.render("createpost", { showError1 });
+        }
+        else {
+            showValid = true;
+            res.render("createpost", { showValid });
+        }
+
         // Save the new post to the database
         await newPost.save();
-        
+                    
+        const postId = newPost._id;
+
         // Redirect to an appropriate page after successful creation
-        res.redirect(`/viewone/${newPost._id}`);
+        res.redirect(`/viewone/${postId}`);
          
     } catch (error) {
         console.error('Error creating post:', error);
         res.status(500).send('Error creating post.');
     }
 });
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {

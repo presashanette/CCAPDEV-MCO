@@ -182,13 +182,15 @@
 
 .comment p {
     margin: 0;
-}
-
+} 
 hr {
     margin: 10px 0;
     border: none;
     border-top: 1px solid #ccc;
 }
+
+
+
 
 #focus, .focus {
     font-variation-settings:

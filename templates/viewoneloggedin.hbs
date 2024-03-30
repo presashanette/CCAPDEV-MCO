@@ -24,18 +24,20 @@
     <link rel="stylesheet" href="../styles/general.css" />
 
     
-    <link rel="stylesheet" href="../styles/viewone.css" />
+    <link rel="stylesheet" href="../styles/viewone.css" /> 
     <link rel="stylesheet" href="../styles/comment.css" />
 
     <!-- scripts -->
-    <script src="//code.jquery.com/jquery.min.js"></script>
+    
 
     <script src="../scripts/viewone.js"></script>
     <script src="../scripts/recent.js" ></script>
-    <script src="../scripts/comment.js"></script>
+    
     
     
     <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="../scripts/comment.js"></script>
 
     <title>View one | Girls</title>
   </head>
@@ -233,7 +235,8 @@
         </form>
     </div>
 
-    <div id="comments">
+    
+    {{!-- <div id="comments">
         {{#each comments}}
             <div class="comment" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">
                 <!-- Render each comment dynamically -->
@@ -312,11 +315,14 @@
                         {{/each}}
             </div>
         {{/each}}
-    </div>
+    </div> --}}
+  
+
+        {{> comment}}
+
+    
 </div>
 
-
-</div>
 
 
     

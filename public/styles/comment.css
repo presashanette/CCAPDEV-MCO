@@ -133,13 +133,13 @@
     margin-bottom: 10px;
     
 }
-.comment .reply {
+/* .comment .reply {
     margin-top: 20px;
     margin-left: 20px;
     border-left: 3px solid var(--pink1);
     padding-left: 10px;
     
-}
+} */
 
 .comment button {
     margin-right: 20px;
@@ -176,6 +176,6 @@
 }
 
 
-.comment-container{
+/* .comment-container{
     padding: 30px 20px;
-}
+} */

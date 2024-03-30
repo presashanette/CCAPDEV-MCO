@@ -96,7 +96,12 @@ const commentSch = new mongoose.Schema({
     }
 });
 
-
+commentSch.pre("find", function( next){
+    this.populate({path:"replies",
+    populate:{path:"author"}
+})
+    next()
+})
 
 const Post = mongoose.model('Post', postSch, 'posts');
 const User = mongoose.model('User', userSch, 'users');

@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, "./public")));
 app.use(express.static(path.join(__dirname, "./images")));
+hbs.registerPartials(path.join(__dirname, 'templates', 'partials'));
 
 
 app.set("view engine", "hbs");
@@ -75,7 +76,7 @@ app.get('/homepage', async (req, res) => {
 app.get("/viewone/:postId", async (req, res) => {
     try {
         if(!req.session.authorized){
-            return res.render('login');
+            return res.redirect('/login');
         }
         
         const postId = req.params.postId;
@@ -218,8 +219,6 @@ app.post('/deletePost/:postId', async (req, res) => {
     }
 });
 
-
-
 app.get('/logout', async (req, res) => {
 
     try {
@@ -230,7 +229,6 @@ app.get('/logout', async (req, res) => {
         res.status(500).send('Error destroying session.');
     }
 });
-
 
 // Route for fetching homepage with all posts
 app.get('/', async (req, res) => {
@@ -438,6 +436,46 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
     }
   });
 
+// app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
+//     try {
+//         // Extract postId and parentCommentId from req.params
+//         const { postId, parentCommentId } = req.params;
+
+//         // Extract replyContent from request body
+//         const { content: replyContent } = req.body;
+
+//         // Now, create a new comment for the reply
+//         const reply = await new Comment({
+//             author: req.session.user._id,
+//             content: replyContent,
+//             post: postId,
+//             parentComment: parentCommentId
+//         }).save();
+
+//         console.log(reply);
+
+//         const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
+
+
+//         console.log('Update result:', result);
+//         // Assuming `parentComment` contains the parent comment fetched from the database
+//         const parentComment = await Comment.findById(parentCommentId);
+
+//         // Fetch contents of replies
+//         const replies = await Comment.find({ _id: { $in: parentComment.replies } });
+
+//         // Extract contents of replies
+//         const replyContents = replies.map(reply => reply.content);
+
+//         console.log(replyContents);
+//         res.redirect(`/viewone/${postId}`);
+//     } catch (error) {
+//         // Handle any errors that occur during the process
+//         console.error('Error submitting reply:', error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// });
+
 app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
     try {
         // Extract postId and parentCommentId from req.params
@@ -458,19 +496,11 @@ app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
 
         const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
 
-
         console.log('Update result:', result);
-        // Assuming `parentComment` contains the parent comment fetched from the database
-        const parentComment = await Comment.findById(parentCommentId);
-
-        // Fetch contents of replies
-        const replies = await Comment.find({ _id: { $in: parentComment.replies } });
-
-        // Extract contents of replies
-        const replyContents = replies.map(reply => reply.content);
-
-        console.log(replyContents);
+        
+        // Send a success response
         res.redirect(`/viewone/${postId}`);
+
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error submitting reply:', error);

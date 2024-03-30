@@ -109,7 +109,7 @@ app.get("/viewone/:postId", async (req, res) => {
             .exec();
 
         // Fetch the comments for the post
-        const comments = await Comment.find({ post: postId })
+        const comments = await Comment.find({ parentComment: null, post: postId })
         .populate({
             path: 'author',
             select: 'uname profPicLink' // Specify fields to populate for the author
@@ -204,8 +204,7 @@ app.post('/deletePost/:postId', async (req, res) => {
         }
 
         if (!post.author || !post.author._id.equals(userId)) {
-            return res.redirect(`/viewone/${postId}?error=Unauthorized: You cannot delete this post.`);
-            
+            return res.redirect(`/viewone/${postId}?error=Unauthorized: You cannot delete this post.`);   
         }
         else {
             await Post.findByIdAndDelete(postId);
@@ -400,13 +399,21 @@ app.post('/addComment/:postId', async (req, res) => {
 
 // Route to update a comment
 app.put('/editComment/:postId/:commentId', async (req, res) => {
+    const commentId = req.params.commentId;
+    const comment = await Comment.findById(commentId);
+    const userId = req.session.user._id;
+
     var { content } = req.body;
     content = content.trim();
 
     try {
-        const comment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
-        if (!comment) return res.status(404).json({ message: 'Comment not found' });
-        res.json(comment);
+        if (!comment.author._id.equals(userId)) {
+            return res.status(403).json({ success: false, message: "Unauthorized: You cannot edit this comment." });
+        }
+        else{
+            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
+            res.json(updatedComment);
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -414,6 +421,11 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
 
 // Route to delete a comment
 app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
+
+    const commentId = req.params.commentId;
+    const comment = await Comment.findById(commentId);
+    const userId = req.session.user._id;
+
     try {
       const post = await Post.findByIdAndUpdate(
         req.params.postId,
@@ -422,14 +434,16 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
         },
         { new: true }
       );
+
+        if (!comment.author._id.equals(userId)) {
+            return res.status(403).json({ success: false, message: "Unauthorized: You cannot delete this comment." }); 
+        }
+        else{
+            await Comment.findByIdAndDelete(req.params.commentId);
+            res.send("Success");
+        }
   
-      if (!post) {
-        return res.status(400).send("Post not found");
-      }
-  
-      await Comment.findByIdAndDelete(req.params.commentId);
-  
-      res.send("Success");
+      
     } catch (err) {
       console.log(err);
       res.status(500).send("Something went wrong");

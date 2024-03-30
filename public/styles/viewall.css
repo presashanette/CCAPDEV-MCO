@@ -86,6 +86,14 @@
     
 }
 
+.viewcomment {
+    width: 100%;
+    
+    margin: 10px 5px 10px 10px;
+    border-top: 1px solid var(--pink2);
+}
+
+
 .post-content {
     width: 95%; /* the element needs a fixed width (in px, em, %, etc) */
     margin: 0 0 0 10px;

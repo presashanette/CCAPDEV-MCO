@@ -1,62 +1,3 @@
-// // Fetch comments when the page loads
-// fetchComments();
-
-// // Event listener for editing a comment
-// document.addEventListener('click', async (event) => {
-//     if (event.target.classList.contains('edit-btn')) {
-//         const commentDiv = event.target.closest('.comment');
-//         const commentId = commentDiv.dataset.commentId;
-//         const newContent = prompt('Enter the new content:');
-//         if (newContent !== null) {
-//             const response = await fetch(`/comments/${commentId}`, {
-//                 method: 'PUT',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify({ content: newContent })
-//             });
-//             if (response.ok) {
-//                 const updatedComment = await response.json();
-//                 commentDiv.querySelector('.editable').textContent = updatedComment.content;
-//             } else {
-//                 alert('Failed to update comment');
-//             }
-//         }
-//     }
-// });
-
-// // Event listener for deleting a comment
-// document.addEventListener('click', async (event) => {
-//     if (event.target.classList.contains('delete-btn')) {
-//         const commentDiv = event.target.closest('.comment');
-//         const commentId = commentDiv.dataset.commentId;
-//         const confirmDelete = confirm('Are you sure you want to delete this comment?');
-//         if (confirmDelete) {
-//             const response = await fetch(`/comments/${commentId}`, {
-//                 method: 'DELETE'
-//             });
-//             if (response.ok) {
-//                 commentDiv.remove();
-//             } else {
-//                 alert('Failed to delete comment');
-//             }
-//         }
-//     }
-// });
-
-// // Function to fetch comments from the backend
-// async function fetchComments() {
-//     try {
-//         const response = await fetch('/comments');
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch comments');
-//         }
-//         const comments = await response.json();
-//         renderComments(comments);
-//     } catch (error) {
-//         console.error(error.message);
-//     }
-// }
 
 
 $(document).ready(function() {
@@ -353,7 +294,8 @@ $(document).on('click', '#edit-button', function(e) {
             error: function(err){
                 // Handle error if needed
                 console.log(err);
-                alert('Failed to update comment');
+                alert('Unauthorized: You cannot edit this comment.');
+                location.reload();
             }
         });
     } else {
@@ -383,6 +325,7 @@ $(document).on('click', '#edit-button', function(e) {
             alert('Comment deleted successfully!');
         },
         error: function(err){
+            alert('Unauthorized: You cannot delete this comment.');
             console.log(err);
         }
     });

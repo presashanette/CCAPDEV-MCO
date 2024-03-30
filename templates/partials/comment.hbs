@@ -23,13 +23,21 @@
             <div class="editable">
                 {{this.content}}
             </div>
+
+            {{#if this.isEdited}}
+                <p id="edited-text">Edited</button>
+            {{/if}}
             
-            <button id="edit-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Edit</button>
+            <div class="row">
+                <button id="edit-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Edit</button>
             <button id="delete-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Delete</button>
+            
+            </div>
 
             <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
             <button id="reply-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Reply</button>
             <button id="collapse-button">Collapse</button>
+            
 
             {{#if this.replies}}
                 <div class="reply" >

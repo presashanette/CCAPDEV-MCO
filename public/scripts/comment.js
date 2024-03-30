@@ -290,6 +290,7 @@ $(document).on('click', '#edit-button', function(e) {
             success: function(response) {
                 // Handle success response if needed
                 console.log("Comment updated successfully!");
+                location.reload();
             },
             error: function(err){
                 // Handle error if needed

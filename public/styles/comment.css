@@ -151,7 +151,6 @@
     margin-right: 20px;
     height: 30px;
     margin-left: auto;
-    margin-right: 20px;
     border: 0px;
     outline: none;
     background: none;
@@ -162,6 +161,16 @@
     color: var(--pink5);
     cursor: pointer;
 }
+
+#edited-text {
+    margin-left: auto;
+    margin-right: 20px;
+    border-radius: 10px;
+    font-weight: 200;
+    color: var(--pink1);
+    display: flex;
+}
+
 
 .collapse {
     display: none;
@@ -180,7 +189,6 @@
     margin-top: 5px;
     cursor: pointer;
 }
-
 
 /* .comment-container{
     padding: 30px 20px;

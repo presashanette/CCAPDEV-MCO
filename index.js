@@ -433,7 +433,7 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized: You cannot edit this comment." });
         }
         else{
-            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
+            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content, isEdited: true }, { new: true });
             res.json(updatedComment);
         }
     } catch (err) {

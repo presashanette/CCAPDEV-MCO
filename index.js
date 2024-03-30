@@ -42,36 +42,64 @@ app.get("/secret", isLoggedIn, function (req, res) {
     res.render("secret");
 })
 
+app.get('/', async (req, res) => {
+    res.redirect('/homepage');
+});
+
 
 // Route for fetching homepage with all posts
 app.get('/homepage', async (req, res) => {
     try {
-        const allPosts = await Post.find().populate('author').exec();
+        const allPosts = await Post.find()
+        .populate('author')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'replies'
+            }
+        })
+        .exec();
 
+        const pageTitle = 'All Posts';
+        
+        
+        let totalComments = 0;
+
+        allPosts.forEach(post => {
+        
+            if (post.comments) {
+                console.log("comment amount" + post.comments.length);
+                totalComments = post.comments ? post.comments.length : 0;
+        
+                post.comments.forEach(comment => {
+                    totalComments += countReplies(comment); // Call the recursive function for each comment
+                });
+            }
+        
+            post.totalComments = totalComments;
+            console.log(post.totalComments);
+        });
+        
         if (!req.session.authorized || !req.session.user) {
-            return res.render('homepage', { posts: allPosts.reverse() });
+            return res.render('homepage', { posts: allPosts.reverse(), pageTitle });
         } else {
             const userId = req.session.user._id;
-            let hearts = [];
-            let bhearts = [];
 
             const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
             const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
 
             allPosts.forEach(post => {
-                hearts.push(upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id)));
-                bhearts.push(downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id)));
+                post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
+                post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
             });
 
-            return res.render('indexloggedin', { posts: allPosts.reverse(), hearts: hearts.reverse(), bhearts: bhearts.reverse() });
+            return res.render('indexloggedin', { posts: allPosts.reverse(), pageTitle });
         }
-
     } catch (error) {
         console.error('Error fetching homepage posts.', error);
         res.status(500).send('Error fetching homepage posts.');
     }
 });
-
 
 app.get("/viewone/:postId", async (req, res) => {
     try {
@@ -85,7 +113,7 @@ app.get("/viewone/:postId", async (req, res) => {
         const foundPosts = await Post.find({ _id: postId, upvotedBy: userId }).exec();
         const foundPostsdown = await Post.find({ _id: postId, downvotedBy: userId }).exec();
         let addClassHeart;
-        let addClassBheart
+        let addClassBheart;
         if (foundPosts.length > 0) {
             addClassHeart = true;
         }
@@ -123,8 +151,20 @@ app.get("/viewone/:postId", async (req, res) => {
         })
             .exec();
 
+            let totalComments = 0;
+            if (comments) {
+                console.log("comment amount" + comments.length);
+                totalComments = comments ? comments.length : 0;
+            
+                comments.forEach(comment => {
+                    totalComments += countReplies(comment);
+                });
+            }
+            
 
-            // console.log(post, comments)
+            post.totalComments = totalComments;
+            console.log(post.totalComments);
+
 
         if (!post) {
             return res.status(404).send("Post not found");
@@ -228,25 +268,7 @@ app.get('/logout', async (req, res) => {
         res.status(500).send('Error destroying session.');
     }
 });
-
-// Route for fetching homepage with all posts
-app.get('/', async (req, res) => {
-    try {
-        // Fetch all posts from the database
-        const allPosts = await Post.find().populate('author').exec();
-
-        if (!req.session.authorized || !req.session.user) {
-            return res.render('homepage', { posts: allPosts.reverse() });
-        }
-        else{
-            return res.render('indexloggedin', { posts: allPosts.reverse() });
-        }
-    } catch (error) {
-        console.error('Error fetching homepage posts:', error);
-        res.status(500).send('Error fetching homepage posts.');
-    }
-});
-     
+ 
 app.post("/signup", async(req, res) => {
     const checksu = await User.findOne({uname: req.body.uname});
 
@@ -439,8 +461,8 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
             return res.status(403).json({ success: false, message: "Unauthorized: You cannot delete this comment." }); 
         }
         else{
-            await Comment.findByIdAndDelete(req.params.commentId);
-            res.send("Success");
+            await deleteCommentAndReplies(commentId);
+            res.send("success.");
         }
   
       
@@ -449,46 +471,6 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
       res.status(500).send("Something went wrong");
     }
   });
-
-// app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
-//     try {
-//         // Extract postId and parentCommentId from req.params
-//         const { postId, parentCommentId } = req.params;
-
-//         // Extract replyContent from request body
-//         const { content: replyContent } = req.body;
-
-//         // Now, create a new comment for the reply
-//         const reply = await new Comment({
-//             author: req.session.user._id,
-//             content: replyContent,
-//             post: postId,
-//             parentComment: parentCommentId
-//         }).save();
-
-//         console.log(reply);
-
-//         const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
-
-
-//         console.log('Update result:', result);
-//         // Assuming `parentComment` contains the parent comment fetched from the database
-//         const parentComment = await Comment.findById(parentCommentId);
-
-//         // Fetch contents of replies
-//         const replies = await Comment.find({ _id: { $in: parentComment.replies } });
-
-//         // Extract contents of replies
-//         const replyContents = replies.map(reply => reply.content);
-
-//         console.log(replyContents);
-//         res.redirect(`/viewone/${postId}`);
-//     } catch (error) {
-//         // Handle any errors that occur during the process
-//         console.error('Error submitting reply:', error);
-//         res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// });
 
 app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
     try {
@@ -523,8 +505,6 @@ app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
 });
 
 const upload = multer({ storage: storage }).single('profPic');
-
-
 
 app.get("/viewprofile", async (req, res) => {
     try {
@@ -599,7 +579,11 @@ app.post('/updateProfile', upload, async (req, res) => {
 app.get('/globalSearch', async (req, res) => {
     const { query } = req.query;
     try {
-        // Search based on title, content, and tags
+
+        if (!req.session.authorized || !req.session.user) 
+            res.redirect('/login');
+        else{
+            // Search based on title, content, and tags
         const posts = await Post.find({
             $or: [
                 { title: { $regex: query, $options: 'i' } },
@@ -607,7 +591,41 @@ app.get('/globalSearch', async (req, res) => {
                 { tags: { $regex: query, $options: 'i' } } // Search in tags field
             ]
         }).populate('author');
+
+        let totalComments = 0;
+
+        posts.forEach(post => {
+        
+            if (post.comments) {
+                console.log("comment amount" + post.comments.length);
+                totalComments = post.comments ? post.comments.length : 0;
+        
+                post.comments.forEach(comment => {
+                    totalComments += countReplies(comment); // Call the recursive function for each comment
+                });
+            }
+        
+            post.totalComments = totalComments;
+            console.log(post.totalComments);
+        });
+        
+        
+
+            const userId = req.session.user._id;
+
+            const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
+            const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+
+            posts.forEach(post => {
+                post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
+                post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
+            });
+
+
         res.render('search', { posts, query });
+        }   
+        
+
     } catch (error) {
         console.error('Error searching posts:', error);
         res.status(500).send('Error searching posts.');
@@ -618,19 +636,53 @@ app.get('/globalSearch', async (req, res) => {
 // Route for fetching recent posts
 app.get('/recent', async (req, res) => {
     try {
-        // Fetch recent posts from the database, limit as needed and reverse the order
-        const recentPosts = await Post.find()
-            .sort({ createdAt: -1 }) // Sort by createdAt in descending order (latest first)
-            .limit(10) // Limit the number of posts
-            .populate('author')
-            .exec();
+        const allPosts = await Post.find()
+        .populate('author')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'replies'
+            }
+        })
+        .exec();
 
-        // Reverse the order of recentPosts
-        const reversedPosts = recentPosts.reverse();
+        const pageTitle = 'Recent Posts';
+        
+        
+        let totalComments = 0;
 
-        res.render('recentloggedin', { posts: reversedPosts });
+        allPosts.forEach(post => {
+        
+            if (post.comments) {
+                console.log("comment amount" + post.comments.length);
+                totalComments = post.comments ? post.comments.length : 0;
+        
+                post.comments.forEach(comment => {
+                    totalComments += countReplies(comment); // Call the recursive function for each comment
+                });
+            }
+        
+            post.totalComments = totalComments;
+            console.log(post.totalComments);
+        });
+        
+        if (!req.session.authorized || !req.session.user) {
+            return res.render('homepage', { posts: allPosts.reverse(), pageTitle });
+        } else {
+            const userId = req.session.user._id;
+
+            const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
+            const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+
+            allPosts.forEach(post => {
+                post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
+                post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
+            });
+
+            return res.render('indexloggedin', { posts: allPosts.reverse(), pageTitle });
+        }
     } catch (error) {
-        console.error('Error fetching recent posts:', error);
+        console.error('Error fetching recent posts.', error);
         res.status(500).send('Error fetching recent posts.');
     }
 });
@@ -641,16 +693,79 @@ app.get('/popular', async (req, res) => {
         // Fetch popular posts from the database, sorted by upvotes count in descending order
         const popularPosts = await Post.find()
             .sort({ upvotes: -1 }) // Sort by upvotes count in descending order
-            .limit(10)
             .populate('author')
             .exec();
 
-        res.render('popularloggedin', { posts: popularPosts });
+            const pageTitle = 'Popular Posts';
+
+            let totalComments = 0;
+
+            popularPosts.forEach(post => {
+            
+                if (post.comments) {
+                    console.log("comment amount" + post.comments.length);
+                    totalComments = post.comments ? post.comments.length : 0;
+            
+                    post.comments.forEach(comment => {
+                        totalComments += countReplies(comment); // Call the recursive function for each comment
+                    });
+                }
+            
+                post.totalComments = totalComments;
+                console.log(post.totalComments);
+            });
+            
+            if (!req.session.authorized || !req.session.user) {
+                return res.render('homepage', { posts: popularPosts, pageTitle });
+            } else {
+                const userId = req.session.user._id;
+    
+                const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
+                const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+    
+                popularPosts.forEach(post => {
+                    post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
+                    post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
+                });
+    
+                return res.render('indexloggedin', { posts: popularPosts, pageTitle });
+            }
     } catch (error) {
         console.error('Error fetching popular posts:', error);
         res.status(500).send('Error fetching popular posts.');
     }
 });
+
+// Recursive function to count replies including replies to replies
+function countReplies(comment) {
+    let count = 0;
+    if (comment.replies) {
+        count += comment.replies.length;
+        comment.replies.forEach(reply => {
+            count += countReplies(reply); // Recursive call to count replies of replies
+        });
+    }
+    return count;
+}
+
+async function deleteCommentAndReplies(commentId) {
+    // Find the comment
+    const comment = await Comment.findById(commentId);
+
+    // If the comment doesn't exist, return
+    if (!comment) {
+        return;
+    }
+
+    // Recursively delete replies
+    for (const replyId of comment.replies) {
+        await deleteCommentAndReplies(replyId);
+        await Comment.findByIdAndDelete(replyId);
+    }
+
+    // Delete the comment
+    await Comment.findByIdAndDelete(commentId);
+}
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) return next();
@@ -693,7 +808,14 @@ app.post('/upvotePost/:postId', async(req, res) => {
         if (referer && referer.includes('/viewone/')) {
             // Redirect to the same post if user came from viewone/:postId
             res.redirect(referer);
-        } else {
+        } 
+
+        else if (referer && referer.includes('/globalSearch')) {
+            // Redirect to the same post if user came from viewone/:postId
+            res.redirect(referer);
+        } 
+        
+        else {
             // Redirect to viewall if user came from viewall or if referer is not available
             res.redirect('/homepage');
         }
@@ -739,7 +861,14 @@ app.post('/downvotePost/:postId', async(req, res) => {
         if (referer && referer.includes('/viewone/')) {
             // Redirect to the same post if user came from viewone/:postId
             res.redirect(referer);
-        } else {
+        } 
+        
+        else if (referer && referer.includes('/globalSearch')) {
+            // Redirect to the same post if user came from viewone/:postId
+            res.redirect(referer);
+        } 
+
+        else {
             // Redirect to viewall if user came from viewall or if referer is not available
             res.redirect('/homepage');
         }

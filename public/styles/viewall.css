@@ -3,6 +3,7 @@
     flex-flow: column wrap;
     align-items: center;
     width: 100%;
+    padding-bottom: 20px;
 }
 
 #profile-symbol {
@@ -170,13 +171,15 @@
     height: 22px;
     width: auto;
     margin-right: 10px;
+    margin-bottom: 10px;
+
 }
 
 .tagtext {
     font-size: 15px;
     padding-left: 5px;
     padding-right: 10px;
-    margin: 0 0 0 5px;
+    margin: 2px 0 0 5px;
 }
 
 .count {

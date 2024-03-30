@@ -94,7 +94,12 @@
     font-size: x-large;
 } 
 /* comments **********/
+.comments{
+    padding-bottom: 20px;
+}
+
 .editable{
+    margin-top: -5px;
     margin-left: 45px;
 }
 
@@ -121,12 +126,13 @@
     margin-left: 5px;
 }
 
-.user {
+.comment .user {
     color: var(--brown);
+    font-size: 16px;
 }
 
 .comment {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 20px;
     border-left: 3px solid var(--pink1);
     padding-left: 10px;

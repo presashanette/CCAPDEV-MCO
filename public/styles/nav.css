@@ -193,11 +193,6 @@
 .nav-side-items .material-symbols-outlined, .nav-side-right-items .material-symbols-outlined{
     margin-right: 14px;
     color: var(--pink5);
-    font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
 }
 
 .nav-symbol .material-symbols-outlined{

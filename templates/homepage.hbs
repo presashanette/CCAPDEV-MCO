@@ -30,7 +30,7 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="./scripts/viewone.js"></script>
 
-    <title>Home | Girls</title>
+    <title>{{pageTitle}} | Girls</title>
   </head>
   <body>
 <!-- NAVIGATIONS!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -61,7 +61,7 @@
                   <a class="nav-symbol-button" id="home-button" href="/homepage">
                     <span
                       class="material-symbols-outlined"
-                      id="home-symbol"
+                      id="active"
                     >home</span>
                     Home
                   </a>
@@ -116,7 +116,7 @@
 <!-- NAVIGATIONS END!!!!!!!!!!!!!!!!!!!!!!!!!!! -->      
 
 <div class="content-container">    
-  <h1 class="hometext">All Posts</h1>
+  <h1 class="hometext">{{pageTitle}}</h1>
   
   <div class="allposts">
   <!-- homepage.hbs -->
@@ -158,14 +158,14 @@
                 {{/each}}
             </div>
             <div class="action-icons">
-                <form method="POST" action="/upvotePost/{{_id}}">
+                <form method="" action="/login">
                     <button type="submit" class="icon" id="hearticon">
                         <span class="material-symbols-outlined" id="heart">favorite</span>
                     </button>
                 </form>
                 <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
 
-                <form method="POST" action="/downvotePost/{{_id}}">
+                <form method="" action="/login">
                     <button type="submit" class="icon" id="bhearticon">
                         <span class="material-symbols-outlined" id="brokenheart">heart_broken</span>
                     </button>
@@ -175,7 +175,7 @@
                 <button type="button" class="icon" id="commenticon" onclick="window.location.href = '/viewone/{{_id}}';">
                     <span class="material-symbols-outlined" id="comment">mode_comment</span>
                 </button>
-                <p class="count">{{comments.length}}</p> <!-- Display comments count here -->
+                <p class="count">{{totalComments}}</p> <!-- Display comments count here -->
             </div>
         </div>
       </div>

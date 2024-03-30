@@ -162,7 +162,7 @@
             <button type="button" class="icon" id="commenticon">
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
-            <p class="count" id="comment-count">{{comments.length}}</p>
+            <p class="count" id="comment-count">{{post.totalComments}}</p>
             <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/editpost/{{post._id}}';">
                 <span class="material-symbols-outlined" id="edit">edit</span>
             </button>
@@ -234,91 +234,11 @@
             </div>
         </form>
     </div>
-
-    
-    {{!-- <div id="comments">
-        {{#each comments}}
-            <div class="comment" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">
-                <!-- Render each comment dynamically -->
-                <div class="profile-container">
-                  <p class="profile-picture">
-                    {{#if this.author.profPicLink}}
-                      <img src="{{this.author.profPicLink}}" class="profile-picture" />
-                    {{else}}
-                        <img src="./public/images/defUser.png" class="profile-picture" />
-                    {{/if}}
-                  </p>
-
-                  <div class="user-info">
-                      {{#if this.author.uname}}
-                            <a class="user" href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
-                        {{else}}
-                            <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
-                        {{/if}}
-                  </div>
-                </div>
-
-                <div class="editable">
-                    {{this.content}}
-                </div>
-                
-                <button id="edit-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Edit</button>
-                <button id="delete-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Delete</button>
-
-                <form action="/reply/comment/{{this.post._id}}/{{this._id}}" method="post">
-                  <textarea
-                      name="content"
-                      class="replyInput"
-                      placeholder="Reply to this comment"
-                  ></textarea>
-                  <button type="submit">Reply</button>
-                </form>
-                <button onclick="toggleCollapse(this)">Collapse</button>
-
-                <!-- Render replies dynamically if applicable -->
-                        {{#each this.replies}}
-                            <div class="comment" data-post-id="{{post._id}}"  data-comment-id="{{this._id}}"> 
-                                <div class="profile-container">
-                                <p class="profile-picture">
-                                  {{#if this.author.profPicLink}}
-                                    <img src="{{this.author.profPicLink}}" class="profile-picture" />
-                                  {{else}}
-                                      <img src="./public/images/defUser.png" class="profile-picture" />
-                                  {{/if}}
-                                </p>
-
-                                <div class="user-info">
-                                    {{#if this.author.uname}}
-                                          <a class="user" href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
-                                      {{else}}
-                                          <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
-                                      {{/if}}
-                                </div>
-                              </div>
-                                <div class="editable">
-                                    {{this.content}}
-                                </div>
-                                
-                                <button id="edit-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Edit</button>
-                                <button id="delete-button" data-post-id="{{post._id}}" data-comment-id="{{this._id}}">Delete</button>
-
-                                <form action="/reply/comment/{{this.post._id}}/{{this._id}}" method="post">
-                                <textarea
-                                    name="content"
-                                    class="replyInput"
-                                    placeholder="Reply to this comment"
-                                ></textarea>
-                                <button type="submit">Reply</button>
-                              </form>
-                                <button onclick="toggleCollapse(this)">Collapse</button>
-                            </div>
-                        {{/each}}
-            </div>
-        {{/each}}
-    </div> --}}
   
-
-        {{> comment}}
+    <div class="comments">
+      {{> comment}}
+    </div>
+        
 
     
 </div>

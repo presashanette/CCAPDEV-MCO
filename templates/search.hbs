@@ -21,9 +21,8 @@
     <link rel="stylesheet" href="./styles/search.css"/>
     <!-- scripts -->
     <script src="//code.jquery.com/jquery.min.js"></script>
-    <script src="scripts/index.js"></script>
-    <script src="scripts/viewone.js"></script>
-    <script src="scripts/search.js"></script>
+    <script src="./scripts/viewone.js"></script>
+    <script src="./scripts/search.js"></script>
 
     <title>Search | Girls</title>
 </head>
@@ -108,88 +107,90 @@
       <!-- side navigation right end -->
 <!-- NAVIGATIONS END!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
         
-        <!-- content -->
-        <div class="content-container">
-            <div class="content">
-        
-            <h1 class="hometext">Search Results:</h1>
-
-
-        <div class="allposts">
-
-        <div class="posts">
-            <!-- Display popular posts -->
-            {{#each posts}}
-            <div class="post">
-                <!-- Display post content -->
-                <div class="profile">
-                    {{#if this.author.profPicLink}}
-                    <img src="{{this.author.profPicLink}}" class="dp" />
-                    <!-- Display profile image -->
-                    {{else}}
-                    <img src="images/bubbles.jpg" class="dp" />
-                    <!-- Fallback image -->
-                    {{/if}}
-                    <div class="headerpost">
-                        <p class="handle">
-                            {{#if this.author.uname}}
-                            <a class="user" href="/viewprofile{{this.author._id}}">@{{this.author.uname}}</a>
-                            {{else}}
-                            <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
-                            <!-- Fallback username -->
-                            {{/if}}
-                        </p>
-                        {{#if this.author.url}}
-                        <a class="title" href="{{this.author.url}}">{{title}}</a>
-                        <!-- Use author's URL if available -->
-                        {{else}}
-                        <a class="title" href="http://localhost:3000/viewone">{{title}}</a>
-                        <!-- Fallback URL -->
-                        {{/if}}
-                    </div>
-                </div>
-                <div class="content">
-                    <!-- Display post content -->
-                    <p class="text">{{{content}}}</p>
-                </div>
-                <div class="icons">
-                    <div class="tagpost">
-                        {{#each tags}}
-                        <div class="onetag">
-                            <p class="tagtext">{{this}}</p>
-                        </div>
-                        {{/each}}
-                    </div>
-                    <div class="action-icons">
-                        <form method="POST" action="/upvotePost/{{_id}}">
-                            <button type="submit" class="icon" id="hearticon">
-                                <span class="material-symbols-outlined" id="heart">favorite</span>
-                            </button>
-                        </form>
-                        <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
-
-                        <form method="POST" action="/downvotePost/{{_id}}">
-                            <button type="submit" class="icon" id="bhearticon">
-                                <span class="material-symbols-outlined" id="brokenheart">heart_broken</span>
-                            </button>
-                        </form>
-                        <p class="count">{{downvotes}}</p> <!-- Display downvotes count here -->
-
-                        <button type="button" class="icon" id="commenticon" onclick="window.location.href = '/viewone/{{_id}}';">
-                            <span class="material-symbols-outlined" id="comment">mode_comment</span>
-                        </button>
-                        <p class="count">{{comments.length}}</p> <!-- Display comments count here -->
-                    </div>
-                </div>
-            </div>
+<div class="content-container">    
+  <h1 class="hometext">Search Results:</h1>
+  
+  <div class="allposts">
+  <!-- homepage.hbs -->
+    <div class="posts">
+<!-- Display all posts -->
+      {{#each posts}}
+      <div class="post">
+        <!-- Display post content -->
+        <div class="profile">
+            {{#if this.author.profPicLink}}
+                <img src="{{this.author.profPicLink}}" class="dp" />
             {{else}}
-            <p>No popular posts found</p>
-            {{/each}}
+                <img src="images/defUser.png" class="dp" />
+            {{/if}}
+            <div class="headerpost">
+                <p class="handle">
+                    {{#if this.author.uname}}
+                        <a class="user" href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
+                    {{else}}
+                        <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
+                    {{/if}}
+                </p>
+                {{#if this.author.url}}
+                    <a class="title" href="{{this.author.url}}">{{title}}</a>
+                {{else}}
+                    <a class="title" href="http://localhost:3000/viewone/{{this._id}}">{{title}}</a>
+                {{/if}}
+            </div>
         </div>
+        <div class="content">
+            <p class="text">{{{this.content}}}</p>
+        </div>
+        <div class="icons">
+            <div class="tagpost">
+                {{#each tags}}
+                    <div class="onetag">
+                        <p class="tagtext">{{this}}</p>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="action-icons">
+                <form method="POST" action="/upvotePost/{{this._id}}">
+                    <button type="submit" class="icon" id="hearticon">
+                        <span class="material-symbols-outlined"  {{#if this.isUpvoted}}id="focus"{{/if}}>favorite</span>
+                    </button>
+                </form>
+                <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
 
+                <form method="POST" action="/downvotePost/{{this._id}}">
+                    <button type="submit" class="icon" id="bhearticon">
+                        <span class="material-symbols-outlined" {{#if this.isDownvoted}}id="focus"{{/if}}>heart_broken</span>
+                    </button>
+                </form>
+                <p class="count">{{downvotes}}</p> <!-- Display downvotes count here -->
+
+                <button type="button" class="icon" id="commenticon" onclick="window.location.href = '/viewone/{{_id}}';">
+                    <span class="material-symbols-outlined" id="comment">mode_comment</span>
+                </button>
+                <p class="count">{{totalComments}}</p> <!-- Display comments count here -->
+            </div>
         </div>
       </div>
+      {{else}}
+      <p>No posts found</p>
+      {{/each}}
+      </div>  
+    </div> 
+  </div>
+</div>  
 
+<div id="myModal3" class="modal" style="{{#if showError3}}display: block;{{else}}display: none;{{/if}}">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <button class="close" onclick="myFunc()">X</button>
+    <p>An error occurred fetching user profile.</p>
+  </div>
+</div>
 
+<script>
+// When the user clicks on div, close the popup
+function myFunc() {
+  $(".modal").hide();
+}
     
 </html>

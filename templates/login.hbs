@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In || Girls</title>
+    <link rel="stylesheet" href="./styles/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+    <div class="main">
+        <div class="spacer"></div>
+        <div class="panel">
+            <div class="header">
+                <h1>LOGIN</h1>
+            </div>
+
+            <form action="/login" method="post">
+                <div class="username">
+                    <h3>Username</h3>
+                    <input type="text" placeholder="Enter Username" name="uname" required>
+                </div>
+                <div class="password">
+                    <h3>Password</h3>
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                </div>
+                <div class="buttons">
+                    <div class="rmblogin">
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember" class="remembercheck"> Remember me
+                        </label>
+                        <span class="notyetuser"><p>Not yet a user? <a href="/signup">Sign Up</a></p></span>
+                    </div>
+                    
+                    <button onclick="window.location.href='/homepage';" class="loginbtn">Login</button>
+                
+                    <input type="button" class="backbtn" value="Back" onclick="history.back()">
+                </div>
+            </form>
+            
+        </div>
+        <div class="spacer"></div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal1" class="modal" style="{{#if showError1}}display: block;{{else}}display: none;{{/if}}">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <button class="close" onclick="myFunc()">X</button>
+        <p>Wrong password!</p>
+    </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal2" class="modal" style="{{#if showError2}}display: block;{{else}}display: none;{{/if}}">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <button class="close" onclick="myFunc()">X</button>
+        <p>No account with this username!</p>
+    </div>
+    </div>
+
+    <script>
+    // When the user clicks on div, close the popup
+    function myFunc() {
+        $(".modal").hide();
+    }
+    </script>
+
+</body>
+</html>

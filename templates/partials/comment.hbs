@@ -1,0 +1,42 @@
+<div class="comment-container">
+    {{#each comments}}
+        <div class="comment">
+            <!-- Render each comment dynamically -->
+            <div class="profile-container">
+                <p class="profile-picture">
+                {{#if this.author.profPicLink}}
+                    <img src="{{this.author.profPicLink}}" class="profile-picture" />
+                {{else}}
+                    <img src="./public/images/defUser.png" class="profile-picture" />
+                {{/if}}
+                </p>
+
+                <div class="user-info">
+                    {{#if this.author.uname}}
+                        <a class="user" href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
+                    {{else}}
+                        <a class="user" href="/viewprofile/{{this.author._id}}">girlsUser</a>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="editable">
+                {{this.content}}
+            </div>
+            
+            <button id="edit-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Edit</button>
+            <button id="delete-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Delete</button>
+
+            <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
+            <button id="reply-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Reply</button>
+            <button id="collapse-button">Collapse</button>
+
+            {{#if this.replies}}
+                <div class="reply" >
+                    {{> comment comments=this.replies}}
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+</div>
+

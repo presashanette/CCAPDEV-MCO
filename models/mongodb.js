@@ -49,6 +49,10 @@ const postSch = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    isEdited: {
+        type: Boolean,
+        default: false
+    },
     title: String,
     content: String,
     tags: [String],

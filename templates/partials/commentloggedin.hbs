@@ -28,36 +28,21 @@
             {{/if}}
             
             <div class="row">
-                <button onclick="location.href='http://localhost:3000/login';" >Edit</button>
-            <button onclick="location.href='http://localhost:3000/login';">Delete</button>
+                <button id="edit-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Edit</button>
+            <button id="delete-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Delete</button>
             
             </div>
 
-            <div onclick="location.href='http://localhost:3000/login';"></div>
-            <button onclick="location.href='http://localhost:3000/login';">Reply</button>
+            <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
+            <button id="reply-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Reply</button>
             <button id="collapse-button">Collapse</button>
             
 
             {{#if this.replies}}
                 <div class="reply" >
-                    {{> comment comments=this.replies}}
+                    {{> commentloggedin comments=this.replies}}
                 </div>
             {{/if}}
         </div>
     {{/each}}
 </div>
-
-{{!-- <!-- The Modal -->
-<div id="myModal1" class="modal" style="{{#if showError1}}display: block;{{else}}display: none;{{/if}}">
-<!-- Modal content -->
-<div class="modal-content">
-    <button class="close" onclick="myFunc()">X</button>
-    <p>This field is required!</p>
-</div>
-</div>
-
-<script>
-    function myFunc() {
-        $(".modal").hide();
-    }
-</script> --}}

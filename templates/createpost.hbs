@@ -10,17 +10,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- styles -->
     <link rel="stylesheet" href="./styles/general.css" />
     <link rel="stylesheet" href="./styles/nav.css" />
     <link rel="stylesheet" href="./styles/index.css">
     <link rel="stylesheet" href="./styles/createpost.css">
-    {{!-- <link rel="stylesheet" href="./styles/recent.css"> --}}
 
-    
     <!-- scripts -->
     <script src="//code.jquery.com/jquery.min.js"></script>
-    {{!-- <script src="scripts/createpost.js"></script> --}}
 
     <title>Create Post | Girls</title>
 </head>
@@ -173,13 +171,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Existing code for editor buttons
             $('.btn').click(function () {
                 var command = $(this).data('element');
                 document.execCommand(command, false, null);
             });
 
-            // Insert Image button click event
             $('#insertImageBtn').click(function () {
                 var imageUrl = prompt('Enter image URL:');
                 if (imageUrl) {
@@ -188,7 +184,6 @@
                 }
             });
 
-            // Insert Link button click event
             $('#insertLinkBtn').click(function () {
                 var url = prompt('Enter URL:');
                 var linkText = prompt('Enter link text:');
@@ -197,14 +192,10 @@
                     document.execCommand('insertHTML', false, linkHtml);
                 }
             });
-            // e.stopImmediatePropagation();
             
             $('#postForm').submit(function () {
-                // Get the text content of the posttext div
                 var textContent = $('#posttext').text();
-                // Replace new lines with <br> tags
                 {{!-- var htmlContent = textContent.replace('<br>', /\n/g); --}}
-                // Set the value of the contentHTML input to the modified HTML content
                 $('#contentHTML').val(textContent);
 
                 {{!-- var postContent = $('#posttext').html();
@@ -232,30 +223,10 @@
     </div>
 
     <script>
-    // When the user clicks on div, close the popup
     function myFunc() {
         $(".modal").hide();
     }
     </script>
 </body>
 
-{{!-- $('#postbtn').click(function (e) {
-                var postContent = $('#posttext').html();
-                $('#contentHTML').val(postContent); // Update hidden input
-
-                // Send data to server using AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: '/createPost',
-                    data: $('#postForm').serialize(), // Serialize form data
-                    success: function (response) {
-                        alert('Post saved successfully!');
-                        res.redirect()
-                        // Redirect or perform actions based on response
-                    },
-                    error: function () {
-                        alert('Error saving post!');
-                    }
-                });
-            }); --}}
 </html>

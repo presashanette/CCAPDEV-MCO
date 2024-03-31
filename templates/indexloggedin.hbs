@@ -160,19 +160,19 @@
                         <span class="material-symbols-outlined"  {{#if this.isUpvoted}}id="focus"{{/if}}>favorite</span>
                     </button>
                 </form>
-                <p class="count">{{upvotes}}</p> <!-- Display upvotes count here -->
+                <p class="count">{{upvotes}}</p>
 
                 <form method="POST" action="/downvotePost/{{this._id}}">
                     <button type="submit" class="icon" id="bhearticon">
                         <span class="material-symbols-outlined" {{#if this.isDownvoted}}id="focus"{{/if}}>heart_broken</span>
                     </button>
                 </form>
-                <p class="count">{{downvotes}}</p> <!-- Display downvotes count here -->
+                <p class="count">{{downvotes}}</p>
 
                 <button type="button" class="icon" id="commenticon" onclick="window.location.href = '/viewone/{{_id}}';">
                     <span class="material-symbols-outlined" id="comment">mode_comment</span>
                 </button>
-                <p class="count">{{totalComments}}</p> <!-- Display comments count here -->
+                <p class="count">{{totalComments}}</p>
             </div>
         </div>
       </div>
@@ -193,10 +193,10 @@
 </div>
 
 <script>
-// When the user clicks on div, close the popup
-function myFunc() {
-  $(".modal").hide();
-}
+
+  function myFunc() {
+    $(".modal").hide();
+  }
 </script>
 
 

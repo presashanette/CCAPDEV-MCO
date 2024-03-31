@@ -49,6 +49,7 @@ app.get('/', async (req, res) => {
 
 // Route for fetching homepage with all posts
 app.get('/homepage', async (req, res) => {
+    
     try {
         const allPosts = await Post.find()
         .populate('author')
@@ -93,7 +94,7 @@ app.get('/homepage', async (req, res) => {
                 post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
             });
 
-            return res.render('indexloggedin', { posts: allPosts.reverse(), pageTitle });
+            return res.render('indexloggedin', { posts: allPosts.reverse(), pageTitle, userId });
         }
     } catch (error) {
         console.error('Error fetching homepage posts.', error);
@@ -103,81 +104,125 @@ app.get('/homepage', async (req, res) => {
 
 app.get("/viewone/:postId", async (req, res) => {
     try {
+        //if user is logged out (still can view post)
         if(!req.session.authorized){
-            return res.redirect('/login');
-        }
-        
-        const postId = req.params.postId;
-        const userId = req.session.user._id;
-
-        const foundPosts = await Post.find({ _id: postId, upvotedBy: userId }).exec();
-        const foundPostsdown = await Post.find({ _id: postId, downvotedBy: userId }).exec();
-        let addClassHeart;
-        let addClassBheart;
-        if (foundPosts.length > 0) {
-            addClassHeart = true;
-        }
-        else {
-            addClassHeart = false;
-        }
-
-        if (foundPostsdown.length > 0) {
-            addClassBheart = true;
-        }
-        else {
-            addClassBheart = false;
-        }
-
-        // Fetch the post including author details and explicitly populate author fields
-        const post = await Post.findById(postId)
+            //return res.redirect('/login');
+            const postId = req.params.postId;
+            const post = await Post.findById(postId)
             .populate({
                 path: 'author',
-                select: 'uname profPicLink' // Select only necessary fields
+                select: 'uname profPicLink' 
             })
             .exec();
 
-        // Fetch the comments for the post
-        const comments = await Comment.find({ parentComment: null, post: postId })
-        .populate({
-            path: 'author',
-            select: 'uname profPicLink' // Specify fields to populate for the author
-        })
-        .populate({
-            path: 'replies',
-            populate: {
+            const comments = await Comment.find({ parentComment: null, post: postId })
+            .populate({
                 path: 'author',
-                select: 'uname profPicLink' // Specify fields to populate for the reply author
+                select: 'uname profPicLink' 
+            })
+            .populate({
+                path: 'replies',
+                populate: {
+                    path: 'author',
+                    select: 'uname profPicLink' 
+                }
+            })
+                .exec();
+
+                let totalComments = 0;
+                if (comments) {
+                    console.log("comment amount" + comments.length);
+                    totalComments = comments ? comments.length : 0;
+                
+                    comments.forEach(comment => {
+                        totalComments += countReplies(comment);
+                    });
+                }
+                
+
+                post.totalComments = totalComments;
+                console.log(post.totalComments);
+
+
+            if (!post) {
+                return res.status(404).send("Post not found");
             }
-        })
-            .exec();
-
-            let totalComments = 0;
-            if (comments) {
-                console.log("comment amount" + comments.length);
-                totalComments = comments ? comments.length : 0;
             
-                comments.forEach(comment => {
-                    totalComments += countReplies(comment);
-                });
-            }
-            
-
-            post.totalComments = totalComments;
-            console.log(post.totalComments);
-
-
-        if (!post) {
-            return res.status(404).send("Post not found");
-        }
-
-        if (!req.session.authorized || !req.session.user) {
             return res.render("viewone", { post, comments });
+            
         }
-        else{
+        
+        //if user is logged in
+        else {
+            const postId = req.params.postId;
             const userId = req.session.user._id;
-            return res.render("viewoneloggedin", { addClassHeart, addClassBheart, post, comments, userId });
-        }
 
+            const foundPosts = await Post.find({ _id: postId, upvotedBy: userId }).exec();
+            const foundPostsdown = await Post.find({ _id: postId, downvotedBy: userId }).exec();
+            let addClassHeart;
+            let addClassBheart;
+            if (foundPosts.length > 0) {
+                addClassHeart = true;
+            }
+            else {
+                addClassHeart = false;
+            }
+
+            if (foundPostsdown.length > 0) {
+                addClassBheart = true;
+            }
+            else {
+                addClassBheart = false;
+            }
+
+            const post = await Post.findById(postId)
+                .populate({
+                    path: 'author',
+                    select: 'uname profPicLink' 
+                })
+                .exec();
+
+            const comments = await Comment.find({ parentComment: null, post: postId })
+            .populate({
+                path: 'author',
+                select: 'uname profPicLink' 
+            })
+            .populate({
+                path: 'replies',
+                populate: {
+                    path: 'author',
+                    select: 'uname profPicLink' 
+                }
+            })
+                .exec();
+
+                let totalComments = 0;
+                if (comments) {
+                    console.log("comment amount" + comments.length);
+                    totalComments = comments ? comments.length : 0;
+                
+                    comments.forEach(comment => {
+                        totalComments += countReplies(comment);
+                    });
+                }
+                
+
+                post.totalComments = totalComments;
+                console.log(post.totalComments);
+
+
+            if (!post) {
+                return res.status(404).send("Post not found");
+            }
+
+            if (!req.session.authorized || !req.session.user) {
+                return res.render("viewone", { post, comments });
+            }
+            else{
+                const userId = req.session.user._id;
+                return res.render("viewoneloggedin", { addClassHeart, addClassBheart, post, comments, userId });
+            }
+        }
         
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -220,6 +265,7 @@ app.post('/updatePost', async (req, res) => {
             title: title,
             content: content,
             tags: tags.split(',').map(tag => tag.trim()), 
+            isEdited: true,
         });
       
         res.redirect(`/viewone/${postId}`);
@@ -301,6 +347,7 @@ app.post("/signup", async(req, res) => {
 app.post("/login", async (req, res) => {
     let showError1 = false;
     let showError2 = false;
+
     try {
         const { uname, psw } = req.body;
         const user = await User.findOne({ uname });
@@ -335,7 +382,7 @@ app.get("/createpost",  (req, res) => {
     res.render("createpost");
 });
 
-// POST route to handle creating a new post
+
 app.post("/createpost", async (req, res) => {
     
     try {
@@ -344,11 +391,11 @@ app.post("/createpost", async (req, res) => {
 
         const { title, contentHTML, tags } = req.body;
 
-        const tagList = tags.split(',').map(tag => tag.trim()); // Split tags by comma and trim whitespace
+        const tagList = tags.split(',').map(tag => tag.trim());
 
 
         const newPost = new Post({
-            title, // Ensure that title is accessed correctly from req.body
+            title, 
             content: contentHTML,
             tags: tagList,
             author: req.session.user._id 
@@ -363,12 +410,8 @@ app.post("/createpost", async (req, res) => {
             res.render("createpost", { showValid });
         }
 
-        // Save the new post to the database
         await newPost.save();
-                    
         const postId = newPost._id;
-
-        // Redirect to an appropriate page after successful creation
         res.redirect(`/viewone/${postId}`);
          
     } catch (error) {
@@ -387,9 +430,11 @@ const storage = multer.diskStorage({
     }
 });
 
-// Add a comment to a post
+
 app.post('/addComment/:postId', async (req, res) => {
     try {
+        let showError1 = false;
+        
         if (!req.session.authorized || !req.session.user) {
             return res.redirect("/login");
         }
@@ -401,13 +446,13 @@ app.post('/addComment/:postId', async (req, res) => {
                 content,
                 post: postId
             });
+
             await newComment.save();
 
             const post = await Post.findById(postId).exec();
             post.comments.push(newComment);
             await newComment.save();
 
-            // Increment comments count in the post
             post.commentsCount += 1;
             await post.save();
 
@@ -419,7 +464,7 @@ app.post('/addComment/:postId', async (req, res) => {
     }
 });
 
-// Route to update a comment
+
 app.put('/editComment/:postId/:commentId', async (req, res) => {
     const commentId = req.params.commentId;
     const comment = await Comment.findById(commentId);
@@ -433,7 +478,7 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized: You cannot edit this comment." });
         }
         else{
-            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content, isEdited: true }, { new: true });
+            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
             res.json(updatedComment);
         }
     } catch (err) {
@@ -441,30 +486,34 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
     }
 });
 
-// Route to delete a comment
+
 app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
-
-    const commentId = req.params.commentId;
-    const comment = await Comment.findById(commentId);
-    const userId = req.session.user._id;
-
     try {
-      const post = await Post.findByIdAndUpdate(
-        req.params.postId,
-        {
-          $pull: { comments: req.params.commentId },
-        },
-        { new: true }
-      );
+        if (!req.session.authorized || !req.session.user) {
+            return res.redirect("/login");
+        }
 
-        if (!comment.author._id.equals(userId)) {
-            return res.status(403).json({ success: false, message: "Unauthorized: You cannot delete this comment." }); 
-        }
         else{
-            await deleteCommentAndReplies(commentId);
-            res.send("success.");
+            const commentId = req.params.commentId;
+            const comment = await Comment.findById(commentId);
+            const userId = req.session.user._id;
+
+            const post = await Post.findByIdAndUpdate(
+                req.params.postId,
+                {
+                  $pull: { comments: req.params.commentId },
+                },
+                { new: true }
+              );
+        
+                if (!comment.author._id.equals(userId)) {
+                    return res.status(403).json({ success: false, message: "Unauthorized: You cannot delete this comment." }); 
+                }
+                else{
+                    await deleteCommentAndReplies(commentId);
+                    res.send("success.");
+                }
         }
-  
       
     } catch (err) {
       console.log(err);
@@ -474,31 +523,30 @@ app.delete("/deleteComment/:postId/:commentId", async function (req, res) {
 
 app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
     try {
-        // Extract postId and parentCommentId from req.params
-        const { postId, parentCommentId } = req.params;
+        if (!req.session.authorized || !req.session.user) {
+            return res.redirect("/login");
+        }
 
-        // Extract replyContent from request body
-        const { content: replyContent } = req.body;
+        else{
+            const { postId, parentCommentId } = req.params;
+            const { content: replyContent } = req.body;
 
-        // Now, create a new comment for the reply
-        const reply = await new Comment({
-            author: req.session.user._id,
-            content: replyContent,
-            post: postId,
-            parentComment: parentCommentId
-        }).save();
+            const reply = await new Comment({
+                author: req.session.user._id,
+                content: replyContent,
+                post: postId,
+                parentComment: parentCommentId
+            }).save();
 
-        console.log(reply);
+            console.log(reply);
 
-        const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
+            const result = await Comment.findOneAndUpdate({_id:parentCommentId},{$push:{replies:reply._id}});
 
-        console.log('Update result:', result);
+            console.log('Update result:', result);
+            res.redirect(`/viewone/${postId}`);
+        }
         
-        // Send a success response
-        res.redirect(`/viewone/${postId}`);
-
     } catch (error) {
-        // Handle any errors that occur during the process
         console.error('Error submitting reply:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -512,7 +560,6 @@ app.get("/viewprofile", async (req, res) => {
         const posts = await Post.find({ 'author': user._id }).populate('comments').populate('author').exec();
         const comments = await Comment.find({ 'author': user._id }).populate('replies').populate('author').exec();
 
-        // Reverse the order of posts and comments
         const reversedPosts = posts.reverse();
         const reversedComments = comments.reverse();
 
@@ -525,13 +572,53 @@ app.get("/viewprofile", async (req, res) => {
             isEmpty 
         };
 
-        res.render("viewprofile", userDetails);
+        res.render("viewprofile",  userDetails );
 
     } catch (error) {
         console.error("Error fetching user profile:", error);
         res.render("homepage", { showError3: true });
     }
 });
+
+app.get("/viewprofile/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        // console.log("user id:"+userId);
+        // const loggedInUserId = req.session.user._id;
+        // console.log("loggedin: "+loggedInUserId);
+         
+        const user = await User.findOne({ _id: userId }).exec();
+        console.log("user:"+ user);
+        const posts = await Post.find({ 'author': userId }).populate('comments').populate('author').exec();
+        console.log("posts:"+ posts);
+        const comments = await Comment.find({ 'author': userId }).populate('replies').populate('author').exec();
+        console.log("comments:"+ comments);
+
+        const reversedPosts = posts.reverse();
+        const reversedComments = comments.reverse();
+
+        const isEmpty = reversedPosts.length === 0;
+
+        const userDetails = {
+            user,
+            posts: reversedPosts,
+            comments: reversedComments,
+            isEmpty 
+        };
+        console.log("user details:"+ userDetails);
+
+        //Determine if the logged-in user is viewing their own profile
+        // const isOwnProfile = userId === loggedInUserId;
+        // console.log(isOwnProfile);
+
+        res.render("viewprofile",  userDetails );
+
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.render("homepage", { showError3: true });
+    }
+});
+
 
 app.get("/editprofile", async (req, res) => {
     if (!req.session.authorized || !req.session.user) {
@@ -583,49 +670,46 @@ app.get('/globalSearch', async (req, res) => {
         if (!req.session.authorized || !req.session.user) 
             res.redirect('/login');
         else{
-            // Search based on title, content, and tags
-        const posts = await Post.find({
-            $or: [
-                { title: { $regex: query, $options: 'i' } },
-                { content: { $regex: query, $options: 'i' } },
-                { tags: { $regex: query, $options: 'i' } } // Search in tags field
-            ]
-        }).populate('author');
+            const posts = await Post.find({
+                $or: [
+                    { title: { $regex: query, $options: 'i' } },
+                    { content: { $regex: query, $options: 'i' } },
+                    { tags: { $regex: query, $options: 'i' } } 
+                ]
+            }).populate('author');
 
-        let totalComments = 0;
-
-        posts.forEach(post => {
-        
-            if (post.comments) {
-                console.log("comment amount" + post.comments.length);
-                totalComments = post.comments ? post.comments.length : 0;
-        
-                post.comments.forEach(comment => {
-                    totalComments += countReplies(comment); // Call the recursive function for each comment
-                });
-            }
-        
-            post.totalComments = totalComments;
-            console.log(post.totalComments);
-        });
-        
-        
-
-            const userId = req.session.user._id;
-
-            const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
-            const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+            let totalComments = 0;
 
             posts.forEach(post => {
-                post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
-                post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
+            
+                if (post.comments) {
+                    console.log("comment amount" + post.comments.length);
+                    totalComments = post.comments ? post.comments.length : 0;
+            
+                    post.comments.forEach(comment => {
+                        totalComments += countReplies(comment); 
+                    });
+                }
+            
+                post.totalComments = totalComments;
+                console.log(post.totalComments);
             });
+            
+            
+
+                const userId = req.session.user._id;
+
+                const upvotedPosts = await Post.find({ upvotedBy: userId }).exec();
+                const downvotedPosts = await Post.find({ downvotedBy: userId }).exec();
+
+                posts.forEach(post => {
+                    post.isUpvoted = upvotedPosts.some(upvotedPost => upvotedPost._id.equals(post._id));
+                    post.isDownvoted = downvotedPosts.some(downvotedPost => downvotedPost._id.equals(post._id));
+                });
 
 
-        res.render('search', { posts, query });
+            res.render('search', { posts, query });
         }   
-        
-
     } catch (error) {
         console.error('Error searching posts:', error);
         res.status(500).send('Error searching posts.');
@@ -633,7 +717,6 @@ app.get('/globalSearch', async (req, res) => {
 });
 
 
-// Route for fetching recent posts
 app.get('/recent', async (req, res) => {
     try {
         const allPosts = await Post.find()
@@ -658,7 +741,7 @@ app.get('/recent', async (req, res) => {
                 totalComments = post.comments ? post.comments.length : 0;
         
                 post.comments.forEach(comment => {
-                    totalComments += countReplies(comment); // Call the recursive function for each comment
+                    totalComments += countReplies(comment); 
                 });
             }
         
@@ -687,12 +770,10 @@ app.get('/recent', async (req, res) => {
     }
 });
 
-// Route for fetching popular posts based on upvotes count
 app.get('/popular', async (req, res) => {
     try {
-        // Fetch popular posts from the database, sorted by upvotes count in descending order
         const popularPosts = await Post.find()
-            .sort({ upvotes: -1 }) // Sort by upvotes count in descending order
+            .sort({ upvotes: -1 })
             .populate('author')
             .exec();
 
@@ -707,7 +788,7 @@ app.get('/popular', async (req, res) => {
                     totalComments = post.comments ? post.comments.length : 0;
             
                     post.comments.forEach(comment => {
-                        totalComments += countReplies(comment); // Call the recursive function for each comment
+                        totalComments += countReplies(comment); 
                     });
                 }
             
@@ -736,34 +817,30 @@ app.get('/popular', async (req, res) => {
     }
 });
 
-// Recursive function to count replies including replies to replies
+
 function countReplies(comment) {
     let count = 0;
     if (comment.replies) {
         count += comment.replies.length;
         comment.replies.forEach(reply => {
-            count += countReplies(reply); // Recursive call to count replies of replies
+            count += countReplies(reply); 
         });
     }
     return count;
 }
 
 async function deleteCommentAndReplies(commentId) {
-    // Find the comment
     const comment = await Comment.findById(commentId);
 
-    // If the comment doesn't exist, return
     if (!comment) {
         return;
     }
 
-    // Recursively delete replies
     for (const replyId of comment.replies) {
         await deleteCommentAndReplies(replyId);
         await Comment.findByIdAndDelete(replyId);
     }
 
-    // Delete the comment
     await Comment.findByIdAndDelete(commentId);
 }
 
@@ -806,17 +883,18 @@ app.post('/upvotePost/:postId', async(req, res) => {
         await postExist.save();
 
         if (referer && referer.includes('/viewone/')) {
-            // Redirect to the same post if user came from viewone/:postId
             res.redirect(referer);
         } 
 
         else if (referer && referer.includes('/globalSearch')) {
-            // Redirect to the same post if user came from viewone/:postId
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/viewprofile')) {
             res.redirect(referer);
         } 
         
         else {
-            // Redirect to viewall if user came from viewall or if referer is not available
             res.redirect('/homepage');
         }
         
@@ -859,17 +937,21 @@ app.post('/downvotePost/:postId', async(req, res) => {
         await postExist.save();
 
         if (referer && referer.includes('/viewone/')) {
-            // Redirect to the same post if user came from viewone/:postId
+            
             res.redirect(referer);
         } 
         
         else if (referer && referer.includes('/globalSearch')) {
-            // Redirect to the same post if user came from viewone/:postId
+           
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/viewprofil')) {
             res.redirect(referer);
         } 
 
         else {
-            // Redirect to viewall if user came from viewall or if referer is not available
+
             res.redirect('/homepage');
         }
 

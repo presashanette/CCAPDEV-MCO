@@ -35,14 +35,6 @@
     z-index: 1000;
 }
 
-/* .nav-top-container {
-    background-color: #EE7C9A;
-    position: sticky;
-    top: 0 !important;
-    z-index: 1000;
-    width: 100%;
-} */
-
 .nav-top-items{
     width: 100%;
     display: flex;

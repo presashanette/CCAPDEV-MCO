@@ -1,14 +1,11 @@
 .main {
     background: none;
     width: 100%;
-    
     top:0;
     left:0;
     margin: 0;
     padding: 0;
-
 }
-
 
 .hometext {
     text-align: center;
@@ -18,13 +15,11 @@
 
 .panel {
     background-color: var(--pink3);
-    /* background: none; */
     min-height: 550px;
     border-radius: 20px;
     margin:auto;
     display: flex;
     flex-direction: column;
-
 }
 
 .buttons, .bio {

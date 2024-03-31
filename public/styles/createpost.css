@@ -1,5 +1,3 @@
-
-
 .hometext {
     text-align: center;
     font-size: 33px;
@@ -29,7 +27,6 @@
 }
 
 #titleinp {
-     /*top right bottom left*/
     background-color: var(--pink3);
     border: 0px;
     width: 100%;
@@ -49,11 +46,11 @@
 
 #richtexteditor {
     background-color: white;
-    border-radius: 10px 10px 0 0; /*topleft, topright, botright, botleft */
+    border-radius: 10px 10px 0 0;
     height: 50px;
     display: flex;
     flex-direction: row;
-    align-items: center; /*justify-content used to align things horizontally, align-items for vertical*/
+    align-items: center;
     
 }
 
@@ -82,9 +79,7 @@
     width: 100%;
     background-color: var(--pink3);
     border-radius: 0 0 10px 10px;
-    /* overflow: auto; */
     white-space: pre-wrap;
-    /* overflow-wrap: break-word; */
     margin-bottom: 10px;
 }
 
@@ -158,6 +153,6 @@
 
 #cancelbtn:hover,
 #postbtn:hover {
-    background-color: var(--pink1); /* Pink color */
+    background-color: var(--pink1); 
     color: white;
 }

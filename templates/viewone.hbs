@@ -24,19 +24,20 @@
     <link rel="stylesheet" href="../styles/general.css" />
 
     
-    <link rel="stylesheet" href="../styles/viewone.css" />
+    <link rel="stylesheet" href="../styles/viewone.css" /> 
     <link rel="stylesheet" href="../styles/comment.css" />
 
     <!-- scripts -->
-    <script src="//code.jquery.com/jquery.min.js"></script>
+    
 
     <script src="../scripts/viewone.js"></script>
     <script src="../scripts/recent.js" ></script>
-    <script src="../scripts/comment.js"></script>
+    
     
     
     <script src="https://use.fontawesome.com/a31a3f8384.js"></script>
-    {{!-- <script src="https://use.fontawesome.com/fe459689b4.js"></script> --}}
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="../scripts/comment.js"></script>
 
     <title>View one | Girls</title>
   </head>
@@ -133,9 +134,12 @@
             </div>
             <div class="headerpost">
                 <p class="handle">
-                    <a class="user" href="#">@{{post.author.uname}}</a>
+                    <a class="user" href="/viewprofile/{{post.author._id}}">@{{post.author.uname}}</a>
                 </p>
                 <h1 class="title">{{post.title}}</h1>
+                {{#if this.isEdited}}  
+                  <p id="edited">Edited</p>
+                {{/if}} 
             </div>
         </div>
         <div class="post-content">
@@ -149,30 +153,31 @@
             {{/each}}
         </div>
         <div class="icons">
-            <form method="POST" action="/upvotePost/{{post._id}}">
-                <button type="submit" class="icon" id="hearticon">
+
+                <button type="button" class="icon" id="hearticon" onclick="location.href='http://localhost:3000/login';">
                     <span class="material-symbols-outlined" id="heart" aria-hidden="true">favorite</span>
                 </button>
-            </form>
+            
             <p class="count">{{post.upvotes}}</p>
-            <form method="POST" action="/downvotePost/{{post._id}}">
-                <button type="submit" class="icon" id="bhearticon">
+            
+                <button type="button" class="icon" id="bhearticon" onclick="location.href='http://localhost:3000/login';">
                     <span class="material-symbols-outlined" id="bheart" aria-hidden="true">heart_broken</span>
                 </button>
-            </form>
+            
             <p class="count" id="downvote-count">{{post.downvotes}}</p>
             <button type="button" class="icon" id="commenticon">
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
             <p class="count" id="comment-count">{{comments.length}}</p>
-            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/editpost/{{this._id}}';">
+            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/login';">
                 <span class="material-symbols-outlined" id="edit">edit</span>
             </button>
-            <form action="/deletePost/{{post._id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
-                <button type="submit" class="icon" id="deleteicon">
-                    <span class="material-symbols-outlined" id="delete">delete</span>
-                </button>
-            </form>
+            
+            <button type="button" class="icon" id="deleteicon"  onclick="location.href='http://localhost:3000/login';">
+                <span class="material-symbols-outlined" id="delete">delete</span>
+            </button>
+            
+            
         </div>
     </div>
 
@@ -185,6 +190,7 @@
                     id="commentinput"
                     placeholder="Enter comment here"
                     aria-placeholder="Comment"
+                    required
                 ></textarea>
                 <input
                     type="hidden"
@@ -210,65 +216,10 @@
         
     </div>
 
-    {{!-- <div class="comments-section">
-        <h2>All Comments</h2>
-        <div id="comments">
-            {{#each comments}}
-            <div class="comment">
-              
-                <p><strong>{{this.uname}}:</strong> {{this.content}}</p>
-                <hr />
-            </div>
-            {{/each}}
-        </div>
-    </div> --}}
-    
-    <div id="comments">
-        {{#each comments}}
-            <div class="comment">
-                <!-- Render each comment dynamically -->
-                <div class="commentheader">
-                  {{#if this.author.profPicLink}}
-                    <img src="{{this.author.profPicLink}}" class="dp" />
-                  {{else}}
-                      <img src="./public/images/defUser.png" class="dp" />
-                  {{/if}}
-
-                  <p class="handle">
-                        {{#if this.author.uname}}
-                            <a href="/viewprofile/{{this.author._id}}">@{{this.author.uname}}</a>
-                        {{else}}
-                            <a href="/viewprofile/{{this.author._id}}">girlsUser</a>
-                        {{/if}}
-                  </p>
-                  <div class="user-info">
-                      <p>{{post.author.uname}}</p>
-                  </div>
-                </div>
-                <div class="editable">
-                    <!-- Render comment text dynamically -->
-                    {{this.content}}
-                </div>
-                
-                {{!-- <button onclick="toggleEdit(this)">Edit</button> --}}
-                <button id="editButton">Edit</button>
-                <button id="delete-button">Delete</button>
-                <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
-                <button onclick="addReply(this)">Reply</button>
-                <button onclick="toggleCollapse(this)">Collapse</button>
-                <!-- Render replies dynamically if applicable -->
-                {{#each replies}}
-                    <div class="reply">
-                        <!-- Render reply dynamically -->
-                    </div>
-                {{/each}}
-            </div>
-            
-        {{/each}}
+   <div class="comments">
+      {{> comment}}
     </div>
 </div>
-
-
     
 <script>
     function editPost() {

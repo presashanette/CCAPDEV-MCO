@@ -131,9 +131,12 @@
             </div>
             <div class="headerpost">
                 <p class="handle">
-                    <a class="user" href="#">@{{post.author.uname}}</a>
+                    <a class="user" href="/viewprofile/{{post.author._id}}">@{{post.author.uname}}</a>
                 </p>
                 <h1 class="title">{{post.title}}</h1>
+                {{#if post.isEdited}}  
+                  <p id="edited">Edited</p>
+                {{/if}}  
             </div>
         </div>
         <div class="post-content">
@@ -212,6 +215,7 @@
                     id="commentinput"
                     placeholder="Enter comment here"
                     aria-placeholder="Comment"
+                    required
                 ></textarea>
                 <input
                     type="hidden"
@@ -236,20 +240,31 @@
     </div>
   
     <div class="comments">
-      {{> comment}}
+      {{> commentloggedin}}
     </div>
         
 
     
 </div>
 
-
+<!-- The Modal -->
+<div id="myModal1" class="modal" style="{{#if showError1}}display: block;{{else}}display: none;{{/if}}">
+<!-- Modal content -->
+<div class="modal-content">
+    <button class="close" onclick="myFunc()">X</button>
+    <p>This field is required!</p>
+</div>
+</div>
 
     
 <script>
     function editPost() {
         const postId = '{{post._id}}';
         window.location.href = `/editpost/${postId}`;
+    }
+
+    function myFunc() {
+        $(".modal").hide();
     }
 </script>
 

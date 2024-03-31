@@ -67,7 +67,6 @@
     text-justify: inter-word;
     font-size: 25px;
     overflow-wrap: break-word;
-    /* white-space: pre-wrap; */
 }
 
 .icons {
@@ -99,19 +98,6 @@
     color: var(--brown);
     font-size: 22px;
 }
-
-/* #heart, #bheart, #comment, #edit, #delete {
-    color: var(--brown);
-    font-size: 22px;
-} */
-/* 
-#heart:focus, #brokenheart:active, #comment:active, #edit:active, #delete:active {
-    font-variation-settings:
-    'FILL' 1,
-    'wght' 300,
-    'GRAD' 0,
-    'opsz' 24
-} */
 
 
 .icon {
@@ -167,13 +153,13 @@
 }
 
 
-    .comments-section {
-        margin:  10px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        width: 98%;
-        border-radius: 10px;
-        background-color: var(--pink2);
+.comments-section {
+    margin:  10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 98%;
+    border-radius: 10px;
+    background-color: var(--pink2);
 }
 
 .comment {
@@ -197,4 +183,11 @@ hr {
     'opsz' 24;
 }
 
-
+#edited {
+    margin-left: auto;
+    margin-right: 20px;
+    border-radius: 10px;
+    font-weight: 200;
+    color: var(--pink1);
+    display: flex;
+}

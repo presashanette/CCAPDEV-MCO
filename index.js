@@ -12,6 +12,8 @@ const templatePath = path.join(__dirname, "./templates");
 const { body } = require('express-validator');
 const { cp } = require('fs');
 const uuidv4 = require('uuid').v4;
+const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -35,16 +37,16 @@ app.set("views", templatePath);
 //     })
 // );
 
-app.use(session({
-    secret: 'somegibberishsecret',
-    // store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
-  }));
+// app.use(session({
+//     secret: 'somegibberishsecret',
+//     // store: new MongoStore({ mongooseConnection: mongoose.connection }),
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
+//   }));
   
-app.use(express.cookieParser());
-app.use(express.cookieSession({
+app.use(cookieParser());
+app.use(cookieSession({
     secret: 'secret',
     cookie: {maxAge: 60 * 60 * 1000}
 }));
@@ -370,7 +372,9 @@ app.post('/deletePost/:postId', async (req, res) => {
 app.get('/logout', async (req, res) => {
 
     try {
-        req.session.destroy();
+        const sessionId = req.headers.cookie?.split('=')[1];
+        delete sessions[sessionId];
+        res.set('Set-Cookie', `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
         res.redirect('/homepage');
     } catch (error) {
         console.error('Error destroying session:', err);
@@ -430,19 +434,22 @@ app.post("/login", async (req, res) => {
             req.session.user = user;
             req.session.authorized = true;
 
-            // if (remember) {
-            //     res.cookie('remember_token', userId, { maxAge: 604800000 }); // Cookie expires in 7 days (604800000 ms)
-            // }
+            const sessionId = uuidv4();
+
+            if (remember) {
+                sessions[sessionId] = { uname, userId };
+                res.cookie('sessionyay', sessionId, { maxAge: 1000*60*1 }); // Cookie expires in 7 days (604800000 ms)
+            }
             
             // const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
             //     expiresIn: '1 hour'
             //   });
             //   res.json({ token });
             
-            const sessionId = uuidv4();
+            
 
-            sessions[sessionId] = { uname, userId};
-            res.set('Set-Cookie', `session=${sessionId}`);
+            // sessions[sessionId] = { uname, userId};
+            // res.set('Set-Cookie', `session=${sessionId}`, { maxAge: 1000*60*5 });
 
             return res.redirect("/homepage");
         } else {
@@ -478,6 +485,26 @@ app.post("/login", async (req, res) => {
 //         next();
 //     }
 // });
+
+app.use((req, res, next) => {
+    const sessionId = req.cookies.sessionyay;
+    const sessionData = sessions[sessionId];
+
+    if (sessionId && sessionData) {
+        const sessionAge = Date.now() - sessionData.createdAt;
+
+        if (sessionAge > 1000 * 60 * 1) { // Check if session has expired (5 minutes in milliseconds)
+            // Session has expired, remove session data and cookie
+            delete sessions[sessionId];
+            res.clearCookie('sessionyay');
+            req.session = null;
+        }
+    }
+
+    next();
+});
+
+
 
 app.get("/createpost",  (req, res) => {
     if(!req.session.authorized){

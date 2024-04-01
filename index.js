@@ -51,15 +51,15 @@ app.use(cookieSession({
     cookie: {maxAge: 60 * 60 * 1000}
 }));
 
-// Flash
-app.use(flash());
+// // Flash
+// app.use(flash());
 
-// Global messages vars
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  next();
-});
+// // Global messages vars
+// app.use((req, res, next) => {
+//   res.locals.success_msg = req.flash('success_msg');
+//   res.locals.error_msg = req.flash('error_msg');
+//   next();
+// });
 
 const sessions = {};
 

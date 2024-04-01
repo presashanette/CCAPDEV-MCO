@@ -43,11 +43,11 @@ app.use(session({
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
   }));
   
-// app.use(express.cookieParser());
-// app.use(express.cookieSession({
-//     secret: 'secret',
-//     cookie: {maxAge: 60 * 60 * 1000}
-// }));
+app.use(express.cookieParser());
+app.use(express.cookieSession({
+    secret: 'secret',
+    cookie: {maxAge: 60 * 60 * 1000}
+}));
 
 // Flash
 app.use(flash());
@@ -58,6 +58,8 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash('error_msg');
   next();
 });
+
+const sessions = {};
 
 app.get("/login", (req,res) => {
     res.render("login");
@@ -72,7 +74,18 @@ app.get("/secret", isLoggedIn, function (req, res) {
 })
 
 app.get('/', async (req, res) => {
-    res.redirect('/homepage');
+    const sessionId = req.headers.cookie?.split('=')[1];
+    const userSession = sessions[sessionId];
+    if(userSession) {
+        console.log ([{
+            id:1,
+            title: "hi",
+            userId,
+        }]);
+    }
+    else {
+        res.redirect('/homepage');
+    }
 });
 
 
@@ -427,7 +440,6 @@ app.post("/login", async (req, res) => {
             //   res.json({ token });
             
             const sessionId = uuidv4();
-            const sessions = {};
 
             sessions[sessionId] = { uname, userId};
             res.set('Set-Cookie', `session=${sessionId}`);

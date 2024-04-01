@@ -780,23 +780,28 @@ const upload = multer({ storage: storage }).single('profPic');
 
 app.get("/viewprofile", async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.session.user._id }).exec();
-        const posts = await Post.find({ 'author': user._id }).populate('comments').populate('author').exec();
-        const comments = await Comment.find({ 'author': user._id }).populate('replies').populate('author').exec();
+        if (!req.session.authorized) {
+            return res.render("login");
+        }  
+        else {  
+            const user = await User.findOne({ _id: req.session.user._id }).exec();
+            const posts = await Post.find({ 'author': user._id }).populate('comments').populate('author').exec();
+            const comments = await Comment.find({ 'author': user._id }).populate('replies').populate('author').exec();
 
-        const reversedPosts = posts.reverse();
-        const reversedComments = comments.reverse();
+            const reversedPosts = posts.reverse();
+            const reversedComments = comments.reverse();
 
-        const isEmpty = reversedPosts.length === 0;
+            const isEmpty = reversedPosts.length === 0;
 
-        const userDetails = {
-            user,
-            posts: reversedPosts,
-            comments: reversedComments,
-            isEmpty 
-        };
+            const userDetails = {
+                user,
+                posts: reversedPosts,
+                comments: reversedComments,
+                isEmpty 
+            };
 
-        res.render("viewprofile",  userDetails );
+            res.render("viewprofileloggedin", userDetails );
+        }
 
     } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -804,18 +809,23 @@ app.get("/viewprofile", async (req, res) => {
     }
 });
 
-app.get("/viewprofile/:userId", async (req, res) => {
+app.get("/viewprofile/:profileId", async (req, res) => {
     try {
-        const userId = req.params.userId;
-        // console.log("user id:"+userId);
-        // const loggedInUserId = req.session.user._id;
-        // console.log("loggedin: "+loggedInUserId);
+        let userId = null;
+        
+        if (req.session.authorized) {
+            userId = req.session.user._id;
+        }
+        
+        console.log("user: "+userId);
+        const profileId = req.params.profileId;
+        console.log("profile: "+profileId);
          
-        const user = await User.findOne({ _id: userId }).exec();
+        const user = await User.findOne({ _id: profileId }).exec();
         console.log("user:"+ user);
-        const posts = await Post.find({ 'author': userId }).populate('comments').populate('author').exec();
+        const posts = await Post.find({ 'author': profileId }).populate('comments').populate('author').exec();
         console.log("posts:"+ posts);
-        const comments = await Comment.find({ 'author': userId }).populate('replies').populate('author').exec();
+        const comments = await Comment.find({ 'author': profileId }).populate('replies').populate('author').exec();
         console.log("comments:"+ comments);
 
         const reversedPosts = posts.reverse();
@@ -827,15 +837,22 @@ app.get("/viewprofile/:userId", async (req, res) => {
             user,
             posts: reversedPosts,
             comments: reversedComments,
-            isEmpty 
+            isEmpty,
+            userId,
+            profileId 
         };
-        console.log("user details:"+ userDetails);
+        //console.log("user details:"+ userDetails);
 
         //Determine if the logged-in user is viewing their own profile
         // const isOwnProfile = userId === loggedInUserId;
         // console.log(isOwnProfile);
-
-        res.render("viewprofile",  userDetails );
+        if (req.session.authorized) {
+            res.render("viewprofileloggedin",  userDetails);
+        }
+        else {
+            res.render("viewprofile",  userDetails);
+        }
+        
 
     } catch (error) {
         console.error("Error fetching user profile:", error);

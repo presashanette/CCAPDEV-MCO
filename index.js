@@ -95,15 +95,12 @@ app.get('/', async (req, res) => {
 app.get('/homepage', async (req, res) => {
     
     try {
-        const allPosts = await Post.find()
-        .populate('author')
-        .populate({
+        const allPosts = await Post.find().populate('author').populate({
             path: 'comments',
             populate: {
                 path: 'replies'
             }
-        })
-        .exec();
+        }).exec();
 
         const pageTitle = 'All Posts';
         

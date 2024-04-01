@@ -14,6 +14,7 @@ const { cp } = require('fs');
 const uuidv4 = require('uuid').v4;
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
+const cheerio = require('cheerio');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -37,19 +38,19 @@ app.set("views", templatePath);
 //     })
 // );
 
-// app.use(session({
-//     secret: 'somegibberishsecret',
-//     // store: new MongoStore({ mongooseConnection: mongoose.connection }),
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
-//   }));
+app.use(session({
+    secret: 'somegibberishsecret',
+    // store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
+  }));
   
 app.use(cookieParser());
-app.use(cookieSession({
-    secret: 'secret',
-    cookie: {maxAge: 60 * 60 * 1000}
-}));
+// app.use(cookieSession({
+//     secret: 'secret',
+//     cookie: {maxAge: 60 * 60 * 1000}
+// }));
 
 // // Flash
 // app.use(flash());
@@ -59,8 +60,9 @@ app.use(cookieSession({
 //   res.locals.success_msg = req.flash('success_msg');
 //   res.locals.error_msg = req.flash('error_msg');
 //   next();
-// });
-
+// // });
+const SESSION_DURATION = 1000 * 60 * 60 * 24 * 21; // 1 week in milliseconds
+const REMEMBER_ME_DURATION = 1000 * 60 * 60 * 24 * 21; // 3 weeks in milliseconds
 const sessions = {};
 
 app.get("/login", (req,res) => {
@@ -76,18 +78,7 @@ app.get("/secret", isLoggedIn, function (req, res) {
 })
 
 app.get('/', async (req, res) => {
-    const sessionId = req.headers.cookie?.split('=')[1];
-    const userSession = sessions[sessionId];
-    if(userSession) {
-        console.log ([{
-            id:1,
-            title: "hi",
-            userId,
-        }]);
-    }
-    else {
         res.redirect('/homepage');
-    }
 });
 
 
@@ -122,6 +113,10 @@ app.get('/homepage', async (req, res) => {
             console.log(post.totalComments);
         });
         
+        if (req.session && req.session.cookie && req.session.cookie.maxAge && req.session.cookie.maxAge === SESSION_DURATION) {
+            req.session.cookie.maxAge = REMEMBER_ME_DURATION;
+        }
+
         if (!req.session.authorized || !req.session.user) {
             return res.render('homepage', { posts: allPosts.reverse(), pageTitle });
         } else {
@@ -418,7 +413,7 @@ app.post("/login", async (req, res) => {
     try {
         const { uname, psw, remember } = req.body;
         const user = await User.findOne({ uname });
-        const userId = user._id;
+        // const userId = user._id;
 
         if (!user) {
             showError2 = true;
@@ -431,12 +426,17 @@ app.post("/login", async (req, res) => {
             req.session.user = user;
             req.session.authorized = true;
 
-            const sessionId = uuidv4();
+            // const sessionId = uuidv4();
 
             if (remember) {
-                sessions[sessionId] = { uname, userId };
-                res.cookie('sessionyay', sessionId, { maxAge: 1000*60*1 }); // Cookie expires in 7 days (604800000 ms)
+                const rememberMe = req.body.rememberMe === 'on';
+                req.session.cookie.maxAge = rememberMe ? REMEMBER_ME_DURATION : SESSION_DURATION;
             }
+
+            // if (remember) {
+            //     sessions[sessionId] = { uname, userId };
+            //     res.cookie('sessionyay', sessionId, { maxAge: 1000*60*1 }); // Cookie expires in 7 days (604800000 ms)
+            // }
             
             // const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
             //     expiresIn: '1 hour'
@@ -483,23 +483,23 @@ app.post("/login", async (req, res) => {
 //     }
 // });
 
-app.use((req, res, next) => {
-    const sessionId = req.cookies.sessionyay;
-    const sessionData = sessions[sessionId];
+// app.use((req, res, next) => {
+//     const sessionId = req.cookies.sessionyay;
+//     const sessionData = sessions[sessionId];
 
-    if (sessionId && sessionData) {
-        const sessionAge = Date.now() - sessionData.createdAt;
+//     if (sessionId && sessionData) {
+//         const sessionAge = Date.now() - sessionData.createdAt;
 
-        if (sessionAge > 1000 * 60 * 1) { // Check if session has expired (5 minutes in milliseconds)
-            // Session has expired, remove session data and cookie
-            delete sessions[sessionId];
-            res.clearCookie('sessionyay');
-            req.session = null;
-        }
-    }
+//         if (sessionAge > 1000 * 60 * 1) { // Check if session has expired (5 minutes in milliseconds)
+//             // Session has expired, remove session data and cookie
+//             delete sessions[sessionId];
+//             res.clearCookie('sessionyay');
+//             req.session = null;
+//         }
+//     }
 
-    next();
-});
+//     next();
+// });
 
 
 
@@ -522,21 +522,21 @@ app.post("/createpost", async (req, res) => {
 
         const tagList = tags.split(',').map(tag => tag.trim());
 
+        const $ = cheerio.load(contentHTML);
+
+        // Extract the text with styles applied
+        const formattedContent = $('body').text();
 
         const newPost = new Post({
             title, 
-            content: contentHTML,
+            content: formattedContent,
             tags: tagList,
             author: req.session.user._id 
         });
 
-        if (!title || !contentHTML) {
+        if (!title || !formattedContent) {
             showError1 = true;
             return res.render("createpost", { showError1 });
-        }
-        else {
-            showValid = true;
-            res.render("createpost", { showValid });
         }
 
         await newPost.save();

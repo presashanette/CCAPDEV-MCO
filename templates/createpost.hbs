@@ -195,11 +195,8 @@
             
             $('#postForm').submit(function () {
                 var textContent = $('#posttext').text();
-                {{!-- var htmlContent = textContent.replace('<br>', /\n/g); --}}
                 $('#contentHTML').val(textContent);
-
-                {{!-- var postContent = $('#posttext').html();
-                $('#contentHTML').val(postContent); --}}
+                console.log($('#contentHTML') + " " + textContent);
              });
         });
     </script>

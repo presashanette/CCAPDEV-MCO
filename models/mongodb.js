@@ -133,4 +133,4 @@ const posts = new mongoose.model("posts", postSch);
 const users = new mongoose.model("users", userSch);
 const comments = new mongoose.model("comments", commentSch);
 
-module.exports = Post, User, Comment;
+module.exports = {Post, User, Comment};

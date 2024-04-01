@@ -1,15 +1,13 @@
 const mongoose = require("mongoose")
+require('dotenv').config();
 
-mongoose.connect("mongodb://localhost:27017/Girls")
-.then(() => {
-    console.log("mongodb connected")
-})
-
-.catch(() => {
-    console.log("failed to connect mongodb")
-})
-
-
+mongoose.connect(process.env.MONGODB_CONNECT_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("Failed to connect MongoDB:", err);
+  });
 
 const userSch = new mongoose.Schema({
     uname:{
@@ -135,5 +133,4 @@ const posts = new mongoose.model("posts", postSch);
 const users = new mongoose.model("users", userSch);
 const comments = new mongoose.model("comments", commentSch);
 
-module.exports = { Post, User, Comment };
-
+module.exports = Post, User, Comment;

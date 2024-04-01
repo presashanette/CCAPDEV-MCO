@@ -19,21 +19,21 @@
             <form action="/login" method="post">
                 <div class="username">
                     <h3>Username</h3>
-                    <input type="text" placeholder="Enter Username" name="uname" required>
+                    <input type="text" placeholder="Enter Username" id="uname" name="uname" required>
                 </div>
                 <div class="password">
                     <h3>Password</h3>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
+                    <input type="password" placeholder="Enter Password" id="psw" name="psw" required>
                 </div>
                 <div class="buttons">
                     <div class="rmblogin">
                         <label>
-                            <input type="checkbox" checked="checked" name="remember" class="remembercheck"> Remember me
+                            <input type="checkbox" name="remember" id="remembercheck" value="isRememberMe"> Remember me
                         </label>
                         <span class="notyetuser"><p>Not yet a user? <a href="/signup">Sign Up</a></p></span>
                     </div>
                     
-                    <button type="submit" class="loginbtn">Login</button>
+                    <button type="submit" class="loginbtn" onclick="rememberMe()">Login</button>
                 
                     <input type="button" class="backbtn" value="Back" onclick="history.back()">
                 </div>
@@ -74,6 +74,34 @@
     function myFunc() {
         $(".modal").hide();
     }
+
+    {{!-- const rmCheck = $("#remembercheck");
+    const pswInput = $("#psw");
+    const unameInput = $("#uname");
+
+    if (localStorage.checkbox && localStorage.checkbox !== "") {
+        rmCheck.setAttribute("checked", "checked");
+        pswInput.value = localStorage.psw;
+        unameInput.value = localStorage.uname;
+    }
+    else {
+        rmCheck.removeAttribute("checked");
+        pswInput.value = "";
+        unameInput.value = "";
+    }
+
+    function rememberMe() {
+        if (rmCheck.checked && unameInput.value !== "" && pswInput.value !== "") {
+            localStorage.uname = unameInput.value;
+            localStorage.pswInput = pswInput.value;
+            localStorage.checkbox = rmCheck.value;
+        }
+        else {
+            localStorage.uname = "";
+            localStorage.pswInput = "";
+            localStorage.checkbox = "";
+        }
+    } --}}
     </script>
 
 </body>

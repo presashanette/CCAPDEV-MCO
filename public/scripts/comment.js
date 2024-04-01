@@ -42,7 +42,7 @@ $(document).on('click', '#edit-button', function(e) {
     var $button = $(this);
     var parentComment = $button.closest('.comment');
     var editableDiv = parentComment.find(".editable");
-    // var modal = $("#myModal1");
+    var modal = $("#myModal1");
 
     const $target = $(e.target);
     const postId = $target.attr('data-post-id');
@@ -55,15 +55,15 @@ $(document).on('click', '#edit-button', function(e) {
 
         var newContent = editableDiv.text();
         
-        // fetch(`/editComment/${postId}/${commentId}`)
-        //     .then(response => {
-        //         if(newContent == ""){
-        //             modal.style.display = "block";
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
+        fetch(`/editComment/${postId}/${commentId}`)
+            .then(response => {
+                if(newContent == ""){
+                    modal.style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
         $.ajax({
             type: 'PUT',

@@ -5,8 +5,12 @@ const path = require('path');
 const hbs = require("hbs");
 const { Post, User, Comment } = require('./models/mongodb');
 const session = require('express-session');
+const flash = require('connect-flash');
+// const MongoStore = require('connect-mongo')(session);
 const bcrypt = require('bcrypt');
 const templatePath = path.join(__dirname, "./templates");
+const { body } = require('express-validator');
+const uuidv4 = require('uuid').v4;
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -19,16 +23,40 @@ app.set("view engine", "hbs");
 app.set("views", templatePath);
 
 
-app.use(
-    session({
-      secret: 'secret-key',
-      resave: false,
-        saveUninitialized: false,
-      cookie: {
-        sameSite: 'strict'
-      }
-    })
-);
+// app.use(
+//     session({
+//       secret: 'secret-key',
+//       resave: false,
+//         saveUninitialized: false,
+//       cookie: {
+//         sameSite: 'strict'
+//       }
+//     })
+// );
+
+app.use(session({
+    secret: 'somegibberishsecret',
+    // store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
+  }));
+  
+// app.use(express.cookieParser());
+// app.use(express.cookieSession({
+//     secret: 'secret',
+//     cookie: {maxAge: 60 * 60 * 1000}
+// }));
+
+// Flash
+app.use(flash());
+
+// Global messages vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+});
 
 app.get("/login", (req,res) => {
     res.render("login");
@@ -316,10 +344,14 @@ app.get('/logout', async (req, res) => {
 });
  
 app.post("/signup", async(req, res) => {
-    const checksu = await User.findOne({uname: req.body.uname});
+    const { uname, psw } = req.body
+    const checksu = await User.findOne({uname});
 
-    if (checksu && checksu.uname === req.body.uname){
-        const showError1 = true;
+    let showError1 = false;
+    let showError2 = false;
+
+    if (checksu && checksu.uname === uname){
+        showError1 = true;
         res.render("signup", { showError1 });
     }
 
@@ -341,7 +373,6 @@ app.post("/signup", async(req, res) => {
         req.session.authorized = true;
         res.redirect("/editprofile");
     }
-
 })
 
 app.post("/login", async (req, res) => {
@@ -349,8 +380,9 @@ app.post("/login", async (req, res) => {
     let showError2 = false;
 
     try {
-        const { uname, psw } = req.body;
+        const { uname, psw, remember } = req.body;
         const user = await User.findOne({ uname });
+        const userId = user._id;
 
         if (!user) {
             showError2 = true;
@@ -362,6 +394,22 @@ app.post("/login", async (req, res) => {
         if (isPassMatch) {
             req.session.user = user;
             req.session.authorized = true;
+
+            // if (remember) {
+            //     res.cookie('remember_token', userId, { maxAge: 604800000 }); // Cookie expires in 7 days (604800000 ms)
+            // }
+            
+            // const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+            //     expiresIn: '1 hour'
+            //   });
+            //   res.json({ token });
+            
+            const sessionId = uuidv4();
+            const sessions = {};
+
+            sessions[sessionId] = { uname, userId};
+            res.set('Set-Cookie', `session=${sessionId}`);
+
             return res.redirect("/homepage");
         } else {
             showError1 = true;
@@ -373,6 +421,29 @@ app.post("/login", async (req, res) => {
         return res.render("login", { showError2 });
     }
 });
+
+// app.use((req, res, next) => {
+//     const rememberToken = req.cookies.remember_token;
+
+//     if (rememberToken) {
+//         // Authenticate the user based on the remember token
+//         // For example, you can look up the user in your database
+//         // and set req.user to the authenticated user
+//         User.findOne({ _id: rememberToken })
+//             .then(user => {
+//                 if (user) {
+//                     req.session.user = user; // Set req.user to the authenticated user
+//                 }
+//                 next();
+//             })
+//             .catch(err => {
+//                 console.error('Error finding user:', err);
+//                 next();
+//             });
+//     } else {
+//         next();
+//     }
+// });
 
 app.get("/createpost",  (req, res) => {
     if(!req.session.authorized){
@@ -476,6 +547,9 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
     try {
         if (!comment.author._id.equals(userId)) {
             return res.status(403).json({ success: false, message: "Unauthorized: You cannot edit this comment." });
+        }
+        else if (!content) {
+            console.log("emptyyy");
         }
         else{
             const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
@@ -894,6 +968,14 @@ app.post('/upvotePost/:postId', async(req, res) => {
             res.redirect(referer);
         } 
         
+        else if (referer && referer.includes('/popular')) {
+            res.redirect(referer);
+        }
+
+        else if (referer && referer.includes('/recent')) {
+            res.redirect(referer);
+        }
+
         else {
             res.redirect('/homepage');
         }
@@ -946,12 +1028,19 @@ app.post('/downvotePost/:postId', async(req, res) => {
             res.redirect(referer);
         } 
 
-        else if (referer && referer.includes('/viewprofil')) {
+        else if (referer && referer.includes('/viewprofile')) {
             res.redirect(referer);
         } 
 
-        else {
+        else if (referer && referer.includes('/popular')) {
+            res.redirect(referer);
+        }
 
+        else if (referer && referer.includes('/recent')) {
+            res.redirect(referer);
+        }
+
+        else {
             res.redirect('/homepage');
         }
 

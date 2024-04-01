@@ -27,16 +27,33 @@
                 <p id="edited-text">Edited</p>
             {{/if}}
             
-            <div class="row">
                 <button id="edit-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Edit</button>
             <button id="delete-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Delete</button>
             
-            </div>
-
-            <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
-            <button id="reply-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Reply</button>
-            <button id="collapse-button">Collapse</button>
             
+                <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
+                <div class="row">
+                <button id="reply-button" data-post-id="{{this.post}}" data-comment-id="{{this._id}}">Reply</button>
+                <button id="collapse-button">Collapse</button>
+
+
+                <form method="POST" action="/upvoteComment/{{this._id}}">
+                    <button type="submit" class="icon" id="hearticon-comment">
+                        <span class="material-symbols-outlined" {{#if this.isUpvoted}}id="focus"{{/if}}>favorite</span>
+                    </button>
+                </form>
+                <p class="count">{{this.upvotes}}</p>
+
+
+                <form method="POST" action="/downvoteComment/{{this._id}}">
+                    <button type="submit" class="icon" id="bhearticon-comment">
+                        <span class="material-symbols-outlined" {{#if this.isDownvoted}}id="focus"{{/if}}>heart_broken</span>
+                    </button>
+                </form>
+                <p class="count" id="downvote-count">{{this.downvotes}}</p>
+
+                
+            </div>    
 
             {{#if this.replies}}
                 <div class="reply" >

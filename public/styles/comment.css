@@ -46,9 +46,8 @@
 }
 
 .comment button {
-    margin-right: 20px;
+    
     height: 30px;
-    margin-left: auto;
     border: 0px;
     outline: none;
     background: none;
@@ -60,6 +59,10 @@
     cursor: pointer;
 }
 
+.comment button:not(#hearticon-comment):not(#bhearticon-comment) {
+    margin-right: 20px;
+}
+
 #edited-text {
     margin-left: auto;
     margin-right: 20px;
@@ -68,6 +71,8 @@
     color: var(--pink1);
     display: flex;
 }
+
+
 
 
 .collapse {
@@ -86,4 +91,19 @@
     border-width: 1px;
     margin-top: 5px;
     cursor: pointer;
+}
+
+#hearticon-comment, #bhearticon-comment{
+    margin-right: 5px;
+    font-size: 16px !important;
+}
+
+#bhearticon-comment{
+    margin-left: 5px;
+}
+
+
+.row{
+    display: flex;
+    margin: 0;
 }

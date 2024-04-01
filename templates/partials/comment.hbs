@@ -27,16 +27,25 @@
                 <p id="edited-text">Edited</p>
             {{/if}}
             
-            <div class="row">
                 <button onclick="location.href='http://localhost:3000/login';" >Edit</button>
-            <button onclick="location.href='http://localhost:3000/login';">Delete</button>
+                <button onclick="location.href='http://localhost:3000/login';">Delete</button>
             
-            </div>
+            
+            
+                <div onclick="location.href='http://localhost:3000/login';"></div>
+                <div class="row">
+                <button onclick="location.href='http://localhost:3000/login';">Reply</button>
+                <button id="collapse-button">Collapse</button>
 
-            <div onclick="location.href='http://localhost:3000/login';"></div>
-            <button onclick="location.href='http://localhost:3000/login';">Reply</button>
-            <button id="collapse-button">Collapse</button>
-            
+                    <button onclick="location.href='http://localhost:3000/login';" class="icon" id="hearticon-comment">
+                        <span class="material-symbols-outlined {{#if addClassHeartComment}}focus{{/if}}">favorite</span>
+                    </button>
+                <p class="count">{{this.upvotes}}</p>
+                    <button onclick="location.href='http://localhost:3000/login';" class="icon" id="bhearticon-comment">
+                        <span class="material-symbols-outlined {{#if addClassBHeartComment}}focus{{/if}}">heart_broken</span>
+                    </button>
+                <p class="count" id="downvote-count">{{this.downvotes}}</p>
+            </div>    
 
             {{#if this.replies}}
                 <div class="reply" >

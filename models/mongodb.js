@@ -101,7 +101,23 @@ const commentSch = new mongoose.Schema({
     post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
-    }
+    },
+    upvotes: {
+        type: Number,
+        default: 0,
+    },
+    downvotes: {
+        type: Number,
+        default: 0,
+    },
+    upvotedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    downvotedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 });
 
 commentSch.pre("find", function( next){

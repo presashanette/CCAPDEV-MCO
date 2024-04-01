@@ -24,7 +24,11 @@ $(document).on('click', '#reply-button', function(e) {
     const parentCommentId = $button.attr('data-comment-id');
     var replyContent = $('.replyInput').text();
 
-    $.ajax({
+    if (replyContent === "") {
+        alert('Content must be filled.');
+    }
+    else{
+        $.ajax({
             type: 'POST',
             url: '/reply/comment/' + postId + '/' + parentCommentId,
             data: { content: replyContent },
@@ -35,6 +39,8 @@ $(document).on('click', '#reply-button', function(e) {
                 console.error('Error:', error);
             }
         });
+    }
+    
 });
 
 
@@ -49,41 +55,51 @@ $(document).on('click', '#edit-button', function(e) {
     console.log("post id in comment EDIT" + postId);
     const commentId = $target.attr('data-comment-id');
 
-    if (editableDiv.prop("contentEditable") === "true") {
-        editableDiv.prop("contentEditable", false);
-        $button.text("Edit"); 
+    var editableText = editableDiv.text();
 
-        var newContent = editableDiv.text();
-        
-        fetch(`/editComment/${postId}/${commentId}`)
-            .then(response => {
-                if(newContent == ""){
-                    modal.style.display = "block";
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        $.ajax({
-            type: 'PUT',
-            url: `/editComment/${postId}/${commentId}`, 
-            data: { content: newContent }, 
-            success: function(response) {
-                console.log("Comment updated successfully!");
-                location.reload();
-            },
-            error: function(err){
-                console.log(err);
-                alert('Unauthorized: You cannot edit this comment.');
-                location.reload();
-            }
-        });
-    } else {
-
-        editableDiv.prop("contentEditable", true);
-        $button.text("Save"); 
+    if (editableText === "") {
+        alert('Content must be filled.');
     }
+
+    else{
+        if (editableDiv.prop("contentEditable") === "true") {
+            editableDiv.prop("contentEditable", false);
+            $button.text("Edit"); 
+    
+            var newContent = editableDiv.text();
+            
+            fetch(`/editComment/${postId}/${commentId}`)
+                .then(response => {
+                    if(newContent == ""){
+                        modal.style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+    
+            $.ajax({
+                type: 'PUT',
+                url: `/editComment/${postId}/${commentId}`, 
+                data: { content: newContent }, 
+                success: function(response) {
+                    console.log("Comment updated successfully!");
+                    location.reload();
+                },
+                error: function(err){
+                    console.log(err);
+                    alert('Unauthorized: You cannot edit this comment.');
+                    location.reload();
+                }
+            });
+        } else {
+    
+            editableDiv.prop("contentEditable", true);
+            $button.text("Save"); 
+        }
+    }
+
+    
 });
 
   $(document).on('click', '#delete-button', function(e) {

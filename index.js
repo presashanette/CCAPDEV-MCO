@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 const bcrypt = require('bcrypt');
 const templatePath = path.join(__dirname, "./templates");
 const { body } = require('express-validator');
+const { cp } = require('fs');
 const uuidv4 = require('uuid').v4;
 
 app.use(express.json());
@@ -187,6 +188,8 @@ app.get("/viewone/:postId", async (req, res) => {
 
             const foundPosts = await Post.find({ _id: postId, upvotedBy: userId }).exec();
             const foundPostsdown = await Post.find({ _id: postId, downvotedBy: userId }).exec();
+
+            // like dislike for posts
             let addClassHeart;
             let addClassBheart;
             if (foundPosts.length > 0) {
@@ -202,6 +205,11 @@ app.get("/viewone/:postId", async (req, res) => {
             else {
                 addClassBheart = false;
             }
+
+
+            
+
+
 
             const post = await Post.findById(postId)
                 .populate({
@@ -237,6 +245,20 @@ app.get("/viewone/:postId", async (req, res) => {
 
                 post.totalComments = totalComments;
                 console.log(post.totalComments);
+
+            const upvotedComments = await Comment.find({ upvotedBy: userId }).exec();
+            const downvotedComments = await Comment.find({ downvotedBy: userId }).exec();
+
+
+            comments.forEach(comment => {
+                comment.isUpvoted = upvotedComments.some(upvotedComment => upvotedComment._id.equals(comment._id));
+                comment.isDownvoted = downvotedComments.some(downvotedComment => downvotedComment._id.equals(comment._id));
+
+                comment.replies.forEach(reply => {
+                    reply.isUpvoted = upvotedComments.some(upvotedComment => upvotedComment._id.equals(reply._id));
+                    reply.isDownvoted = downvotedComments.some(downvotedComment => downvotedComment._id.equals(reply._id));
+                });
+            });    
 
 
             if (!post) {
@@ -626,6 +648,134 @@ app.post('/reply/comment/:postId/:parentCommentId', async (req, res) => {
     }
 });
 
+app.post('/upvoteComment/:commentId', async(req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const userId = req.session.user._id;        
+        const referer = req.header('Referer');
+
+        const commentExist = await Comment.findOne({_id: commentId}).exec();
+        const userExist = await User.findOne({_id: userId}).exec();
+
+        if (!commentExist) {
+            return res.status(400).json({message: "Comment not found!"});
+        }
+
+        if (!userExist) {
+            return res.status(400).json({message: "User not found!"});
+        }
+
+        if (commentExist.upvotedBy.includes(userId)) {
+            commentExist.upvotedBy.pull(userId);
+            commentExist.upvotes -= 1;
+        }
+        else {
+            commentExist.upvotedBy.push(userId);
+            commentExist.upvotes += 1;
+        }
+
+        if (commentExist.downvotedBy.includes(userId)) {
+            commentExist.downvotedBy.pull(userId);
+            commentExist.downvotes -= 1;
+        }
+
+        await commentExist.save();
+
+        if (referer && referer.includes('/viewone/')) {
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/globalSearch')) {
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/viewprofile')) {
+            res.redirect(referer);
+        } 
+        
+        else if (referer && referer.includes('/popular')) {
+            res.redirect(referer);
+        }
+
+        else if (referer && referer.includes('/recent')) {
+            res.redirect(referer);
+        }
+
+        else {
+            res.redirect('/homepage');
+        }
+        
+    } catch (error) {
+        res.status(500).json({error: error});
+    }
+});
+
+app.post('/downvoteComment/:commentId', async(req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const userId = req.session.user._id;        
+        const referer = req.header('Referer');
+
+        const commentExist = await Comment.findOne({_id: commentId}).exec();
+        const userExist = await User.findOne({_id: userId}).exec();
+
+        if (!commentExist) {
+            return res.status(400).json({message: "Comment not found!"});
+        }
+
+        if (!userExist) {
+            return res.status(400).json({message: "User not found!"});
+        }
+
+        if (commentExist.downvotedBy.includes(userId)) {
+            commentExist.downvotedBy.pull(userId);
+            commentExist.downvotes -= 1;
+        }
+        else {
+            commentExist.downvotedBy.push(userId);
+            commentExist.downvotes += 1;
+        }
+
+        if (commentExist.upvotedBy.includes(userId)) {
+            commentExist.upvotedBy.pull(userId);
+            commentExist.upvotes -= 1;
+        }
+        
+        await commentExist.save();
+
+        if (referer && referer.includes('/viewone/')) {
+            
+            res.redirect(referer);
+        } 
+        
+        else if (referer && referer.includes('/globalSearch')) {
+           
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/viewprofile')) {
+            res.redirect(referer);
+        } 
+
+        else if (referer && referer.includes('/popular')) {
+            res.redirect(referer);
+        }
+
+        else if (referer && referer.includes('/recent')) {
+            res.redirect(referer);
+        }
+
+        else {
+            res.redirect('/homepage');
+        }
+
+    } catch (error) {
+        res.status(500).json({error: error});
+    }
+});
+
+
+
 const upload = multer({ storage: storage }).single('profPic');
 
 app.get("/viewprofile", async (req, res) => {
@@ -744,13 +894,27 @@ app.get('/globalSearch', async (req, res) => {
         if (!req.session.authorized || !req.session.user) 
             res.redirect('/login');
         else{
-            const posts = await Post.find({
-                $or: [
+            let tagQuery;
+            let regexQuery;
+
+            if(query.startsWith('#')){
+                const tag = query.slice(1).toLowerCase();
+                tagQuery = { tags: { $regex: new RegExp('^' + tag + '$', 'i') } };
+                regexQuery = { $or: [
+                    { title: { $regex: query.slice(1), $options: 'i' } },
+                    { content: { $regex: query, $options: 'i' } }
+                ] };
+
+            }
+            else{
+                regexQuery = { $or: [
                     { title: { $regex: query, $options: 'i' } },
                     { content: { $regex: query, $options: 'i' } },
                     { tags: { $regex: query, $options: 'i' } } 
-                ]
-            }).populate('author');
+                ] };
+            }
+
+            const posts = await Post.find({ $and: [regexQuery, tagQuery || {}] }).populate('author');
 
             let totalComments = 0;
 

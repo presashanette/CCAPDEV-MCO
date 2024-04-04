@@ -953,10 +953,9 @@ app.get('/globalSearch', async (req, res) => {
             if(query.startsWith('#')){
                 const tag = query.slice(1).toLowerCase();
                 tagQuery = { tags: { $regex: new RegExp('^' + tag + '$', 'i') } };
-                regexQuery = { $or: [
-                    { title: { $regex: query.slice(1), $options: 'i' } },
-                    { content: { $regex: query, $options: 'i' } }
-                ] };
+
+
+                const posts = await Post.find({tags: tagQuery}).populate('author');
 
             }
             else{
@@ -965,9 +964,11 @@ app.get('/globalSearch', async (req, res) => {
                     { content: { $regex: query, $options: 'i' } },
                     { tags: { $regex: query, $options: 'i' } } 
                 ] };
+
+             posts = await Post.find({ $and: [regexQuery, tagQuery || {}] }).populate('author');
             }
 
-            const posts = await Post.find({ $and: [regexQuery, tagQuery || {}] }).populate('author');
+            
 
             let totalComments = 0;
 

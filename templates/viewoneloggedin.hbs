@@ -166,9 +166,11 @@
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
             <p class="count" id="comment-count">{{post.totalComments}}</p>
-            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/editpost/{{post._id}}';">
-                <span class="material-symbols-outlined" id="edit">edit</span>
-            </button>
+            <form action="/editpost/{{post._id}}" method="GET">
+              <button type="button" class="icon" id="editicon">
+                  <span class="material-symbols-outlined" id="edit">edit</span>
+              </button>
+            </form>
             <form action="/deletePost/{{post._id}}" method="POST">
                 <button type="submit" class="icon" id="deleteicon">
                     <span class="material-symbols-outlined" id="delete">delete</span>

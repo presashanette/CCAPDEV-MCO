@@ -113,9 +113,9 @@ app.get('/homepage', async (req, res) => {
             console.log(post.totalComments);
         });
         
-        if (req.session && req.session.cookie && req.session.cookie.maxAge && req.session.cookie.maxAge === SESSION_DURATION) {
-            req.session.cookie.maxAge = REMEMBER_ME_DURATION;
-        }
+        // if (req.session && req.session.cookie && req.session.cookie.maxAge && req.session.cookie.maxAge === SESSION_DURATION) {
+        //     req.session.cookie.maxAge = REMEMBER_ME_DURATION;
+        // }
 
         if (!req.session.authorized || !req.session.user) {
             return res.render('homepage', { posts: allPosts.reverse(), pageTitle });
@@ -453,7 +453,10 @@ app.post("/login", async (req, res) => {
 
             if (remember) {
                 const rememberMe = req.body.rememberMe === 'on';
-                req.session.cookie.maxAge = rememberMe ? REMEMBER_ME_DURATION : SESSION_DURATION;
+                req.session.cookie.maxAge = REMEMBER_ME_DURATION;
+            }
+            else {
+                req.session.cookie.expires = false;
             }
 
             // if (remember) {

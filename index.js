@@ -61,8 +61,8 @@ app.use(cookieParser());
 //   res.locals.error_msg = req.flash('error_msg');
 //   next();
 // // });
-const SESSION_DURATION = 1000 * 60 * 60 * 24 * 21; // 1 week in milliseconds
-const REMEMBER_ME_DURATION = 1000 * 60 * 60 * 24 * 21; // 3 weeks in milliseconds
+const SESSION_DURATION = 1000 * 60 * 2; // 1 week in milliseconds
+const REMEMBER_ME_DURATION = 1000 * 60 * 2; // 3 weeks in milliseconds
 const sessions = {};
 
 app.get("/login", (req,res) => {
@@ -366,7 +366,8 @@ app.get('/logout', async (req, res) => {
     try {
         const sessionId = req.headers.cookie?.split('=')[1];
         delete sessions[sessionId];
-        res.set('Set-Cookie', `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+        // res.set('Set-Cookie', `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+        req.session = null;
         res.redirect('/homepage');
     } catch (error) {
         console.error('Error destroying session:', err);

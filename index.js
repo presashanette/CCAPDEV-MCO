@@ -617,7 +617,7 @@ app.put('/editComment/:postId/:commentId', async (req, res) => {
             console.log("emptyyy");
         }
         else{
-            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content }, { new: true });
+            const updatedComment = await Comment.findByIdAndUpdate(req.params.commentId, { content, isEdited: true }, { new: true });
             res.json(updatedComment);
         }
     } catch (err) {

@@ -272,17 +272,22 @@ app.get("/viewone/:postId", async (req, res) => {
                 }
             });
 
-            function markCommentsWithIsAuthor(comments, userId) {
+            function markCommentsWithIsAuthorIsVoted(comments, userId) {
                 comments.forEach(comment => {
                     comment.isAuthor = comment.author._id.toString() === userId.toString();
-            
+                    comment.isUpvoted = upvotedComments.some(upvotedComment => upvotedComment._id.equals(comment._id));
+                    comment.isDownvoted = downvotedComments.some(downvotedComment => downvotedComment._id.equals(comment._id));
+                    
                     if (comment.replies && comment.replies.length > 0) {
-                        markCommentsWithIsAuthor(comment.replies, userId);
+                        markCommentsWithIsAuthorIsVoted(comment.replies, userId);
                     }
                 });
             }
+
+
+
             
-            markCommentsWithIsAuthor(comments, req.session.user._id);            
+            markCommentsWithIsAuthorIsVoted(comments, req.session.user._id);            
 
             if (!post) {
                 return res.status(404).send("Post not found");

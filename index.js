@@ -366,8 +366,9 @@ app.get('/logout', async (req, res) => {
     try {
         const sessionId = req.headers.cookie?.split('=')[1];
         delete sessions[sessionId];
+        req.session.destroy();
         // res.set('Set-Cookie', `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
-        req.session = null;
+
         res.redirect('/homepage');
     } catch (error) {
         console.error('Error destroying session:', err);

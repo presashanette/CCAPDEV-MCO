@@ -271,7 +271,18 @@ app.get("/viewone/:postId", async (req, res) => {
                     });
                 }
             });
-        
+
+            function markCommentsWithIsAuthor(comments, userId) {
+                comments.forEach(comment => {
+                    comment.isAuthor = comment.author._id.toString() === userId.toString();
+            
+                    if (comment.replies && comment.replies.length > 0) {
+                        markCommentsWithIsAuthor(comment.replies, userId);
+                    }
+                });
+            }
+            
+            markCommentsWithIsAuthor(comments, req.session.user._id);            
 
             if (!post) {
                 return res.status(404).send("Post not found");

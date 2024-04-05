@@ -153,30 +153,36 @@
             {{/each}}
         </div>
         <div class="icons">
-
-                <button type="button" class="icon" id="hearticon" onclick="location.href='http://localhost:3000/login';">
+              <form action="/login" method="get">
+                <button type="submit" class="icon" id="hearticon">
                     <span class="material-symbols-outlined" id="heart" aria-hidden="true">favorite</span>
                 </button>
-            
+              </form>
             <p class="count">{{post.upvotes}}</p>
-            
-                <button type="button" class="icon" id="bhearticon" onclick="location.href='http://localhost:3000/login';">
+
+              <form action="/login" method="get">
+                <button type="submit" class="icon" id="bhearticon">
                     <span class="material-symbols-outlined" id="bheart" aria-hidden="true">heart_broken</span>
                 </button>
-            
+              </form>  
             <p class="count" id="downvote-count">{{post.downvotes}}</p>
+
             <button type="button" class="icon" id="commenticon">
                 <span class="material-symbols-outlined" id="comment">mode_comment</span>
             </button>
             <p class="count" id="comment-count">{{comments.length}}</p>
-            <button type="button" class="icon" id="editicon" onclick="location.href='http://localhost:3000/login';">
-                <span class="material-symbols-outlined" id="edit">edit</span>
-            </button>
-            
-            <button type="button" class="icon" id="deleteicon"  onclick="location.href='http://localhost:3000/login';">
-                <span class="material-symbols-outlined" id="delete">delete</span>
-            </button>
-            
+
+            <form action="/login" method="get">
+              <button type="submit" class="icon" id="editicon">
+                  <span class="material-symbols-outlined" id="edit">edit</span>
+              </button>
+            </form>
+
+            <form action="/login" method="get">
+              <button type="submit" class="icon" id="deleteicon">
+                  <span class="material-symbols-outlined" id="delete">delete</span>
+              </button>
+            </form>
             
         </div>
     </div>

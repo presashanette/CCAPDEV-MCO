@@ -26,24 +26,27 @@
             {{#if this.isEdited}}
                 <p id="edited-text">Edited</p>
             {{/if}}
-            
-                <button onclick="location.href='http://localhost:3000/login';" >Edit</button>
-                <button onclick="location.href='http://localhost:3000/login';">Delete</button>
-            
-            
-            
-                <div onclick="location.href='http://localhost:3000/login';"></div>
+
+                <div class="replyInput" contenteditable="true" placeholder="Reply to this comment"></div>
                 <div class="row">
-                <button onclick="location.href='http://localhost:3000/login';">Reply</button>
+
+                <form action="/login" method="get">
+                    <button type="submit">Reply</button>
+                </form>    
                 <button id="collapse-button">Collapse</button>
 
-                    <button onclick="location.href='http://localhost:3000/login';" class="icon" id="hearticon-comment">
+                <form action="/login" method="get">
+                    <button type="submit" class="icon" id="hearticon-comment">
                         <span class="material-symbols-outlined {{#if addClassHeartComment}}focus{{/if}}">favorite</span>
                     </button>
+                </form>
                 <p class="count">{{this.upvotes}}</p>
-                    <button onclick="location.href='http://localhost:3000/login';" class="icon" id="bhearticon-comment">
+
+                <form action="/login" method="get">
+                    <button type="submit" class="icon" id="bhearticon-comment">
                         <span class="material-symbols-outlined {{#if addClassBHeartComment}}focus{{/if}}">heart_broken</span>
                     </button>
+                </form>    
                 <p class="count" id="downvote-count">{{this.downvotes}}</p>
             </div>    
 

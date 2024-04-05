@@ -942,6 +942,8 @@ app.post('/updateProfile', upload, async (req, res) => {
 
 app.get('/globalSearch', async (req, res) => {
     const { query } = req.query;
+    let posts;
+
     try {
 
         if (!req.session.authorized || !req.session.user) 
@@ -952,10 +954,7 @@ app.get('/globalSearch', async (req, res) => {
 
             if(query.startsWith('#')){
                 const tag = query.slice(1).toLowerCase();
-                tagQuery = { tags: { $regex: new RegExp('^' + tag + '$', 'i') } };
-
-
-                const posts = await Post.find({tags: tagQuery}).populate('author');
+                posts = await Post.find({tags: { $regex: new RegExp('^' + tag + '$', 'i') } }).populate('author');
 
             }
             else{
@@ -965,7 +964,7 @@ app.get('/globalSearch', async (req, res) => {
                     { tags: { $regex: query, $options: 'i' } } 
                 ] };
 
-             posts = await Post.find({ $and: [regexQuery, tagQuery || {}] }).populate('author');
+                posts = await Post.find({ $and: [regexQuery, tagQuery || {}] }).populate('author');
             }
 
             

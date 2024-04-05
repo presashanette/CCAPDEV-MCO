@@ -61,8 +61,8 @@ app.use(cookieParser());
 //   res.locals.error_msg = req.flash('error_msg');
 //   next();
 // // });
-const SESSION_DURATION = 1000 * 60 * 60 * 24 * 21; // 1 week in milliseconds
-const REMEMBER_ME_DURATION = 1000 * 60 * 60 * 24 * 21; // 3 weeks in milliseconds
+// const SESSION_DURATION = 1000 * 60 * 60 * 24 * 21; // 1 week in milliseconds
+const REMEMBER_ME_DURATION = 1000 * 60 * 2; // 3 weeks in milliseconds
 const sessions = {};
 
 app.get("/login", (req,res) => {

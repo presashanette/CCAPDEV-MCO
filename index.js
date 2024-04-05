@@ -213,11 +213,6 @@ app.get("/viewone/:postId", async (req, res) => {
                 addClassBheart = false;
             }
 
-
-            
-
-
-
             const post = await Post.findById(postId)
                 .populate({
                     path: 'author',
@@ -267,6 +262,16 @@ app.get("/viewone/:postId", async (req, res) => {
                 });
             });    
 
+            comments.forEach(comment => {
+                comment.isAuthor = req.session.authorized && comment.author._id.toString() === req.session.user._id.toString();
+                
+                if (comment.replies) {
+                    comment.replies.forEach(reply => {
+                        reply.isAuthor = req.session.authorized && reply.author._id.toString() === req.session.user._id.toString();
+                    });
+                }
+            });
+        
 
             if (!post) {
                 return res.status(404).send("Post not found");
